@@ -1,0 +1,449 @@
+@charset "utf-8";
+
+@media screen and (min-width:2050px) {
+	.con_wrap { width: 100%; left: 0px; margin: 0 auto; }
+}
+@media screen and (max-width:1920px) {
+	.bipv_dif_preview .pdt_slider_wrap { width: 80%; }
+	.esg_circle_list li { width: 380px; height: 380px; }
+}
+@media screen and (max-width:1900px) {
+	.con_wrap { width: 100%; left: 0px; margin: 0 auto; }
+	.top_lang .lang_sub_box a { font-size: 13px; }
+}
+@media screen and (max-width:1600px) {
+	.header_wrap { padding: 0 30px; }
+	.header_wrap a.logo svg { max-width: 150px; }
+	.top_nav .menu_a { height: 70px; }
+	.m_menu_btn_wrap { top: 12px; }
+	.sec_tit8 { font-size: 48px; }
+	.lang_all_wrap.top_lang { top: 30px; }
+	.top_nav .menu { width: 130px; }
+	.sub_motion_visual_txt .tit { font-size: 42px; }
+	.sub_motion_visual_txt .txt { left: 40%; }
+	.slider-wrap .s-autoplay-btn { top: 56%; }
+	.sub .visual_nav_menu .sub_menu_a { padding: 15px 50px 20px; }
+	.main_sec_in { padding: 0 5%; }
+}
+@media screen and (max-width:1450px) {
+	.sec_in { max-width: inherit; padding: 0px 50px; }
+	.top_nav { display: none; }
+	.lang_all_wrap.top_lang { display: block; }
+	.header_mid { height: 70px; }
+	.sec_tit7 { font-size: 38px; }
+	.sub_visual_nav { font-size: 16px; padding-bottom: 5px}
+	.main_sec_in { padding: 0 50px; }
+	.sec_tit8 { font-size: 42px; }
+	.sec_tit5 { font-size: 28px; }
+	.main-slider .slide-item-1 > .slide-con > .slide-txt, .main-slider .slide-item-2 > .slide-con > .slide-txt, .main-slider .slide-item-3 > .slide-con > .slide-txt, .main-slider .slide-item-4 > .slide-con > .slide-txt { left: 50px; }
+	.slider-wrap .s-autoplay-btn { left: 50px; }
+	.main-slider .slide-item > .slide-con > .slide-txt > h2.txt-tt { font-size: 60px; }
+	.mainAbout_list { gap: 20px; padding-top: 40px; }
+	.mainAbout_item_a .on .tit,.mainAbout_item_a .off .tit { font-size: 38px; }
+	.mainAbout_item_a .on .txt,.mainAbout_item_a .detail { font-size: 16px; }
+	.view_more_btn,.view_more_btn a { font-size: 16px; }
+	.mainAbout_item_a .off { padding: 40px; }
+	.mainAbout_item_a { padding: 40px; min-height: 50vh; }
+	.mainProject_item_a { height: 33vh; }
+	.Motion_text_wrap .tit_ { left: 50px; }
+	.Motion_text_wrap .txt { right: 50px; bottom: 10%; }
+	.NewsList { gap: 20px; }
+	.news_btn_a { font-size: 16px; }
+	.bgap { height: 70px; }
+	.sec_pd100 { padding-top: 80px; padding-bottom: 80px; }
+	.sub_motion_visual_bg_wrap { padding: 10% 50px !important}
+	.parking_slogan { font-size: 36px; }
+	.parking_motion_section .txt { font-size: 30px; padding: 80px 0; }
+	.parking_motion_section { padding: 100px 0; }
+	.parking_detail_card { padding: 30px; }
+	.parking_bfat_wrap .item .tit { font-size: 24px; padding-bottom: 15px; }
+	.parking_pdt_wrap .tit { font-size: 36px; padding-bottom: 30px; }
+	.m_menu .menu_a { font-size: 24px; width: 240px; }
+	.m_menu .sub_menu { padding-bottom: 8px; }
+	.m_menu { width: 100%; row-gap: 20px; }
+	.m_menu .menu { padding-bottom: 20px; }
+	.m_menu_wrap .menu_a.void_link.menu_on:after { top: 17px; }
+	.buis_detail_card { padding: 30px; }
+	.buis_detail_card .detail_info_wrap { padding-top: 80px; }
+	.buis_tit .tit { font-size: 36px; }
+	.buis_detail_card .detail_info_wrap .tit { font-size: 24px; }
+	.buis_detail_card .detail_info_wrap .txt { font-size: 16px; }
+	.clist li { font-size: 16px; }
+	.om-card p br { display: none; }
+	.step-num { font-size: 18px; }
+	.legend-list { gap: 30px 10px; flex-wrap: wrap; }
+	.esg_circle_wrap .flow_txt { top: 7%; }
+	.esg_circle_list li { padding: 50px; width: 340px; height: 340px; }
+	.esg_circle_list .txt { font-size: 16px; }
+	.locationWrap .tit { font-size: 36px; }
+	.sun_split__scroll { padding: 0 50px; }
+	.hanbit_wide_all_wrap { padding: 0 50px; }
+	.sec_tit11 { font-size: 12vw; }
+	.s_sec_about_wrap { height: 80vh; }
+    .s_sec_about_mv_bg{height: 100vh;width: auto;max-width: unset;aspect-ratio: 2 / 1;position: absolute;left: 50%;transform: translateX(-50%);}
+    .s_sec_about_mv_bg img{height:100%;}
+	.re_energy_wrap { padding: 80px 5%; }
+	.metering-process-in.sec_in { margin-bottom: 80px; }
+	.metering-process-wrap { margin-bottom: 80px; }
+	.carbon-top-wrap { padding-top: 80px; }
+	.re_feat_section { margin-top: 50px; }
+}
+@media screen and (max-width:1260px) {
+	.sub_motion_visual_txt .tit { font-size: 36px; }
+	.bipv_custom_list .item .tit { font-size: 24px; }
+	.bipv_module_card .tit { font-size: 21px; }
+	.bipv_module_card th,.bipv_module_card td { font-size: 16px; }
+	.bipv_features_wrap .item { padding: 40px; }
+	.detail_info_wrap .txt br { display: none; }
+	.inv-feature-icons .feature p { font-size: 16px; }
+	.buis_tit .tit2 { padding: 0; font-size: 28px; }
+	.step-title { font-size: 21px; }
+	.spec_row dt, .spec_row dd { font-size: 16px; }
+	.legend-list li { font-size: 16px; }
+	.comb_detail_wrap { padding-top: 30px; }
+	.view_slider_wrap .item img { width: 60% !important; }
+	.ft-gobtn li a { font-size: 16px; padding: 10px 20px; }
+	.copyright { font-size: 14px; }
+	.footer-top { gap: 50px; }
+	.esg_circle_list { padding: 0 50px; }
+	.esg_detail_wrap { padding: 80px 50px; }
+	.map_info_wrap th,.map_info_wrap td { font-size: 16px; }
+	.hanbit_txt_ani { font-size: 3vw; }
+	.hanbit_ending_txt { font-size: 36px; }
+	.board_top_label { padding: 120px 50px 0; }
+	.sub_motion_visual_bg_wrap { width: 120%; left: 50%; transform: translateX(-50%); padding: 10% 10% !important; }
+}
+@media screen and (max-width:1200px) {
+	.bbbgap { height: 150px; }
+	.bbgap { height: 100px; }
+	.bgap { height: 50px; }
+	.gap { height: 35px; }
+	.sgap { height: 20px; }
+	.sssgap { height: 10px; }
+	.sec_tit { font-size: 16px; }
+	.sec_tit3 { font-size: 18px; }
+	.sec_tit6 { font-size: 36px; }
+	.f_logo { width: 140px; }
+	.footer-top, .footer-btm { flex-direction: column; }
+	.board_top_label { padding-top: 120px; }
+	.sub_motion_visual_bg_wrap { height: auto; min-height: 50vh; }
+	.cert_list { grid-template-columns: repeat(4, 1fr); }
+	.kpso_bfat_wrap { padding-top: 50px; }
+	.re_feat_section { margin: 50px 5% }
+}
+@media screen and (max-width:1100px) {
+
+	.sec_tit9 { font-size: 36px; }
+	.sec_txt2 { font-size: 16px }
+	.sec_pd100 { padding-top: 50px; padding-bottom: 50px; }
+	.sec_pd150 { padding-top: 80px; padding-bottom: 80px; }
+	.grid-5 { grid-template-columns: repeat(3, 1fr); }
+	.sub .visual_nav_menu .sub_menu_a { padding: 15px 20px 15px; }
+	.sec_tit7 { font-size: 28px; }
+	.sec_tit2 { font-size: 18px; }
+	.sec_txt { font-size: 15px; }
+	.comb_detail .info { font-size: 16px; }
+	.comb_detail .info br { display: none; }
+	.comb_detail { padding: 30px; }
+	.comb_detail .tit { font-size: 21px; }
+	.sub .visual_nav_menu .sub_menu_a { padding: 10px 15px 10px; min-width: 100px; }
+	.grid-3 { grid-template-columns: 1fr 1fr; }
+	.cert_img_wrap .tit { font-size: 16px; }
+	.sun_split { min-height: 50vh; }
+	.sun_split__sticky { height: 70vh; }
+	.hanbit_ending_txt { font-size: 32px; }
+}
+@media screen and (max-width:1000px) {
+	.main_sec_in { padding: 80px 30px; }
+	.sec_in { padding: 0px 30px; }
+	.sub_motion_visual_bg_wrap { padding: 50px 10% !important; }
+	.sec_pd100 { padding-top: 50px; padding-bottom: 50px; }
+	.mainAbout_list { grid-template-columns: repeat(1, 1fr); }
+	.main_sec_03_text_wrap { position: relative; padding-bottom: 30px; }
+	.mainProject_list { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+	.mainProject_item.item_01, .mainProject_item.item_06 { display: none; }
+	.mainProject_item_a { height: 28vh; }
+	.mainProject_item_a .txt { font-size: 14px; }
+	.sec_tit8 { font-size: 38px; }
+	.sec_tit5 { font-size: 24px; }
+	.Motion_text_wrap .tit { top: 80px; }
+	.Motion_text_wrap .txt { right: 30px; bottom: 80px; }
+	#section_05,#section_05 .fp-tableCell { display: flex; align-items: center; height: auto !important; padding: 50px 0; }
+	.mFooter { display: none !important; }
+	.footer-top { gap: 30px; }
+	.footer-top-right { position: relative; right: 0; bottom: 0; }
+	.footer-top { padding: 50px 30px 30px; }
+	.copyright { padding: 30px; }
+	#section_05 .fp-tableCell { padding: 0}
+	.news_btn_a { padding: 7px 20px; }
+	.NewsTit ul { gap: 0; }
+	.m_b_ns_thumb { border-radius: 10px; }
+	.NewsList { gap: 10px; }
+	.footer-top-mid address dl, .footer-top-right nav ul li a, .copyright { font-size: 14px; }
+	address .add-fill dt { min-width: 140px; }
+	.Government-steps-wrap .title { font-size: 30px; }
+	.Government-steps-wrap .list { width: 100%; }
+	.Government-steps-wrap .card { padding: 30px; flex-direction: column; }
+	.Government-steps-wrap .card .tag { bottom: auto; }
+	.spec_term_wrap { overflow: auto; overflow: auto; white-space: nowrap; }
+	.buis_detail_list { grid-template-columns: repeat(2, 1fr); }
+	.bipv_dif_in { flex-direction: column-reverse; }
+	.bipv_dif_list.clist { width: 100%; }
+	.bipv_dif_preview .pdt_slider_wrap { width: 100%; }
+	.bipv_dif_preview { width: 100%; padding-bottom: 20px; }
+	.bipv_features_wrap { grid-template-columns: repeat(2, 1fr); }
+	.sun_txt { font-size: 24px; }
+	.buis2_sec_all_wrap { padding: 50px 0; }
+	.esg_circle_list { grid-template-columns: repeat(1, 1fr); gap: 10px; }
+	.esg_circle_wrap .flow_txt { top: 37%; }
+	.parking_slogan { padding: 100px 10%; }
+	.parking_detail_list { grid-template-columns: repeat(2, 1fr); }
+	.parking_pdt_wrap .tit { font-size: 28px; }
+	.kspo_feat_section { grid-template-columns: 100%; gap: 50px; }
+	.buis_tit { text-align: center; }
+	.const_circle_list { position: relative; padding: 30px 0 100px; display: flex; justify-content: center; flex-direction: column; align-items: center; }
+	.const_circle_detail { position: relative; display: flex; bottom: 0; flex-direction: column; padding: 30px; width: 100%; background-color: #f9f9f9; border-radius: 20px; align-items: center; justify-content: center; margin-top: 70px; }
+	.metering-process-wrap .list { display: flex; width: 100%; gap: 10px; flex-direction: column; align-items: center; }
+	.metering-process-wrap .list .item { width: 100%; }
+	.metering-process-wrap .next { rotate: 90deg; font-size: 14px; }
+	.vnm_structure_wrap .title { font-size: 30px; }
+	.design_detail_list { grid-template-columns: 1fr; }
+	.const_ref_list { grid-template-columns: repeat(2, 1fr); }
+	.om-grid { grid-template-columns: repeat(2, 1fr); }
+	.re100_allinone .list { grid-template-columns: repeat(2, 1fr); gap: 20px; justify-content: start; padding-top: 100px; }
+	.re100_allinone { height: auto; }
+	.bipv_cb_feat_section .tit { font-size: 36px; }
+}
+@media screen and (max-width:960px) {
+	.cert_list { grid-template-columns: repeat(3, 1fr); }
+	.main-slider .slide-item > .slide-con > .slide-txt > h2.txt-tt { font-size: 48px; }
+	.main_sec_all_wrap .scroll .txt { left: -1px ; }
+	.main_sec_all_wrap .scroll .arr { margin-left: 12px; }
+	.header_wrap a.logo svg { max-width: 130px; }
+	.header_wrap .m_menu_btn_wrap .m_menu_btn { width: 40px; height: 40px; }
+	.m_menu_btn_wrap { height: 40px; width: 40px; }
+	.hd_menu { gap: 5px; }
+	.hd_menu .dot { width: 5px; height: 5px; }
+	.header_mid { height: 60px; }
+	.header_wrap a.logo { padding-top: 12px; }
+	.main-slider .slide-item > .slide-con > .slide-txt > p.txt-desc { font-size: 18px; }
+}
+@media screen and (max-width:860px) {
+	.header_wrap { padding: 0 20px; }
+	.top_nav_wrap { padding: 0; }
+	.mainProject_list { grid-template-columns: repeat(3, 1fr); }
+	.NewsTit { justify-content: space-between; align-items: flex-start; padding-bottom: 30px; flex-direction: column; gap: 30px; }
+	.NewsList { grid-template-columns: repeat(2, 1fr); }
+	.NewsTit_in { display: flex; align-items: flex-start; gap: 20px; flex-direction: column; }
+	.NewsTit_in .sec_txt2 br { display: none; }
+	.m_b_ns_box_in { padding: 20px 0 10px; }
+	.visual_nav_box { display: none; }
+	.hanbit_ending_txt { font-size: 28px; }
+	.hanbit_txt_ani { font-size: 30px; }
+	.hanbit_wide_txt { font-size: 30px; }
+	.hanbit_wide_wrap { border-radius: 20px; padding: 30px; }
+	.sub_motion_visual_txt .txt { position: relative; padding-top: 20px; }
+	.history_con_box { grid-template-columns: 1fr; gap: 30px; padding-left: 10%; }
+	.history_con { padding-bottom: 30px; }
+	.history_con_right .history_con { left: 0; }
+	.line-guide { left: 0; }
+	.his_dot:after { width: 40px; height: 40px; top: 65%; left: 25%; }
+	.his_dot span { width: 7px; height: 7px; }
+	.his_dot_wrap { left: -3px; height: 7px; width: 7px; }
+	.history_con_left .history_con { right: auto; }
+	.history_con_02.history_con_right { order: 1; }
+	.history_con_02.history_con_left { order: 2; }
+	.history_con_tit_wrap img { border-radius: 20px; }
+	.history_con_01.history_con_left { padding-right: 0; }
+	.esg_detail_list { grid-template-columns: repeat(1, 1fr); }
+	.esg_detail_wrap { padding: 50px 30px; }
+	.epc_process_wrap ul { flex-direction: column; }
+	.epc_process_wrap ul:after { width: 1px; height: 90%; }
+	.zeb_spec_in.grid-2 { grid-template-columns: 100%; gap: 30px; }
+	.re100-slider { width: 90%; }
+	.re100-slider .active .item { border: 15px solid #111; border-radius: 20px; max-width: 850px; scale: 1; }
+	.re100-slider-wrap { padding: 50px 0 30px; }
+	.Government-target-wrap .card { padding: 30px; }
+	.Government-target-wrap .card .tit { font-size: 24px; }
+	.Government-target-wrap .card .txt { font-size: 16px; }
+}
+@media screen and (max-width:760px) {
+	.lang_all_wrap.top_lang { display: none; }
+	.sec_tit5 { font-size: 18px; }
+	.main_sec_all_wrap .scroll .txt { font-size: 10px; left: -3px; top: -55px; }
+	.main_sec_all_wrap .scroll .arr { margin-left: 8px; width: 20px; height: 33px; }
+	.main-slider .slide-item-1 > .slide-con > .slide-txt, .main-slider .slide-item-2 > .slide-con > .slide-txt, .main-slider .slide-item-3 > .slide-con > .slide-txt, .main-slider .slide-item-4 > .slide-con > .slide-txt { left: 30px; top: 40vh; width: 80vw; }
+	.slider-wrap .s-autoplay-btn { left: 30px; top: 60%; }
+	.mainAbout_item_a { padding: 30px; min-height: 38vh; }
+	.mainAbout_item_a .on,.mainAbout_item_a .off { padding: 30px; }
+	.mainAbout_item_a .on .tit, .mainAbout_item_a .off .tit { font-size: 30px; }
+	.sub_visual_txt2 { padding-top: 30px; justify-content: flex-start; }
+	.sub_motion_visual_txt .txt { font-size: 16px; }
+	.sub_motion_visual_txt .txt br { display: none; }
+	.grid-2 { grid-template-columns: 1fr; }
+	.Government-tit-wrap .left-in { padding-left: 0; padding-top: 30px; }
+	.sub_title.sec_tit5 { font-size: 30px; }
+	.grid-3 { grid-template-columns: 1fr; }
+	.Government-detail-wrap .clist { width: 100%; }
+	.spec_table2 { width: 100%; }
+	.Government-steps-wrap .grid-2 { grid-template-columns: 100%; }
+	.grid-5 { grid-template-columns: repeat(2, 1fr); }
+	.inv_spec_in.grid-2 { grid-template-columns: 100%; }
+	.buis_detail_list { grid-template-columns: repeat(1, 1fr); }
+	.bipv_features_wrap { grid-template-columns: repeat(1, 1fr); }
+	.bipv_module_card .detail_info_wrap { padding: 30px; }
+	.hanbit_ending_sec_wrap { padding: 150px 30px; }
+	.sun_split { min-height: 30vh; flex-direction: column; }
+	.sun_split__sticky { width: 100%; height: 30vh; }
+	.sun_split__scroll { width: 100%; padding: 50px; }
+	.history_con_02 .history_con_tit_wrap { left: 0; padding-left: 10%; }
+	.his_tit { font-size: 48px; }
+	.esg_circle_list .tit { font-size: 24px; }
+	.locationWrap { padding: 50px 0 0; }
+	.parking_bfat_wrap .grid-2 { justify-items: stretch; }
+	.parking_motion_section .txt02 { display: block; }
+	.parking_motion_section .txt02_img { padding-bottom: 50px; }
+	.kpso_bfat_wrap .item.active:after { left: 46%; top: -70px; rotate: 90deg; }
+	.kpso_bfat_in .grid-2 { gap: 100px; }
+	.comb_feat_in.grid-2 { grid-template-columns: 100%; }
+	.subnav ul { flex-direction: column; }
+	.subnav a::after { width: 80%; height: 1px; right: auto; left: 50%; bottom: 0; transform: translateX(-50%); }
+	.const_ref_list { grid-template-columns: repeat(1, 1fr); }
+	.serv_ref_list { grid-template-columns: 1fr; }
+	.kspo_feat_list { grid-template-columns: repeat(1, 1fr); }
+	.re100_allinone .title { font-size: 36px; }
+	.re100_allinone .title br { display: none; }
+	.carbon-top-wrap { padding-top: 50px; }
+	.board_top_label { padding: 120px 5% 0; }
+	.bipv_cb_feat_section .tit { font-size: 30px; }
+	.bipv_cb_feat_section { padding: 50px 5% 80px; }
+	.cb-process-wrap .title { font-size: 30px; }
+	.consult_wrap .tit { font-size: 30px; }
+	.hanbit_wide_all_wrap { padding: 0 5%; }
+	.Government-target-wrap .subtxt p { font-size: 16px; }
+}
+@media screen and (max-width:650px) {
+	.sub_sec_pd { padding: 70px 0 }
+	.bbbgap { height: 80px; }
+	.bbgap { height: 40px; }
+	.bgap { height: 30px; }
+	.gap { height: 25px; }
+	.sgap { height: 18px; }
+	.ssgap { height: 15px; }
+	.sssgap { height: 8px; }
+	.sec_tit8 { font-size: 32px; }
+	.sec_tit4 { font-size: 18px; }
+	.sec_tit9 { font-size: 30px; }
+	.cert_list { grid-template-columns: repeat(2, 1fr); }
+	.cert_img_wrap .tit { font-size: 14px; }
+	.sub_motion_visual_txt .txt { left: 0; }
+	.sub #moveDown { display: none; }
+	.m_menu .sub_menu_a { font-size: 16px; }
+	.mainAbout_item_a .on .txt, .mainAbout_item_a .detail { font-size: 14px; }
+	.main_sec_in { padding: 50px 30px; }
+	.mainProject_list { grid-template-columns: repeat(2, 1fr); }
+	.view_slider_wrap .item img { width: 80% !important; }
+	.bipv_module_card th, .bipv_module_card td { font-size: 14px; }
+	.bipv_features_wrap .item { padding: 30px; }
+	.hanbit_ending_txt { font-size: 24px; }
+	.hanbit_txt_ani { font-size: 24px; }
+	.hanbit_wide_txt { font-size: 24px; }
+	.hanbit_wide_wrap { height: 40vh; }
+	.grid-2 { gap: 20px; }
+	.grid-5 { gap: 20px; }
+	.inv_spec_in.grid-2 { gap: 20px; }
+	.step-num { font-size: 16px; }
+	.step-title { font-size: 18px; }
+	.legend-list li { gap: 5px; }
+	.sub_motion_visual_txt .tit { font-size: 30px; }
+	.map_info_wrap { left: 20px; bottom: 20px; right: 20px; padding: 30px; }
+	.locationWrap .subtit { font-size: 16px; padding-bottom: 10px; }
+	.locationWrap .tit { font-size: 28px; }
+	.parking_detail_list { grid-template-columns: repeat(1, 1fr); }
+	.parking_bfat_wrap .item.active { padding-top: 30px; }
+	.parking_slogan { font-size: 24px; }
+	.parking_motion_section .txt { font-size: 24px; }
+	.parking_motion_section .txt br { display: none; }
+	.parking_pdt_wrap .tit { font-size: 24px; }
+	.img_item .name { padding-top: 10px; }
+	.re_feat_section span br { display: none; }
+	.vnm_structure_wrap .title { font-size: 24px; }
+	.vnm_structure_wrap .list ul { padding: 30px; }
+	.main-slider .slide-item-1 > .slide-con > .slide-txt, .main-slider .slide-item-2 > .slide-con > .slide-txt, .main-slider .slide-item-3 > .slide-con > .slide-txt, .main-slider .slide-item-4 > .slide-con > .slide-txt { top: 30vh; }
+	.slider-wrap .s-autoplay-btn { left: 30px; bottom: 30%; top: auto; }
+	.main-slider .slide-item > .slide-con > .slide-txt > h2.txt-tt { font-size: 36px; line-height: 1.2; font-weight: 600; }
+	.main-slider .slide-item > .slide-con > .slide-txt > p.txt-desc { font-size: 16px; }
+	.slide-con .ssssgap { height: 10px; }
+	.sub_motion_visual_txt br { display: none !important; }
+	.subnav a { font-size: 16px; }
+	.om-grid { grid-template-columns: repeat(1, 1fr); }
+	.metering-process-wrap .result { padding: 30px; font-size: 18px; }
+	.metering-process-wrap .title { font-size: 30px; }
+	.Government-target-wrap .title { font-size: 30px; }
+	.term_row .highlight:after { top: 5px; left: 5px; right: 5px; bottom: 5px; }
+	.cert_tit { font-size: 30px; }
+}
+@media screen and (max-width:520px) {
+
+	.sec_tit3 { font-size: 15px; }
+	.sec_txt2 br { display: none;
+
+	}:root { --sticky-top: 50px; }
+	.Motion_text_wrap .txt { bottom: 180px; }
+	.NewsList { grid-template-columns: repeat(1, 1fr); }
+	.footer-top-mid address dl { flex-direction: column; align-items: flex-start; gap: 0; }
+	.sec_tit5 { font-size: 16px; }
+	.buis_tit .tit2 { font-size: 30px; }
+	.Motion_text_wrap .sec_tit5 br { display: none; }
+	.Motion_text_wrap .tit { position: relative; padding-top: 80px; top: auto; left: auto; }
+	.Motion_text_wrap .txt { position: relative; right: auto; bottom: auto; text-align: left; left: auto; padding-top: 30px; }
+	.Motion_text_wrap { padding: 0 30px; }
+	.view_slider_wrap2 .item { max-width: inherit; }
+	.hanbit_txt_ani { font-size: 21px; }
+	.hanbit_txt_ani br { display: none; }
+	.legend-mark { font-size: 12px; width: 19px; height: 19px; }
+	.sub_visual_nav { font-size: 14px; }
+	.sec_tit7 { font-size: 24px; }
+	.sub_visual_txt2 .sub_menu_a span { font-size: 14px; }
+	.his_tit { font-size: 36px; }
+	.his_year { font-size: 24px; }
+	.esg_circle_list .txt { font-size: 14px; }
+	.subnav a { font-size: 14px; }
+	.buis_tit .txt { font-size: 14px; }
+	.buis_img img,.buis_detail_card { border-radius: 10px; }
+	.buis_section { padding-bottom: 50px; padding-top: 50px}
+	.re_feat_section span { font-size: 16px; }
+	.comb_detail .tit { font-size: 18px; padding-bottom: 10px; }
+	.Government-detail-wrap img { border-radius: 10px; }
+	.Government-steps-wrap .card .tit { font-size: 21px; }
+	.Government-steps-wrap .card .txt { font-size: 14px; line-height: 1.4; }
+	.Government-steps-wrap .card .num { width: 25px; height: 25px; font-size: 12px; }
+	.Government-steps-wrap .list { gap: 15px; }
+	.m_menu .menu_a { font-size: 21px; width: 180px; }
+	.Government-target-wrap .card .txt { font-size: 14px; }
+	.Government-target-wrap .card .tit { font-size: 21px; }
+	.term_row td { font-size: 14px; }
+	.sec_tit6 { font-size: 30px; }
+	.sec_txt2 { font-size: 14px; }
+	.his_info { font-size: 14px; line-height: 1.4; }
+	.sec_in { padding: 0px 5% }
+	.sun_txt br { display: none; }
+	.sun_split__scroll { width: 100%; padding: 50px 5%; }
+	.sun_txt { font-size: 18px; }
+	.Government-tit-wrap { padding-top: 50px; }
+	.Government-target-wrap { padding-bottom: 50px; }
+	.Government-target-wrap .subtxt p { font-size: 14px; }
+	.spec_row dt, .spec_row dd { font-size: 14px; }
+}
+@media screen and (max-width:480px) {
+	.mainProject_item_a { height: 19vh; }
+	.mainProject_item_a:hover .on { padding: 20px; }
+	.m_menu .menu_a { font-size: 18px; }
+	.m_menu .sub_menu_a { font-size: 14px; }
+	.sec_tit8 { font-size: 28px; }
+	.sub_motion_visual_txt .txt { font-size: 14px; }
+	.his_info { font-size: 16px; }
+	.his_info th { min-width: 40px; }
+	.grid-2 { gap: 15px; }
+	.grid-5 { gap: 15px; }
+}

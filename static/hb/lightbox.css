@@ -1,0 +1,12 @@
+/* 이미지 확대 보기 라이트박스 (lightbox.js) */
+.hb-lightbox { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0, 0, 0, .85);
+  align-items: center; justify-content: center; padding: 48px 16px 16px; box-sizing: border-box; cursor: zoom-out; }
+.hb-lightbox.is-open { display: flex; }
+.hb-lightbox-figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; }
+.hb-lightbox-img { display: block; max-width: 100%; max-height: calc(100vh - 80px); width: auto; height: auto; object-fit: contain;
+  background: #fff; cursor: default; }
+.hb-lightbox-cap:empty { display: none; }
+.hb-lightbox-close { position: absolute; top: 8px; right: 12px; width: 40px; height: 40px; border: 0; border-radius: 50%;
+  background: rgba(255, 255, 255, .15); color: #fff; font-size: 30px; line-height: 40px; cursor: pointer; padding: 0; }
+.hb-lightbox-close:hover, .hb-lightbox-close:focus { background: rgba(255, 255, 255, .3); outline: 2px solid #fff; }
+html.hb-lightbox-lock, html.hb-lightbox-lock body { overflow: hidden; }

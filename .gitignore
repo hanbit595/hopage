@@ -1,0 +1,16 @@
+﻿.env
+*.sql
+*.bak
+*.log
+*.php
+data/session/
+data/tmp/
+data/cache/
+data/log/
+Thumbs.db
+.DS_Store
+node_modules/
+__pycache__/
+*.dump
+data/member/
+public/

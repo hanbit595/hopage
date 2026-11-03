@@ -272,13 +272,24 @@ def main(report=False):
             continue
         t = f.read_bytes().decode("utf-8", errors="surrogateescape")
 
+        def exists(item, css=f):
+            u = re.search(r"""url\(\s*['"]?([^'")?#]+)""", item)
+            return u is None or (css.parent / u.group(1)).exists()
+
         def face(m):
             block = m.group(0)
-            src = re.search(r"src\s*:([^;}]*)", block)
-            if not src or "woff2" not in src.group(1):
+            srcs = list(re.finditer(r"src\s*:([^;}]*);?", block))
+            if not srcs:
                 return block
-            keep = [s.strip() for s in re.split(r",(?![^(]*\))", src.group(1)) if "woff2" in s]
-            return block.replace(src.group(0), "src: " + ", ".join(keep))
+            out = block
+            for src in srcs:
+                items = [s.strip() for s in re.split(r",(?![^(]*\))", src.group(1)) if s.strip()]
+                keep = [s for s in items if "woff2" in s] if any("woff2" in s for s in items) else items
+                keep = [s for s in keep if exists(s)]   # D6: 원본 서버에도 없는 글꼴 파일 참조는 뺀다
+                out = out.replace(src.group(0), ("src: " + ", ".join(keep) + (";" if src.group(0).rstrip().endswith(";") else "")) if keep else "")
+            if not re.search(r"src\s*:", out):
+                return ""   # 남는 글꼴 파일이 하나도 없으면 @font-face 자체를 지움(브라우저가 받지 못하는 글꼴)
+            return out
         t2 = re.sub(r"@font-face\s*\{[^}]*\}", face, t)
         if t2 != t:
             f.write_bytes(t2.encode("utf-8", errors="surrogateescape"))

@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+.top_nav .menu_a span{line-height: 1.2;}
+.top_nav .menu_a { font-size: 16px; }
+.txt-tt{font-size: 60px!important; }
+
+.sec_tit8 {
+    font-size: 60px;
+
+}
+@media (max-width:960px){
+    .txt-tt{font-size: 30px!important; }
+    .sec_tit8{font-size: 24px!important; }
+}

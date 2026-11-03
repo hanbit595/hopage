@@ -1,0 +1,55 @@
+# push하면 사이트를 다시 만들어 GitHub Pages에 배포한다.
+# 저장소 설정 > Pages > Source 를 "GitHub Actions"로 한 번 바꿔 두어야 한다.
+# 빌드: build/all.py (optimize.py → build.py) → public/ 을 Pages에 올림
+# extract_pages.py는 수집본(crawl/)·FTP 원본(original/)이 필요해서 여기서는 돌리지 않는다(내 PC에서만).
+name: 배포 (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 패키지 설치
+        # pillow: 이미지 최적화·새 글 축소본, jinja2: 페이지 틀
+        # .mov 동영상을 새로 넣는 경우에만 imageio-ffmpeg가 필요하다(그때 아래 줄 끝에 imageio-ffmpeg 추가)
+        run: python -m pip install pillow jinja2
+
+      - name: 사이트 빌드
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python build/all.py
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

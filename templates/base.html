@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="{{ html_lang }}" class="sok">
+<head>{% include "_head_" ~ lang ~ ".html" %}</head>
+<body  class="{{ body_class }}">
+
+<div id="wrap">
+{% include "_top_" ~ lang ~ ".html" %}
+{% block content %}{% endblock %}
+{% include "_tail_" ~ lang ~ ".html" %}{% block body_end %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,125 @@
+{#- 게시판 목록 (원본 theme/basic/skin/board/notice·reference 목록 화면을 그대로 옮김, 웹진형: 좌측 1건 + 우측 6건)
+    - 관리용 목록 폼(board_list_update.php)은 정적 사이트에서 쓸 수 없어 action을 없앰
+    - 검색: 원본처럼 검색창은 숨겨져 있고, 열리면 JS 제목 검색(board_search.js)으로 동작. 주소 ?stx=검색어 로도 검색 -#}
+{% extends "base.html" %}
+{% block content %}
+
+<!-- 게시판 목록 시작 { -->
+<div id="bo_list" style="width:100%">
+
+    <!-- 게시판 카테고리 시작 { -->
+        <!-- } 게시판 카테고리 끝 -->
+
+    <form name="fboardlist" id="fboardlist" action="#" onsubmit="return false;" method="post">
+
+        <input type="hidden" name="bo_table" value="{{ board.table }}">
+        <input type="hidden" name="sfl" value="">
+        <input type="hidden" name="stx" value="">
+        <input type="hidden" name="spt" value="">
+        <input type="hidden" name="sca" value="">
+        <input type="hidden" name="sst" value="wr_num, wr_reply">
+        <input type="hidden" name="sod" value="">
+        <input type="hidden" name="page" value="{{ page }}">
+        <input type="hidden" name="sw" value="">
+
+        <!-- 게시판 페이지 정보 및 버튼 시작 { -->
+        <div id="bo_btn_top">
+
+            <ul class="btn_bo_user">
+                                                                            </ul>
+        </div>
+        <!-- } 게시판 페이지 정보 및 버튼 끝 -->
+
+
+
+            <div class="webzine_layout">
+
+                <!-- 좌측 : 최신글 1건 -->
+                {% if left %}                <div class="webzine_left">
+                                    <a href="{{ left.href }}" >
+{%- if left.thumb %}
+                        <div class="left_thumb">
+                        <img src="{{ left.thumb }}" alt="">
+                        </div>
+{%- endif %}
+
+                    <div class="left_txt">
+                        <span class="label">
+                                                    {{ labels.list_label }}
+                                                </span>
+                        <h2>{{ left.subject }}</h2>
+                        <p class="date">{{ left.date }}</p>
+                    </div>
+                    </a>
+                </div>
+                {% endif %}
+                <!-- 우측 : 다음 6건 -->
+                <div class="webzine_right">
+                    {% for it in right %}                    <div class="right_item">
+                                            <a href="{{ it.href }}">
+{%- if it.thumb %}
+                            <div class="thumb">
+                                <img src="{{ it.thumb }}" alt="">
+                            </div>
+{%- endif %}
+                            <div class="txt">
+                                <p class="tit">{{ it.subject }}</p>
+                                <span class="date">{{ it.date }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}                </div>
+
+            </div>
+
+        <!-- 페이지 -->
+        {{ paging }}
+        <!-- 페이지 -->
+
+            </form>
+
+    <!-- 게시판 검색 시작 { -->
+    <div class="bo_sch_wrap">
+        <fieldset class="bo_sch">
+            <h3>검색</h3>
+            <form name="fsearch" method="get" data-board-index="search.json">
+                <input type="hidden" name="bo_table" value="{{ board.table }}">
+                <input type="hidden" name="sca" value="">
+                <input type="hidden" name="sop" value="and">
+                <label for="sfl" class="sound_only">검색대상</label>
+                <select name="sfl" id="sfl">
+                    <option value="wr_subject" >제목</option><option value="wr_content" >내용</option><option value="wr_subject||wr_content" >제목+내용</option><option value="wr_name,1" >글쓴이</option><option value="wr_name,0" >글쓴이(코)</option>                </select>
+                <label for="stx" class="sound_only">검색어<strong class="sound_only"> 필수</strong></label>
+                <div class="sch_bar">
+                    <input type="text" name="stx" value="" required id="stx" class="sch_input" size="25" maxlength="20" placeholder="{{ labels.search_placeholder }}">
+                    <button type="submit" value="검색" class="sch_btn"><i class="fa fa-search" aria-hidden="true"></i><span class="sound_only">검색</span></button>
+                </div>
+                <button type="button" class="bo_sch_cls" title="닫기"><i class="fa fa-times" aria-hidden="true"></i><span class="sound_only">닫기</span></button>
+            </form>
+        </fieldset>
+        <div class="bo_sch_bg"></div>
+    </div>
+    <script>
+        jQuery(function ($) {
+            // 게시판 검색
+            $(".btn_bo_sch").on("click", function () {
+                $(".bo_sch_wrap").toggle();
+            })
+            $('.bo_sch_bg, .bo_sch_cls').click(function () {
+                $('.bo_sch_wrap').hide();
+            });
+        });
+
+    </script>
+    <script src="%%ROOT%%hb/board_search.js"></script>
+    <!-- } 게시판 검색 끝 -->
+</div>
+
+
+<!-- } 게시판 목록 끝 -->
+
+
+
+
+
+{% endblock %}

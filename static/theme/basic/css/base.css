@@ -1,0 +1,106 @@
+@charset "utf-8";
+/* base */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 900;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Black.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 800;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-ExtraBold.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 700;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Bold.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 600;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-SemiBold.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 500;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Medium.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 400;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Regular.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 300;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Light.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 200;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-ExtraLight.woff2) format('woff2')}
+
+@font-face {
+	font-family: 'Pretendard';
+	font-weight: 100;
+	font-display: swap;
+	src: url(font/pretendard/Pretendard-Thin.woff2) format('woff2')}
+
+
+
+html{
+font-smoothing: antialiased;
+-webkit-font-smoothing: antialiased;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTJBQkFGRUZFOTIyMTFFMEJDRDNEQzkxOTVGOTNBODAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTJBQkFGRjBFOTIyMTFFMEJDRDNEQzkxOTVGOTNBODAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MkFCQUZFREU5MjIxMUUwQkNEM0RDOTE5NUY5M0E4MCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5MkFCQUZFRUU5MjIxMUUwQkNEM0RDOTE5NUY5M0E4MCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtrV+I8AAAAQSURBVHjaYvj//z8DQIABAAj8Av7bok0WAAAAAElFTkSuQmCC',sizingMethod=crop);
+  zoom: 1;
+  -webkit-font-smoothing: subpixel-antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,body { }
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, input, textarea, p, blockquote, th, td, textfield, select, img{
+  margin:0;
+  padding:0;
+}
+
+body {color:#666;font-size:14px;font-family:'Pretendard','돋움',Dotum,'굴림',Gulim,Helvetica,sans-serif !important;}
+h1, h2, h3, h4, h5, h6 {font-weight:normal; font-size:1em;font-family:'Pretendard','돋움',Dotum,'굴림',Gulim,Helvetica,sans-serif;}
+ol, ul, li, dd, dl, dt  {list-style:none;}
+span{font-family:'Pretendard','돋움',Dotum,'굴림',Gulim,Helvetica,sans-serif !important;}
+fieldset, legend {border:0; margin:0;padding:0;}
+img {border:0; }
+label{cursor:pointer;}
+address, caption, em{font-weight:normal;font-style:normal;}
+
+*:hover {
+
+}
+a {cursor: pointer;}
+strong{}
+
+table {border-collapse:collapse;}
+
+* {
+  -webkit-text-size-adjust: none;
+-moz-text-size-adjust: none;
+-ms-text-size-adjust: none;
+}
+
+.emoji {
+  font-family: "Noto Color Emoji", sans-serif!important;
+  font-weight: 400!important;
+  font-style: normal!important;
+}

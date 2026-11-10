@@ -58,6 +58,10 @@
     if (!to && params.bo_table) {             // 없는 글 번호 등 → 그 게시판 목록
       to = map[rest + "?bo_table=" + params.bo_table];
     }
+    if (!to) {                                // 없는 새 주소의 글·목록 쪽(지운 글 등) → 그 게시판 목록
+      var mb = rest.match(/^\/((?:en\/)?board\/[\w-]+\/)(?:\d+|page-\d+)\.html$/);
+      if (mb) to = mb[1] + "index.html";
+    }
     if (!to && /\.php$/.test(rest)) {         // 그 밖의 옛 .php 주소(로그인·관리자 등) → 홈
       to = params.locale === "en_US" ? "en/index.html" : "index.html";
     }

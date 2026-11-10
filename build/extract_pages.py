@@ -319,6 +319,8 @@ def clean_static():
 
 
 def main():
+    import private_guard            # D17: 비공개 처리 목록(저장소 바깥 private\) 없이는 추출하지 않음
+    private_guard.check()
     clean_static()
     TEMPLATES.mkdir(parents=True, exist_ok=True)
     (TEMPLATES / "base.html").write_text(BASE_HTML, encoding="utf-8", newline=LF)
@@ -418,6 +420,7 @@ def main():
 
     sha = fetch_gsap_beta()
     copied, size = copy_assets()
+    private_guard.apply()           # D17: 비공개 글 사진·메인 5번 카드가 되살아나지 않게 다시 지움
 
     # 결과 보고
     print(f"공통 틀: base.html + _head/_top/_tail_(ko|en).html")

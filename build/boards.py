@@ -275,10 +275,15 @@ def list_thumb(post, table, site: Site, which: str):
 
 
 # ───────── 페이지 만들기 ─────────
-def build_pages(content_dir: Path, static_dir: Path, templates):
-    """게시판 목록·글 페이지 정보 목록을 돌려준다: (출력 경로, 템플릿 이름, 템플릿 변수, 페이지 정보)."""
+def build_pages(content_dir: Path, static_dir: Path, templates, ko_page_rows=None):
+    """게시판 목록·글 페이지 정보 목록을 돌려준다: (출력 경로, 템플릿 이름, 템플릿 변수, 페이지 정보).
+    ko_page_rows: 한글 게시판 쪽당 글 수(cms/settings/site.yml per_page). 없으면 boards.json 값."""
     posts = json.loads((content_dir / "posts.json").read_text(encoding="utf-8"))
     boards = json.loads((content_dir / "boards.json").read_text(encoding="utf-8"))
+    if ko_page_rows:
+        for cfg in boards.values():
+            if cfg["lang"] == "ko":
+                cfg["page_rows"] = ko_page_rows
     snap = json.loads((content_dir / "board_snapshot.json").read_text(encoding="utf-8"))
     site = Site(static_dir)
     out = []

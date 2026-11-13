@@ -19,7 +19,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import boards
 import extras
-from datetime import datetime
+from datetime import date, datetime
 
 SITE = Path(__file__).resolve().parent.parent
 TEMPLATES = SITE / "templates"
@@ -31,6 +31,10 @@ TEMP_BASES = ["/hopage/"]                  # 임시 주소(GitHub Pages 프로�
 MENU_YML = SITE / "cms" / "settings" / "menu.yml"   # 한글 메뉴 원본(관리자 화면에서 고침)
 MENU_SLOT = re.compile(r"%%MENU_KO:(\w+)%%")         # 템플릿·본문 조각의 한글 메뉴 자리표시
 MENU_FORMS = {"mega", "mobile", "drop_main", "drop_sub", "subtab"}
+SITE_YML = SITE / "cms" / "settings" / "site.yml"       # 회사정보·기본설정(한글 푸터, 게시판 쪽당 글 수, 메인 설명문)
+POPUPS_YML = SITE / "cms" / "settings" / "popups.yml"   # 한글 메인 팝업
+FOOTER_SLOT = "%%FOOTER_KO%%"                           # _tail_ko.html·메인 본문의 한글 푸터 자리표시
+POPUP_DEFAULTS = {"width": 450, "height": 660, "top": 150, "left": 10}
 
 
 class BuildError(Exception):
@@ -95,6 +99,116 @@ def load_menu():
     return menus, internal
 
 
+def read_yml(path: Path, key: str):
+    """설정 YAML 을 읽어 최상위 dict 를 돌려준다. 파일 없음·형식 오류는 BuildError."""
+    name = path.relative_to(SITE).as_posix()
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise BuildError(f"설정 파일이 없습니다: {name}")
+    except yaml.YAMLError as e:
+        raise BuildError(f"{path.name} 형식 오류: {e}")
+    except ValueError as e:   # YAML 이 날짜로 읽다가 실패(예: 2026-02-30)
+        raise BuildError(f"{path.name} 날짜 형식 오류(없는 날짜): {e}")
+    if not isinstance(data, dict) or key not in data:
+        raise BuildError(f"{path.name} 에 {key}: 항목이 없습니다.")
+    return data
+
+
+def site_link(link, where, required=True):
+    """/로 시작 → (%%ROOT%%경로, 검사할 내부 주소), http(s) → (주소, None), 빈 값 → ("", None)."""
+    link = str(link or "").strip()
+    if not link and not required:
+        return "", None
+    if link.startswith("/") and not link.startswith("//"):
+        return "%%ROOT%%" + link.lstrip("/"), link
+    if re.match(r"^https?://", link):
+        return esc(link), None
+    raise BuildError(f"{where}: 주소는 / 또는 http 로 시작해야 합니다 (현재: '{link}')")
+
+
+def load_site():
+    """cms/settings/site.yml → (푸터 템플릿 변수, 게시판 쪽당 글 수, 메인 설명문, 검사할 내부 주소 목록)."""
+    d = read_yml(SITE_YML, "offices")
+
+    def text(k):
+        v = d.get(k)
+        if not isinstance(v, (str, int)) or not str(v).strip():
+            raise BuildError(f"site.yml: {k} 가 비어 있습니다.")
+        return str(v).strip()
+    if not isinstance(d["offices"], list) or not d["offices"]:
+        raise BuildError("site.yml: offices 목록이 비어 있습니다.")
+    offices = []
+    for i, o in enumerate(d["offices"], 1):
+        if not isinstance(o, dict) or not str(o.get("name") or "").strip() or not str(o.get("address") or "").strip():
+            raise BuildError(f"site.yml: offices {i}번째 항목에 name·address 가 모두 있어야 합니다.")
+        name = str(o["name"]).strip()
+        offices.append({"name": esc(name), "address": esc(str(o["address"]).strip()),
+                        "comment": name.replace("--", "-").replace(">", "")})
+    brochure, inner = site_link(d.get("brochure"), "site.yml brochure")
+    per = d.get("per_page")
+    if isinstance(per, bool) or not isinstance(per, int) or per < 1:
+        raise BuildError(f"site.yml: per_page 는 1 이상의 숫자여야 합니다 (현재: '{per}')")
+    footer = {"offices": offices, "tel": esc(text("tel")), "email": esc(text("email")), "brochure": brochure}
+    links = [(inner, "site.yml brochure")] if inner else []
+    return footer, per, esc(text("seo_description")), links
+
+
+def load_popups():
+    """cms/settings/popups.yml → (HTML 에 넣을 active 팝업 목록, 검사할 내부 주소 목록).
+    날짜 형식 오류, start > end, active 팝업의 image 누락은 BuildError. 기간 비교는 브라우저가 한다."""
+    d = read_yml(POPUPS_YML, "popups")
+    items = d["popups"] or []
+    if not isinstance(items, list):
+        raise BuildError("popups.yml: popups 는 목록이어야 합니다.")
+
+    def day(v, where):
+        if isinstance(v, datetime):
+            v = v.date()
+        if isinstance(v, date):
+            return v
+        try:
+            if isinstance(v, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", v.strip()):
+                return date.fromisoformat(v.strip())
+        except ValueError:
+            pass
+        raise BuildError(f"popups.yml {where}: 날짜 형식 오류 (YYYY-MM-DD 로 적어야 합니다, 현재: '{v}')")
+
+    out, links, ids = [], [], set()
+    for i, p in enumerate(items, 1):
+        if not isinstance(p, dict):
+            raise BuildError(f"popups.yml {i}번째 팝업: 형식이 잘못되었습니다.")
+        where = f"{i}번째 팝업 '{p.get('title') or ''}'"
+        start, end = day(p.get("start"), where + " start"), day(p.get("end"), where + " end")
+        if start > end:
+            raise BuildError(f"popups.yml {where}: 시작일(start {start})이 종료일(end {end})보다 늦습니다.")
+        pid = p.get("id", i) if p.get("id") not in (None, "") else i
+        if isinstance(pid, bool) or not isinstance(pid, int) or pid < 1:
+            raise BuildError(f"popups.yml {where}: id 는 1 이상의 숫자여야 합니다 (현재: '{pid}')")
+        if pid in ids:
+            raise BuildError(f"popups.yml {where}: id {pid} 가 다른 팝업과 겹칩니다.")
+        ids.add(pid)
+        if p.get("active", True) is False:
+            continue   # active: false → HTML 에 넣지 않음
+        if not str(p.get("image") or "").strip():
+            raise BuildError(f"popups.yml {where}: 노출(active) 팝업에 image 가 없습니다.")
+        src, inner = site_link(p["image"], f"popups.yml {where} image")
+        if inner:
+            links.append((inner, f"popups.yml {where} image"))
+        href, inner = site_link(p.get("link"), f"popups.yml {where} link", required=False)
+        if inner:
+            links.append((inner, f"popups.yml {where} link"))
+        size = {}
+        for k, dv in POPUP_DEFAULTS.items():
+            v = p.get(k, dv) if p.get(k) not in (None, "") else dv
+            if isinstance(v, bool) or not isinstance(v, int) or v < 0:
+                raise BuildError(f"popups.yml {where}: {k} 는 0 이상의 숫자여야 합니다 (현재: '{v}')")
+            size[k] = v
+        out.append(dict(size, id=pid, src=src, href=href, name=esc(posixpath.basename(str(p["image"]).strip())),
+                        begin=f"{start.isoformat()} 00:00:00", end=f"{end.isoformat()} 23:59:59"))
+    return out, links
+
+
 def root_of(out: str) -> str:
     """public/ 기준 출력 경로 → 사이트 루트까지의 상대경로 ("", "../", "../../")."""
     depth = out.count("/")
@@ -144,6 +258,11 @@ def main():
                       keep_trailing_newline=True)
     env.filters["esc"] = esc
     menus, menu_links = load_menu()
+    footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
+    popups, popup_links = load_popups()
+    now = datetime.now(extras.KST)
+    # 한글 푸터(P3-3): site.yml 값 + 빌드 시점 연도. 템플릿 끝 줄바꿈은 자리표시 자리에 없던 것이라 뗀다
+    footer_ko = env.get_template("_footer_ko.html").render(year=now.year, **footer_vars).rstrip("\n")
     menu_macro = env.get_template("_menu_ko.html").module.menu_set
     menu_cache = {}
 
@@ -158,6 +277,7 @@ def main():
         return MENU_SLOT.sub(sub, html)
     meta = json.loads((CONTENT / "pages" / "meta.json").read_text(encoding="utf-8"))
     desc = {lang: meta[f"{lang}/index"]["description"] for lang in ("ko", "en")}
+    desc["ko"] = seo_desc_ko   # 한글 메인·게시판 설명문은 site.yml seo_description
 
     rn_file = CONTENT / "renames.json"   # optimize.py가 바꾼 파일 이름(PNG→JPG, MOV→MP4)
     renames = json.loads(rn_file.read_text(encoding="utf-8")) if rn_file.exists() else {}
@@ -167,6 +287,7 @@ def main():
         ko_out, en_out = (out, pair) if lang == "ko" else (pair, out)
         if lang == "ko":
             html = fill_menu(html, active, out)   # 한글: 메뉴를 menu.yml 로 그리면서 active 표시(P3-2)
+            html = html.replace(FOOTER_SLOT, footer_ko)   # 한글: 푸터를 site.yml 로 그림(P3-3)
         else:
             html = apply_active(html, active)     # 영문: 기존 복사본 메뉴에 active 표시
         if out == "index.html":
@@ -190,7 +311,6 @@ def main():
 
     posts = json.loads((CONTENT / "posts.json").read_text(encoding="utf-8"))
     site = boards.Site(STATIC)
-    now = datetime.now(extras.KST)
     sitemap_urls = []
 
     # 2-1) 메인·고정 페이지
@@ -201,8 +321,13 @@ def main():
         content_html = (CONTENT / "pages" / m["content"]).read_text(encoding="utf-8")
         if "%%LATEST_NOTICE%%" in content_html:   # D12: 메인 회사소식 = posts.json 최신 글 4건
             content_html = content_html.replace("%%LATEST_NOTICE%%", extras.latest_notice(m["lang"], posts, site))
-        ctx.update(description=m["description"], page_css=m.get("page_css", ""), content_html=content_html,
-                   popup_html=extras.popup_html(posts, site, now) if m.get("is_main") else "")
+        description = seo_desc_ko if key == "ko/index" else m["description"]
+        # 메인 팝업: 한글은 popups.yml(P3-3), 영문은 기존 posts.json 방식 그대로(1차 범위 밖)
+        popup = ""
+        if m.get("is_main"):
+            popup = extras.popup_html(popups) if m["lang"] == "ko" else extras.popup_html_en(posts, site, now)
+        ctx.update(description=description, page_css=m.get("page_css", ""), content_html=content_html,
+                   popup_html=popup)
         write(out, tpl.render(**ctx), m["lang"], m["pair"], m.get("active"))
         sitemap_urls.append((out, None))
     print(f"  메인·고정 페이지 {len(meta)}개")
@@ -210,7 +335,7 @@ def main():
     # 2-2) 게시판 목록·글 (content/posts.json)
     n_list = n_view = 0
     dates = {f"{b}:{p['id']}": p["datetime"][:10] for b, v in posts["boards"].items() for p in v}
-    for out, tname, ctx, pm in boards.build_pages(CONTENT, STATIC, env):
+    for out, tname, ctx, pm in boards.build_pages(CONTENT, STATIC, env, per_page_ko):
         if tname is None:   # 검색용 목록 JSON
             (PUBLIC / out).parent.mkdir(parents=True, exist_ok=True)
             (PUBLIC / out).write_text(json.dumps(ctx, ensure_ascii=False), encoding="utf-8")
@@ -226,6 +351,9 @@ def main():
 
     # 3) 옛 주소 이동(404.html + redirects.json), sitemap.xml, robots.txt
     boards_cfg = json.loads((CONTENT / "boards.json").read_text(encoding="utf-8"))
+    for cfg in boards_cfg.values():
+        if cfg["lang"] == "ko":
+            cfg["page_rows"] = per_page_ko   # 옛 주소 page=N 대응도 site.yml per_page 기준
     red = extras.redirects(meta, boards_cfg, posts)
     red_json = json.dumps(red, ensure_ascii=False, indent=0, sort_keys=True)
     (CONTENT / "redirects.json").write_text(red_json, encoding="utf-8", newline="\n")   # 옛 주소 대응표(기록용, 빌드마다 새로 만듦)
@@ -242,6 +370,17 @@ def main():
         raise BuildError("menu.yml 에 사이트에 없는 주소가 있습니다:\n"
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))
     print(f"  메뉴 내부 주소 {len(menu_links)}개 확인")
+
+    # 5) site.yml(회사소개서)·popups.yml(이미지·링크) 내부 주소 검사
+    links = site_links + popup_links
+    def exists(link):
+        p = link.lstrip("/").split("#")[0].split("?")[0]
+        return (PUBLIC / renames.get(p, p)).is_file()   # optimize.py 가 이름을 바꾼 파일(PNG→JPG 등)도 인정
+    missing = [(link, where) for link, where in links if not exists(link)]
+    if missing:
+        raise BuildError("설정 파일에 사이트에 없는 주소가 있습니다:\n"
+                         + "\n".join(f"  - {where}: {link}" for link, where in missing))
+    print(f"  회사정보·팝업 내부 주소 {len(links)}개 확인, 노출 팝업 {len(popups)}개")
 
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)

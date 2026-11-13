@@ -58,9 +58,38 @@ def latest_notice(lang: str, posts: dict, site: "B.Site") -> str:
 
 
 # ───────── 팝업 ─────────
-def popup_html(posts: dict, site: "B.Site", build_time: datetime) -> str:
-    """원본(그누보드 팝업레이어)과 같은 마크업. 게시 기간은 브라우저에서 비교(hb/popup.js, 한국 시간 기준).
-    빌드 시점에 이미 끝난 팝업은 넣지 않는다. '시간 동안 다시 열람하지 않습니다'는 쿠키 대신 localStorage."""
+POPUP_HOURS = 24   # "24시간 동안 다시 열람하지 않습니다"
+
+
+def popup_html(popups: list) -> str:
+    """원본(그누보드 팝업레이어)과 같은 마크업. popups 는 build.py load_popups() 가 검사·정리한 active 팝업 목록.
+    게시 기간은 빌드 때 거르지 않고 data-begin/data-end 로 넣어 브라우저가 판단한다(hb/popup.js, 한국 시간 기준).
+    '시간 동안 다시 열람하지 않습니다'는 쿠키 대신 localStorage. 팝업이 0개여도 틀과 스크립트는 그대로 둔다(오류 없음)."""
+    items = []
+    for p in popups:
+        img = f'<img src="{p["src"]}" title="{p["name"]}" alt="{p["name"]}" />'
+        if p["href"]:
+            img = f'<a href="{p["href"]}">{img}</a>'
+        content = f'<p>{img}<br style="clear:both;">&nbsp;</p>'
+        items.append(f"""
+    <div id="hd_pops_{p['id']}" class="hd_pops" style="top:{p['top']}px;left:{p['left']}px" data-begin="{p['begin']}" data-end="{p['end']}">
+        <div class="hd_pops_con" style="width:{p['width']}px;height:{p['height']}px">
+            {content}        </div>
+        <div class="hd_pops_footer">
+            <button class="hd_pops_reject hd_pops_{p['id']} {POPUP_HOURS}"><strong>{POPUP_HOURS}</strong>시간 동안 다시 열람하지 않습니다.</button>
+            <button class="hd_pops_close hd_pops_{p['id']}">닫기 <i class="fa fa-times" aria-hidden="true"></i></button>
+        </div>
+    </div>""")
+    return popup_wrap(items)
+
+
+def popup_wrap(items: list) -> str:
+    return ("\n\n<!-- 팝업레이어 시작 { -->\n<div id=\"hd_pop\">\n    <h2>팝업레이어 알림</h2>\n\n"
+            + "".join(items) + "\n</div>\n\n<script src=\"%%ROOT%%hb/popup.js\"></script>\n<!-- } 팝업레이어 끝 -->")
+
+
+def popup_html_en(posts: dict, site: "B.Site", build_time: datetime) -> str:
+    """영문 메인 팝업: 1차 범위 밖이라 기존 방식 그대로(content/posts.json popups, 빌드 시점에 끝난 팝업 제외)."""
     items = []
     for p in posts.get("popups", []):
         end = datetime.strptime(p["end"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
@@ -76,8 +105,7 @@ def popup_html(posts: dict, site: "B.Site", build_time: datetime) -> str:
             <button class="hd_pops_close hd_pops_{p['id']}">닫기 <i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
     </div>""")
-    return ("\n\n<!-- 팝업레이어 시작 { -->\n<div id=\"hd_pop\">\n    <h2>팝업레이어 알림</h2>\n\n"
-            + "".join(items) + "\n</div>\n\n<script src=\"%%ROOT%%hb/popup.js\"></script>\n<!-- } 팝업레이어 끝 -->")
+    return popup_wrap(items)
 
 
 # ───────── 옛 주소 → 새 주소 ─────────

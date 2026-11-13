@@ -1,0 +1,31 @@
+# 메인 팝업(한글 메인 index.html). build/build.py 가 읽는다.
+# - start·end: 날짜(YYYY-MM-DD). 방문자 브라우저가 오늘 날짜(한국 시간)와 비교해 start 0시 ~ end 23:59:59 동안만 보인다(빌드 시점에 고정하지 않음)
+# - active: false 면 HTML 에 아예 넣지 않는다
+# - image: 필수(active 팝업). /로 시작하는 사이트 안 주소(빌드 때 public/ 에 없으면 빌드 실패) 또는 http 주소
+# - link: 선택. 이미지를 누르면 갈 주소(/로 시작하면 사이트 안, http 로 시작하면 외부). 비우면 링크 없음
+# - id: "24시간 동안 다시 열람하지 않습니다" 기억용 번호(겹치면 안 됨). 비우면 순서 번호
+# - width·height(팝업 크기), top·left(화면 위치): px. 비우면 450·660·150·10
+# - 빌드 실패: 날짜 형식 오류, start 가 end 보다 늦음, active 팝업의 image 누락
+popups:
+  - title: "햇빛소득마을 RESCO"
+    image: "/data/editor/2605/8ff05b45953783ab60f04bdda10a57c4_1778041614_95.jpg"
+    link: ""
+    start: 2026-05-06
+    end: 2026-12-30
+    active: true
+    id: 3
+    width: 450
+    height: 660
+    top: 150
+    left: 10
+  - title: "국제그린에너지엑스포ㅣ한빛이노텍"
+    image: "/data/editor/2603/3b973b780d436418b6b1d2aafbf7e0d9_1773129555_0472.jpg"
+    link: "http://hanbitinnotech.com"
+    start: 2026-03-10
+    end: 2026-04-10
+    active: false
+    id: 2
+    width: 450
+    height: 660
+    top: 100
+    left: 150

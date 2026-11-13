@@ -1,0 +1,181 @@
+# 한글 메뉴(상단 메가메뉴·모바일 메뉴·경로 드롭다운·하위 탭 공통). build/build.py 가 읽어 templates/_menu_ko.html 로 만든다.
+# - link: /로 시작하면 사이트 안 주소(빌드 때 public/ 에 없으면 빌드 실패), http로 시작하면 외부 주소
+# - 대메뉴 link 를 비우면 첫 번째 노출(visible: true) 소메뉴 주소로 이동한다
+# - visible: false 면 모든 메뉴 형태에서 숨긴다. new_window: true 면 새 창
+# - class: 기존 화면 마크업 유지용(menu_05, sub_menu_03 등). 디자인에 쓰이지 않으며, 새 항목은 비워 두면 자동으로 붙는다
+menu:
+  - label: "회사소개"
+    link: "/page/hanbit.html"
+    visible: true
+    class: menu_05
+    items:
+      - label: "한빛이노텍"
+        link: "/page/hanbit.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "연혁"
+        link: "/page/history.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "인증 및 수상"
+        link: "/page/cert.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "ESG 경영"
+        link: "/page/esg.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Contact"
+        link: "/page/location.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "사업분야"
+    link: "/page/pv.html"
+    visible: true
+    class: menu_01
+    items:
+      - label: "태양광 EPC"
+        link: "/page/epc.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "PV"
+        link: "/page/pv.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "BIPV"
+        link: "/page/bipv.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "주차장 태양광"
+        link: "/page/carport.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "햇빛소득마을"
+        link: "/page/solar_village.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "한전수전합리화"
+        link: "/page/kpso.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "분산에너지"
+        link: "/page/de_system.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "제품 & 기술"
+    link: "/page/inverter.html"
+    visible: true
+    class: menu_02
+    items:
+      - label: "구조물제작"
+        link: "/page/structure.html"
+        new_window: false
+        visible: true
+        class: sub_menu_06
+      - label: "태양광접속함"
+        link: "/page/combiner.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "내화인정"
+        link: "/page/fire_cert.html"
+        new_window: false
+        visible: true
+        class: sub_menu_05
+      - label: "지능형모니터링시스템"
+        link: "/page/monitoring.html"
+        new_window: false
+        visible: true
+        class: sub_menu_04
+      - label: "인버터"
+        link: "/page/inverter.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+  - label: "탄소중립"
+    link: "/page/re100.html"
+    visible: true
+    class: menu_03
+    items:
+      - label: "RE100"
+        link: "/page/re100.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "제로에너지빌딩"
+        link: "/page/zeb.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "VNM"
+        link: "/page/vnm.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "탄소배출권"
+        link: "/page/carbon.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "정부지원사업"
+    link: "/page/housing.html"
+    visible: true
+    class: menu_04
+    items:
+      - label: "주택지원사업"
+        link: "/page/housing.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "건물지원사업"
+        link: "/page/building.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "에너지자급자족사업"
+        link: "/page/self_energy.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "금융지원사업"
+        link: "/page/finance.html"
+        new_window: false
+        visible: true
+        class: sub_menu_04
+  - label: "홍보센터"
+    link: "/board/notice/index.html"
+    visible: true
+    class: menu_06
+    items:
+      - label: "회사소식"
+        link: "/board/notice/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "시공사례"
+        link: "/board/media/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "블로그"
+        link: "https://blog.naver.com/hkele"
+        new_window: true
+        visible: true
+        class: sub_menu_03
+      - label: "E-Catalog"
+        link: "/board/library/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03

@@ -19,5 +19,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 for step in ("optimize.py", "build.py"):
     print(f"===== {step} =====", flush=True)
-    subprocess.run([sys.executable, str(HERE / step)], check=True, cwd=HERE.parent)
+    r = subprocess.run([sys.executable, str(HERE / step)], cwd=HERE.parent)
+    if r.returncode:
+        print(f"===== 중단: {step} 실패(종료코드 {r.returncode}) =====", flush=True)
+        sys.exit(1)
 print("===== 완료 =====")

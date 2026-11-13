@@ -13,6 +13,7 @@
 import argparse
 import difflib
 import hashlib
+import re
 import sys
 from pathlib import Path
 
@@ -49,6 +50,17 @@ def changed_lines(a: Path, b: Path) -> int:
 
 def is_en(rel: str) -> bool:
     return rel.startswith("en/")
+
+
+WS = re.compile(r"\s+")
+
+
+def ws_only(a: Path, b: Path) -> bool:
+    """공백·줄바꿈만 다른가(모든 공백 문자를 지우면 같은가). 표시용일 뿐 집계에서 빼지 않는다."""
+    if Path(a).suffix.lower() not in TEXT_EXT:
+        return False
+    ta, tb = (p.read_bytes().decode("utf-8", errors="replace") for p in (a, b))
+    return WS.sub("", ta) == WS.sub("", tb)
 
 
 def main():
@@ -110,16 +122,19 @@ def main():
         for r in removed:
             print("  -", r)
 
+    wso = {r for r in changed if ws_only(fa[r], fb[r])}   # 표시용(위 집계·ENG 경고에는 그대로 포함)
+    print(f"  (변경 {len(changed)}개 중 공백·줄바꿈만 다름 {len(wso)} / 실질 변경 {len(changed) - len(wso)})")
+
     ko_html = [r for r in changed if not is_en(r) and r.lower().endswith((".html", ".htm"))]
     print(f"\n[변경된 한글 HTML] {len(ko_html)}개")
     for r in ko_html:
-        print("  ", r)
+        print("  ", r, "(공백만)" if r in wso else "")
 
     if changed:
         print("\n[파일별 변경 줄 수]")
         for r in changed:
             if Path(r).suffix.lower() in TEXT_EXT:
-                print(f"  {changed_lines(fa[r], fb[r]):>6}줄  {r}")
+                print(f"  {changed_lines(fa[r], fb[r]):>6}줄  {r}" + ("  (공백만)" if r in wso else ""))
             else:
                 print(f"  {'(이진)':>6}    {r}")
     return 0

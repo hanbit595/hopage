@@ -11,8 +11,10 @@ import json
 import posixpath
 import re
 import shutil
+import sys
 from pathlib import Path
 
+import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import boards
@@ -26,6 +28,71 @@ STATIC = SITE / "static"
 PUBLIC = SITE / "public"
 SITE_URL = "https://hanbitinnotech.com/"   # canonical·og:image·sitemap용 최종 도메인
 TEMP_BASES = ["/hopage/"]                  # 임시 주소(GitHub Pages 프로젝트 주소)의 시작 경로. 404.html이 이 경로를 떼고 옛 주소를 찾는다
+MENU_YML = SITE / "cms" / "settings" / "menu.yml"   # 한글 메뉴 원본(관리자 화면에서 고침)
+MENU_SLOT = re.compile(r"%%MENU_KO:(\w+)%%")         # 템플릿·본문 조각의 한글 메뉴 자리표시
+MENU_FORMS = {"mega", "mobile", "drop_main", "drop_sub", "subtab"}
+
+
+class BuildError(Exception):
+    """한국어 메시지로 빌드를 멈춘다(종료코드 1)."""
+
+
+def esc(s) -> str:
+    """메뉴 글자·주소 이스케이프. '&' 뒤가 공백이면 그대로 둔다(기존 '제품 & 기술' 표기 유지, 엔티티가 될 수 없음)."""
+    s = str(s)
+    s = re.sub(r"&(?!\s)", "&amp;", s)
+    return s.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+
+def load_menu():
+    """cms/settings/menu.yml → (노출 메뉴 목록, 검사할 내부 주소 목록). 형식이 틀리면 BuildError."""
+    try:
+        data = yaml.safe_load(MENU_YML.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise BuildError(f"메뉴 파일이 없습니다: {MENU_YML.relative_to(SITE).as_posix()}")
+    except yaml.YAMLError as e:
+        raise BuildError(f"menu.yml 형식 오류: {e}")
+    if not isinstance(data, dict) or not isinstance(data.get("menu"), list):
+        raise BuildError("menu.yml 에 menu: 목록이 없습니다.")
+
+    def href(link, where):
+        link = str(link or "").strip()
+        if link.startswith("/") and not link.startswith("//"):
+            return "%%ROOT%%" + link.lstrip("/"), link
+        if re.match(r"^https?://", link):
+            return link, None
+        raise BuildError(f"menu.yml {where}: link 는 / 또는 http 로 시작해야 합니다 (현재: '{link}')")
+
+    menus, internal = [], []
+    for i, m in enumerate(data["menu"], 1):
+        if not isinstance(m, dict) or not str(m.get("label") or "").strip():
+            raise BuildError(f"menu.yml {i}번째 대메뉴: label 이 없습니다.")
+        name = f"대메뉴 '{m['label']}'"
+        if m.get("visible", True) is False:
+            continue
+        items = []
+        for j, s in enumerate(m.get("items") or [], 1):
+            if not isinstance(s, dict) or not str(s.get("label") or "").strip():
+                raise BuildError(f"menu.yml {name}의 {j}번째 소메뉴: label 이 없습니다.")
+            if s.get("visible", True) is False:
+                continue
+            where = f"{name} > 소메뉴 '{s['label']}'"
+            h, inner = href(s.get("link"), where)
+            if inner:
+                internal.append((inner, where))
+            items.append({"label": str(s["label"]).strip(), "href": h, "new_window": bool(s.get("new_window")),
+                          "cls": str(s.get("class") or f"sub_menu_{j:02d}")})
+        if str(m.get("link") or "").strip():
+            h, inner = href(m["link"], name)
+            if inner:
+                internal.append((inner, name))
+        elif items:
+            h = items[0]["href"]   # 비우면 첫 번째 노출 소메뉴로
+        else:
+            raise BuildError(f"menu.yml {name}: link 가 비어 있고 노출된 소메뉴도 없습니다.")
+        menus.append({"label": str(m["label"]).strip(), "href": h, "cls": str(m.get("class") or f"menu_{i:02d}"),
+                      "items": items})
+    return menus, internal
 
 
 def root_of(out: str) -> str:
@@ -75,6 +142,20 @@ def main():
     # 2) 페이지 렌더링
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=False, undefined=StrictUndefined,
                       keep_trailing_newline=True)
+    env.filters["esc"] = esc
+    menus, menu_links = load_menu()
+    menu_macro = env.get_template("_menu_ko.html").module.menu_set
+    menu_cache = {}
+
+    def fill_menu(html, active, out):
+        """%%MENU_KO:형태%% → menu.yml 로 그린 한글 메뉴(현재 페이지 active 포함)."""
+        def sub(m):
+            if m.group(1) not in MENU_FORMS:
+                raise BuildError(f"{out}: 알 수 없는 메뉴 형태 %%MENU_KO:{m.group(1)}%%")
+            if active not in menu_cache:
+                menu_cache[active] = str(menu_macro(menus, active))
+            return menu_cache[active]
+        return MENU_SLOT.sub(sub, html)
     meta = json.loads((CONTENT / "pages" / "meta.json").read_text(encoding="utf-8"))
     desc = {lang: meta[f"{lang}/index"]["description"] for lang in ("ko", "en")}
 
@@ -84,7 +165,10 @@ def main():
     def write(out, html, lang, pair, active):
         """공통 후처리: 현재 메뉴 표시, KOR/ENG 주소(D1), 바뀐 파일 이름, 상대경로."""
         ko_out, en_out = (out, pair) if lang == "ko" else (pair, out)
-        html = apply_active(html, active)
+        if lang == "ko":
+            html = fill_menu(html, active, out)   # 한글: 메뉴를 menu.yml 로 그리면서 active 표시(P3-2)
+        else:
+            html = apply_active(html, active)     # 영문: 기존 복사본 메뉴에 active 표시
         if out == "index.html":
             # 옛 영문 메인 주소(/?locale=en_US)는 없는 주소가 아니라서 404.html을 거치지 않는다 → 국문 메인에서 바로 영문 메인으로
             html = html.replace("<head>", "<head>\n<script>if(/[?&]locale=en_US(&|$)/.test(location.search))"
@@ -152,10 +236,21 @@ def main():
     (PUBLIC / "robots.txt").write_text(extras.robots(SITE_URL), encoding="utf-8", newline="\n")
     print(f"  옛 주소 대응 {len(red)}건, sitemap {len(sitemap_urls)}개 주소")
 
+    # 4) 메뉴 내부 주소 검사: menu.yml 의 /로 시작하는 link 가 public/ 에 없으면 빌드 실패
+    missing = [(link, where) for link, where in menu_links if not (PUBLIC / link.lstrip("/").split("#")[0].split("?")[0]).is_file()]
+    if missing:
+        raise BuildError("menu.yml 에 사이트에 없는 주소가 있습니다:\n"
+                         + "\n".join(f"  - {where}: {link}" for link, where in missing))
+    print(f"  메뉴 내부 주소 {len(menu_links)}개 확인")
+
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)
     print(f"완료: public/ 파일 {len(files)}개, {size / 1024 / 1024:.1f}MB")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BuildError as e:
+        print(f"빌드 실패: {e}", file=sys.stderr)
+        sys.exit(1)

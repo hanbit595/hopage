@@ -1,0 +1,32 @@
+{#- 한글 메뉴 공통 조각 (P3-2). 원본 cms/settings/menu.yml → build.py 가 읽어 menu_set() 으로 그린다.
+    - 쓰는 곳: _top_ko.html(메가메뉴 mega, 모바일 mobile), _board_head_ko.html·content/pages/ko/page/*.html
+      (경로 드롭다운 drop_main·drop_sub, 하위 탭 subtab). 각 파일에는 %%MENU_KO:형태%% 자리표시만 있고
+      바깥 틀(nav·m_menu·p_d_menu·visual_nav_menu 등)은 각 파일에 그대로 둔다. 안쪽 메뉴 마크업은 4형태 모두 같다(원본도 같음).
+    - menus: 노출(visible) 대메뉴·소메뉴만 들어 있는 목록. href 는 %%ROOT%% 로 시작하는 상대주소 또는 외부 주소
+    - active: 현재 페이지 주소(%%ROOT%%page/bipv.html 등). 같은 주소의 소메뉴와 그 대메뉴에 active (기존 apply_active 와 같은 규칙) -#}
+{%- macro menu_set(menus, active) -%}
+{%- for m in menus %}
+{%- set on = active and (m["items"] | selectattr("href", "equalto", active) | list | length > 0) %}
+{%- if not loop.first %}
+{% endif -%}
+<div class="menu {{ m.cls }} {{ "active" if on else "" }}">
+    <a href="{{ m.href | esc }}" class="menu_a void_link {{ "active" if on else "" }}">
+		<span>
+                    {{ m.label | esc }}
+        		</span>
+    </a>
+    <div class="sub_menu_wrap">
+{%- for s in m["items"] %}
+{%- set son = active and s.href == active %}
+        <div class="sub_menu {{ s.cls }} {{ "active" if son else "" }}">
+            <a href="{{ s.href | esc }}" class="sub_menu_a {{ "active" if son else "" }}"{{ ' target="_blank"' if s.new_window else "" }}>
+				<span>
+                    {{ s.label | esc }}
+                </span>
+            </a>
+        </div>
+{%- endfor %}
+    </div>
+</div>
+{%- endfor -%}
+{%- endmacro %}

@@ -45,7 +45,19 @@ DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2})(?::(\d{2}))?(?:\.
 KST = timezone(timedelta(hours=9))
 
 
-MD_EXTENSIONS = ["tables", "nl2br", "sane_lists"]   # 표·줄바꿈(엔터 한 번 = <br>)·목록
+class CmsLoader(yaml.SafeLoader):
+    """YAML 1.2 처럼 true/false 만 불리언으로 읽는다.
+    관리자 화면(Sveltia, YAML 1.2)은 no·yes·on·off 를 따옴표 없이 저장하는데, PyYAML(1.1)은 이를 불리언으로 읽어
+    files 의 no: 키가 False 가 되거나 글자 칸이 true/false 로 바뀐다."""
+
+
+CmsLoader.yaml_implicit_resolvers = {k: [(t, r) for t, r in v if t != "tag:yaml.org,2002:bool"]
+                                     for k, v in yaml.SafeLoader.yaml_implicit_resolvers.items()}
+CmsLoader.add_implicit_resolver("tag:yaml.org,2002:bool", re.compile(r"^(?:true|True|TRUE|false|False|FALSE)$"),
+                                list("tTfF"))
+
+
+MD_EXTENSIONS =["tables", "nl2br", "sane_lists"]   # 표·줄바꿈(엔터 한 번 = <br>)·목록
 
 
 def md_to_html(text: str) -> str:
@@ -139,7 +151,9 @@ def _files(fm, where):
         if not isinstance(f, dict) or not str(f.get("stored") or "").strip():
             raise CmsError(f"{where}: files {i + 1}번째 항목에 stored 가 없습니다.")
         stored = str(f["stored"]).strip()
-        no, size = f.get("no", i), f.get("size", 0)
+        # YAML 1.1 에서 따옴표 없는 no: 는 키가 False 로 읽힌다(관리자 화면이 따옴표를 빼고 저장할 수 있음). 둘 다 받는다.
+        no = f["no"] if "no" in f else f.get(False, i)
+        size = f.get("size", 0)
         if isinstance(no, bool) or not isinstance(no, int) or isinstance(size, bool) or not isinstance(size, int):
             raise CmsError(f"{where}: files {i + 1}번째 항목의 no·size 는 숫자여야 합니다.")
         out.append({"no": no, "source": str(f.get("source") or posixpath.basename(stored)), "stored": stored, "size": size})
@@ -154,14 +168,15 @@ def read_md(path: Path, where: str = None):
     if not m:
         raise CmsError(f"{where}: 머리말(--- 로 시작·끝)이 없습니다.")
     try:
-        fm = yaml.safe_load(m.group(1)) or {}
+        fm = yaml.load(m.group(1), Loader=CmsLoader) or {}
     except ValueError as e:   # YAML 이 날짜로 읽다가 실패(예: 2026-02-30)
         raise CmsError(f"{where}: date 형식 오류(없는 날짜): {e}")
     except yaml.YAMLError as e:
         raise CmsError(f"{where}: 머리말 형식 오류: {e}")
     if not isinstance(fm, dict):
         raise CmsError(f"{where}: 머리말 형식 오류(칸: 값 형태가 아님)")
-    return fm, m.group(2)
+    # 관리자 화면(Sveltia)은 닫는 --- 다음에 빈 줄, 본문 끝에 줄바꿈을 붙여 저장한다 → 앞뒤 줄바꿈만 떼어 출력이 같게 한다.
+    return fm, m.group(2).strip("\r\n")
 
 
 def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft=False):

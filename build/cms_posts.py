@@ -1,7 +1,9 @@
 """
 한글 게시판 글 원본 읽기 (P3-4a). build.py·optimize.py·extract_boards.py 가 불러 쓴다.
 
-- 한글 글: cms/notice|media|library/<파일명>.md (머리말 YAML + 본문 HTML 그대로)
+- 한글 글: cms/notice|media|library/<파일명>.md (머리말 YAML + 본문)
+  본문 형식(P3-4b): 머리말 body_format: html 인 글(이전한 기존 글)은 본문 HTML 을 그대로 쓴다.
+  그 칸이 없는 글(관리자 화면으로 쓴 새 글)은 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 그대로 통과).
 - 영문 글(notice_en·media_en·library_en)과 팝업 등: content/posts.json 그대로
 - 돌려주는 값은 posts.json 과 같은 모양이다. 글 = {id, subject, datetime, content, link1, link2, files}
   (기존 게시판·메인 News·sitemap·옛 주소·이미지 최적화 코드를 그대로 쓰기 위해)
@@ -12,9 +14,12 @@ draft: true 인 글은 여기서 빼므로 목록·상세·메인·sitemap·옛 
 
 머리말 칸(docs/spec.md 3절)
 - 공통: title(필수), date(필수, "YYYY-MM-DD HH:MM:SS" 또는 "YYYY-MM-DD" → 시각 00:00:00), draft(기본 false),
-        thumbnail·summary(선택, 아직 출력에 쓰지 않음)
+        thumbnail(선택, 목록·메인 썸네일 1순위), summary(선택, 메인 News 요약·상세 meta description 1순위),
+        body_format(선택, html 이면 본문 HTML 그대로, 없으면 markdown)
 - 시공사례: category(필수, 목록, 허용값 CATEGORIES, 표시는 선택 순서대로 쉼표로 이음), capacity·program(선택),
-           gallery(선택, 아직 출력에 쓰지 않음), featured(기본 false, P3-4b 에서 메인 Our Project 에 씀)
+           gallery(선택, 이미지 목록, 상세 본문 아래), featured(기본 false, 메인 Our Project 카드)
+           featured_order(선택, 숫자, 카드 순서 작은 숫자 먼저), featured_image(선택, 카드 이미지 1순위)
+           featured_label·featured_text(기존 글 전용, 선택: 이전 전 메인 카드에 손으로 적혀 있던 분류·문구를 글자 그대로)
            목록·상세 표시 제목 = "[category] title capacity" + program 이 있으면 " ㅣ program"
 - E-Catalog: file(필수, 사이트 주소 /… 의 PDF. public/ 에 있는지는 build.py 가 확인)
 - 기존 글 전용(선택, 없으면 기본값): link1·link2(관련 링크, 기본 ""), files(첨부 목록 [{no, source, stored, size}], 기본 [])
@@ -27,6 +32,7 @@ import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import markdown
 import yaml
 
 KO_BOARDS = ("notice", "media", "library")
@@ -37,6 +43,32 @@ NAME_RE = re.compile(r"[1-9]\d*|\d{8}-\d{6}")   # 기존 글번호 또는 새 �
 FRONT = re.compile(r"\A---\r?\n(.*?)\r?\n?---\r?\n?(.*)\Z", re.S)
 DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2})(?::(\d{2}))?(?:\.\d+)?(Z|[+-]\d{2}:?\d{2})?)?")
 KST = timezone(timedelta(hours=9))
+
+
+MD_EXTENSIONS = ["tables", "nl2br", "sane_lists"]   # 표·줄바꿈(엔터 한 번 = <br>)·목록
+
+
+def md_to_html(text: str) -> str:
+    """관리자 화면(markdown) 본문 → HTML. 원문 HTML 은 그대로 통과."""
+    return markdown.markdown(text, extensions=MD_EXTENSIONS, output_format="html")
+
+
+def _image_list(fm, key, where):
+    """gallery: ["/uploads/a.jpg", ...] 또는 [{image: "/uploads/a.jpg"}, ...] → 주소 목록."""
+    v = fm.get(key)
+    if v in (None, ""):
+        return []
+    if not isinstance(v, list):
+        raise CmsError(f"{where}: {key} 는 목록이어야 합니다.")
+    out = []
+    for i, g in enumerate(v):
+        if isinstance(g, dict):
+            g = g.get("image") or g.get("src")
+        if not isinstance(g, str):
+            raise CmsError(f"{where}: {key} {i + 1}번째 항목이 이미지 주소가 아닙니다.")
+        if g.strip():
+            out.append(g.strip())
+    return out
 
 
 class CmsError(Exception):
@@ -155,10 +187,14 @@ def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft
             raise CmsError(f"{where}: 필수 칸 date 이(가) 비어 있습니다.")
         dt = parse_date(fm["date"], where)
         draft = _flag(fm, "draft", where)
-        _text(fm, "thumbnail", where)
-        _text(fm, "summary", where)
+        fmt = _text(fm, "body_format", where).strip().lower()
+        if fmt not in ("", "html", "markdown"):
+            raise CmsError(f"{where}: body_format 은 html 또는 markdown 이어야 합니다 (현재: '{fmt}')")
+        if fmt != "html":
+            body = md_to_html(body)
         post = {"id": int(name) if name.isdigit() else name, "datetime": dt, "content": body,
-                "link1": _text(fm, "link1", where), "link2": _text(fm, "link2", where), "files": _files(fm, where)}
+                "link1": _text(fm, "link1", where), "link2": _text(fm, "link2", where), "files": _files(fm, where),
+                "thumbnail": _text(fm, "thumbnail", where).strip(), "summary": _text(fm, "summary", where).strip()}
 
         if board == "media":
             cats = fm.get("category")
@@ -171,10 +207,17 @@ def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft
             for c in cats:
                 if c not in CATEGORIES:
                     raise CmsError(f"{where}: category '{c}' 는 허용 목록({', '.join(CATEGORIES)})에 없습니다.")
-            subject = compose_media_title(cats, title, _text(fm, "capacity", where), _text(fm, "program", where))
-            _flag(fm, "featured", where)
-            if fm.get("gallery") not in (None, "") and not isinstance(fm["gallery"], list):
-                raise CmsError(f"{where}: gallery 는 목록이어야 합니다.")
+            capacity = _text(fm, "capacity", where)
+            subject = compose_media_title(cats, title, capacity, _text(fm, "program", where))
+            order = fm.get("featured_order")
+            if order in ("", None):
+                order = None
+            elif isinstance(order, bool) or not isinstance(order, int):
+                raise CmsError(f"{where}: featured_order 는 숫자여야 합니다 (현재: {order!r})")
+            post.update(title=title, category=cats, capacity=capacity, gallery=_image_list(fm, "gallery", where),
+                        featured=_flag(fm, "featured", where), featured_order=order,
+                        featured_image=_text(fm, "featured_image", where).strip(),
+                        featured_label=_text(fm, "featured_label", where), featured_text=_text(fm, "featured_text", where))
         else:
             subject = title
         if board == "library":

@@ -99,12 +99,19 @@ def to_jpeg(im: Image.Image, max_side: int, q: int) -> bytes:
     return encode(im, ".jpg", q)
 
 
+def is_upload(path: str) -> bool:
+    """관리자 화면 업로드(/uploads/…)는 build.py(build/uploads.py)가 public/ 에서 따로 처리한다."""
+    return path.lstrip("/").lower().startswith("uploads/")
+
+
 def post_images(p):
-    """글의 이미지: (본문 이미지 경로들, 목록 썸네일 원본)."""
+    """글의 이미지: (본문 이미지 경로들, 목록 썸네일 원본). thumbnail 칸이 있으면 그것이 목록 썸네일 원본(P3-4b)."""
     content = [s for s in (B.site_path(x) for x in re.findall(r'<img[^>]+src="([^"]+)"', p["content"])) if s]
     files = [f["stored"] for f in sorted(p["files"], key=lambda f: f["no"]) if f["stored"].lower().endswith(B.IMG_EXT)]
-    first = (files or content or [None])[0]
-    return content + files, first
+    thumb = B.post_thumb_src(p)
+    first = thumb if thumb and (is_upload(thumb) or source(thumb.lstrip("/"))) else (files or content or [None])[0]
+    imgs = [s for s in content + files if not is_upload(s)]
+    return imgs, (None if first and is_upload(first) else first)
 
 
 def main(report=False):

@@ -1,5 +1,5 @@
 """
-4-6: 메인 회사소식(D12), 팝업, 옛 주소 이동(404.html + redirects.json), sitemap.xml·robots.txt.
+4-6: 메인 회사소식(D12), 메인 Our Project(P3-4b), 팝업, 옛 주소 이동(404.html + redirects.json), sitemap.xml·robots.txt.
 build.py가 불러 쓴다. 저장소 안의 파일만 사용한다. 게시글(posts)은 build.py 가 cms_posts.load_posts() 로 읽어 넘긴다.
 """
 import html as html_lib
@@ -21,12 +21,14 @@ def latest_notice(lang: str, posts: dict, site: "B.Site") -> str:
     out = ["\n                "]
     for p in posts["boards"][table][:4]:
         w, h = NEWS_THUMB
-        srcs = [f["stored"] for f in sorted(p["files"], key=lambda f: f["no"]) if f["stored"].lower().endswith(B.IMG_EXT)]
+        t = B.post_thumb_src(p)   # 관리자 화면 thumbnail 칸이 1순위(P3-4b)
+        srcs = [t] if t and site.real(t) else [f["stored"] for f in sorted(p["files"], key=lambda f: f["no"]) if f["stored"].lower().endswith(B.IMG_EXT)]
         if not srcs:
             srcs = [s for s in (B.site_path(x) for x in re.findall(r'<img[^>]+src="([^"]+)"', p["content"])) if s]
         thumb = (site.thumb(srcs[0], w, h) or site.real(srcs[0])) if srcs else site.real("theme/basic/images/noimage.jpg")
         title = html_lib.escape(B.cut(html_lib.unescape(p["subject"]), NEWS_TITLE_CUT), quote=False)
-        text = re.sub(r"<[^>]*>", "", p["content"])
+        # 요약: summary 칸(있으면, 글자 이스케이프) → 없으면 지금처럼 본문에서 태그를 뺀 앞부분
+        text = html_lib.escape(" ".join(p["summary"].split()), quote=False) if p.get("summary") else re.sub(r"<[^>]*>", "", p["content"])
         text = text if len(text) <= NEWS_TEXT_CUT else text[:NEWS_TEXT_CUT] + "..."
         out.append(f"""
     <div class="m_b_ns_box">
@@ -54,6 +56,76 @@ def latest_notice(lang: str, posts: dict, site: "B.Site") -> str:
 
         </a>
     </div>""")
+    return "".join(out)
+
+
+# ───────── 메인 Our Project (P3-4b): 시공사례 featured 글 → 카드 ─────────
+# 카드 틀은 10칸(5열 2줄, 작은 화면 4·3·2열). 01·02 는 큰 화면에서 소개 글 자리, 06·10 은 디자인상 빈 칸이라 늘 비운다.
+# 카드 칸은 6개. 채우는 순서 04 → 07 → 08 → 09 → 03 → 05: 지금 카드 4장이 원래 자리(04·07·08·09)를 지키고,
+# 5·6번째 카드는 D17 로 비운 03·05 자리에 들어간다. featured 글이 6건보다 많으면 앞의 6건만 쓴다.
+PROJECT_CELLS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"]
+PROJECT_SLOTS = ["04", "07", "08", "09", "03", "05"]
+# 칸 class 에 CSS(layout.css)로 붙어 있는 배경 이미지. 카드 이미지가 이것과 같으면 style 을 쓰지 않는다(기존 마크업 유지)
+PROJECT_CSS_BG = {s: f"theme/basic/images/main/mainProject_bg_{s}.jpg" for s in ("04", "07", "08", "09")}
+PROJECT_IMG = (900, 600)
+PROJECT_TAG = {"태양광발전장치": "PV", "BIPV": "BIPV"}
+
+
+def featured_projects(posts: dict) -> list:
+    """featured 글: featured_order 작은 숫자 먼저, featured_order 없는 글은 그 뒤에 date 최신순."""
+    items = [p for p in posts["boards"]["media"] if p.get("featured")]
+    with_order = sorted((p for p in items if p["featured_order"] is not None), key=lambda p: p["featured_order"])
+    no_order = [p for p in items if p["featured_order"] is None]   # 이미 date 최신순으로 정렬돼 있음
+    return with_order + no_order
+
+
+def project_image(p: dict, site: "B.Site"):
+    """카드 이미지: featured_image → thumbnail → 기존 규칙(첨부 이미지 → 본문 첫 이미지). 사이트 루트 기준 경로."""
+    for cand in (p.get("featured_image"), p.get("thumbnail")):
+        sp = B.site_path(cand) if cand else None
+        if sp and site.real(sp):
+            if sp.lstrip("/").lower().startswith("theme/"):
+                return site.real(sp)   # 디자인 이미지(기존 카드 배경)는 그대로
+            return site.thumb(sp, *PROJECT_IMG) or site.thumb(sp, B.VIEW_THUMB_W) or site.real(sp)
+        if cand:
+            print(f"  주의: {p['_src']} 카드 이미지가 사이트에 없습니다: {cand}")
+    srcs = [f["stored"] for f in sorted(p["files"], key=lambda f: f["no"]) if f["stored"].lower().endswith(B.IMG_EXT)]
+    srcs = srcs or [s for s in (B.site_path(x) for x in re.findall(r'<img[^>]+src="([^"]+)"', p["content"])) if s]
+    if not srcs:
+        return None
+    return site.thumb(srcs[0], *PROJECT_IMG) or site.thumb(srcs[0], B.VIEW_THUMB_W) or site.real(srcs[0])
+
+
+def our_project(posts: dict, site: "B.Site") -> str:
+    """<ul class="mainProject_list"> 안의 10칸. content/pages/ko/index.html 의 %%OUR_PROJECT%% 자리에 들어간다."""
+    cards = featured_projects(posts)
+    if len(cards) > len(PROJECT_SLOTS):
+        print(f"  주의: 메인 Our Project 는 {len(PROJECT_SLOTS)}칸입니다. featured 글 {len(cards)}건 중 앞의 "
+              f"{len(PROJECT_SLOTS)}건만 표시합니다(featured_order 로 순서 조정).")
+    by_slot = dict(zip(PROJECT_SLOTS, cards))
+    out = []
+    for cell in PROJECT_CELLS:
+        p = by_slot.get(cell)
+        if p is None:
+            out.append(f'                <li class="mainProject_item item_{cell}"></li>\n')
+            continue
+        img = project_image(p, site)
+        style = ""
+        if img and img.lower() != PROJECT_CSS_BG.get(cell, "").lower():
+            style = f' style="background-image:url(&#39;%%ROOT%%{html_lib.escape(img)}&#39;)"'
+        # 분류·문구: 기존 글은 featured_label·featured_text(이전 전 카드 글자 그대로), 새 글은 category·title·capacity 로 만듦
+        tag = p.get("featured_label") or html_lib.escape("/".join(PROJECT_TAG.get(c, c) for c in p["category"]), quote=False)
+        text = p.get("featured_text") or (html_lib.escape(p["title"], quote=False)
+                                         + (f" <br>{html_lib.escape(p['capacity'], quote=False)}" if p["capacity"] else ""))
+        out.append(f"""                <li class="mainProject_item item_{cell}">
+                    <a href="%%ROOT%%board/media/{p['id']}.html" class="mainProject_item_a">
+                            <div class="bg"{style}></div>
+                        <div class="on">
+                            <div class="tit">{tag}</div>
+                            <div class="txt">{text}</div>
+                        </div>
+                    </a>
+                </li>\n""")
     return "".join(out)
 
 

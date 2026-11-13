@@ -2,6 +2,7 @@
 
 v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·푸터 생성 방식, 5절 비공개 검사, 6절 기술 조건, 8절 검증 기준·9절 확인 필요 신설.
 v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 선택·표시 제목에 program, 기존 글 전용 칸. 2절 한글 글은 posts.json 에서 제거.
+v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail·summary·gallery 출력과 featured_* 칸, 4절 Our Project 칸 배치, 6절 업로드 처리.
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -13,7 +14,8 @@ v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 �
 - 토큰·키는 어떤 파일에도 쓰지 않는다.
 
 ## 2. hopage 원본 파일 규칙
-- 한글 게시판 글은 cms/<게시판>/<글번호>.md 로 관리한다. 본문(body)은 기존 HTML을 그대로 둔다(markdown 변환하지 않음).
+- 한글 게시판 글은 cms/<게시판>/<글번호>.md 로 관리한다. 이전한 기존 글은 머리말 body_format: html 로 본문 HTML을 그대로 출력한다.
+  body_format 이 없는 글(관리자 화면으로 쓴 새 글)은 본문을 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 그대로 통과).
   - cms/notice/*.md   → /board/notice/<파일명>.html   (회사소식)
   - cms/media/*.md    → /board/media/<파일명>.html    (시공사례)
   - cms/library/*.md  → /board/library/<파일명>.html  (E-Catalog)
@@ -41,7 +43,12 @@ v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 �
 - 기존 글 전용 칸(선택, 관리자 화면에 없어도 됨): link1·link2(관련 링크·YouTube, 기본 ""), files(첨부 목록 [{no, source, stored, size}], 기본 [])
   E-Catalog 에 files 가 없으면 file 로 첨부 1개를 만든다(다운로드 이름 = 파일 이름, 크기 = 실제 파일 크기).
   조회수·다운로드 수·연결 수(content/board_snapshot.json)가 없는 새 글은 0, 첨부 날짜는 글 date.
-- thumbnail·summary·gallery 는 1차(P3-4a)에서 검사만 하고 출력에 쓰지 않는다(업로드 처리·Our Project 작업 때 연결).
+- thumbnail: 목록·메인 News·Our Project 썸네일 1순위(없으면 첨부 이미지 → 본문 첫 이미지).
+  summary: 메인 News 요약·상세 meta description 1순위(없으면 본문 앞부분 / site.yml seo_description).
+  gallery: 상세 본문 아래, 기존 상세 사진과 같은 마크업(a.view_image > img, 1400px 축소본 + 1920px 확대 보기).
+- 시공사례 메인 카드 칸(선택): featured_order(숫자, 작은 숫자 먼저, 없으면 date 최신순), featured_image(카드 이미지 1순위 → thumbnail → 기존 규칙).
+  기존 글 전용: featured_label·featured_text(이전 전 메인 카드에 손으로 적혀 있던 분류·문구, HTML 그대로).
+  없으면 분류 = category(태양광발전장치→PV), 문구 = "title <br>capacity".
 - menu.yml: menu[ {label, visible, items[ {label, link, new_window, visible} ]} ]
   대메뉴 클릭 시 첫 번째 노출 소메뉴로 이동한다. link가 /로 시작하면 내부 링크, http로 시작하면 외부 링크다.
 - site.yml: offices[{name, address}], tel, email, brochure(PDF), per_page(기본 7), seo_description
@@ -54,7 +61,9 @@ v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 �
   모두 그 조각을 불러오도록 교체한다(대상 목록은 9절 c).
 - 하단 푸터는 cms/settings/site.yml 에서 생성한다.
 - 게시판 3종의 목록(페이징)과 상세 페이지. 기존 마크업·클래스를 그대로 써서 디자인을 유지한다.
-- 메인: 팝업, News(최신 회사소식), Our Project(featured 시공사례 최신순)
+- 메인: 팝업, News(최신 회사소식), Our Project(featured 시공사례, 3절 순서)
+  Our Project 틀은 10칸(item_01~10). 01·02(소개 글 자리)·06·10 은 디자인상 늘 빈 칸. 카드 칸 6개를 04→07→08→09→03→05 순서로 채우고
+  남는 칸은 빈 <li>. featured 글이 6건을 넘으면 앞의 6건만 표시(빌드 주의 메시지).
 - 상세 페이지 <title>: "제목 | HANBIT Innotech", description: summary(없으면 본문 앞 150자)
 - 하단 Copyright 연도는 빌드 시 현재 연도로 넣는다.
 - 로고 링크 title 속성 "Animotiontech" → "HANBIT Innotech"
@@ -73,8 +82,8 @@ v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 �
 - 제목·요약·경로는 HTML 이스케이프한다.
 - 빌드 산출물 public/ 은 git에 올리지 않는다(기존 .gitignore 유지).
 - 관리자 화면 업로드 이미지(uploads/)는 빌드 시 pillow 로 긴 변 1920px 이하(기존 확대본 D3 기준과 동일)로 줄여 public/ 에 넣는다.
-  원본이 더 작으면 그대로 둔다.
-  배포본 용량 규칙(D13, 300MB)을 지키기 위함이다.
+  원본이 더 작으면 그대로 둔다(확대 안 함). JPEG 품질 85, PNG 는 PNG 유지. uploads/ 원본은 수정·삭제하지 않는다.
+  배포본 용량 규칙(D13, 300MB)을 지키기 위함이다. 빌드 끝에 업로드 원본·배포 합계와 public/ 전체 용량을 출력하고 300MB 를 넘으면 경고(실패 아님).
 
 ## 7. D:\hpadmin 에 만들 파일
 - index.html: noindex 메타, 제목 "한빛이노텍 관리자", Sveltia 스크립트만 넣는다.

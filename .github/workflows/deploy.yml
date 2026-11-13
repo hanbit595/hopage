@@ -29,9 +29,9 @@ jobs:
           python-version: "3.12"
 
       - name: 패키지 설치
-        # pillow: 이미지 최적화·새 글 축소본, jinja2: 페이지 틀, pyyaml: cms/settings/*.yml(메뉴 등)
+        # pillow: 이미지 최적화·새 글 축소본, jinja2: 페이지 틀, pyyaml: cms/settings/*.yml(메뉴 등), markdown: 관리자 화면 새 글 본문
         # .mov 동영상을 새로 넣는 경우에만 imageio-ffmpeg가 필요하다(그때 아래 줄 끝에 imageio-ffmpeg 추가)
-        run: python -m pip install pillow jinja2 pyyaml
+        run: python -m pip install pillow jinja2 pyyaml markdown
 
       - name: 사이트 빌드
         env:

@@ -13,6 +13,10 @@
   허용되지 않는 CSS 속성 삭제, !important 삭제, 잘못된 주소의 링크는 href 삭제
 - 본문 이미지: 축소본(thumb-*_1400x*)이 있으면 축소본을 보여 주고 확대 보기 링크(view_image)를 건다. 없으면 원본 그대로
 - 목록 썸네일: 첫 번째 이미지 첨부 → 없으면 본문 첫 이미지의 축소본(좌측 900x600, 우측 420x280)
+  (관리자 화면 글은 thumbnail 칸이 1순위, P3-4b)
+- 관리자 화면 업로드 이미지(/uploads/…)는 Site.uploads(build/uploads.py)가 줄인 본·축소본을 public/uploads/ 에 만든다
+- 시공사례 gallery: 본문 아래에 본문 사진과 같은 마크업(a.view_image > img, 확대 보기 라이트박스)
+- summary: 상세 화면 meta description 1순위(없으면 지금처럼 site.yml seo_description)
 """
 import html as html_lib
 import json
@@ -136,6 +140,8 @@ def purify(content: str) -> str:
 
 # ───────── 주소·이미지 ─────────
 class Site:
+    uploads = None   # build.py 가 build/uploads.py 의 Uploads 를 넣는다(없으면 /uploads 경로는 찾지 못함)
+
     def __init__(self, static: Path):
         self.files = {}
         for f in static.rglob("*"):
@@ -145,18 +151,27 @@ class Site:
         rn = static.parent / "content" / "renames.json"   # optimize.py가 바꾼 파일 이름(PNG→JPG, MOV→MP4)
         self.renames = {k.lower(): v for k, v in json.loads(rn.read_text(encoding="utf-8")).items()} if rn.exists() else {}
 
+    def _up(self, path: str):
+        return Site.uploads if Site.uploads and path.lstrip("/").lower().startswith("uploads/") else None
+
     def real(self, path: str):
+        if self._up(path):
+            return self._up(path).real(path)
         key = path.lstrip("/").lower()
         key = self.renames.get(key, key).lower()
         return self.files.get(key)
 
     def large(self, path: str):
         """확대 보기용 확대본(optimize.py가 만든 large-{이름}.jpg). 없으면 원본."""
+        if self._up(path):
+            return self._up(path).large(path)
         d, name = posixpath.split(path.lstrip("/"))
         return self.files.get(f"{d}/large-{name.rsplit('.', 1)[0]}.jpg".lower()) or self.real(path)
 
     def thumb(self, path: str, w: int, h: int = None):
         """원본 경로 → 같은 폴더의 thumb-{이름}_{w}x{h}.* (있으면 실제 경로)."""
+        if self._up(path):
+            return self._up(path).thumb(path, w, h)
         d, name = posixpath.split(path.lstrip("/"))
         stem = name.rsplit(".", 1)[0]
         pat = re.compile(re.escape(f"{d}/thumb-{stem}_{w}x").lower() + (str(h) if h else r"\d+") + r"\.\w+$")
@@ -263,8 +278,17 @@ def paging(cur: int, total: int) -> str:
     return '<nav class="pg_wrap"><span class="pg">' + "".join(s) + "</span></nav>"
 
 
+def post_thumb_src(post):
+    """목록·메인 썸네일 원본 1순위: 관리자 화면의 thumbnail 칸(/로 시작하는 사이트 주소)."""
+    t = post.get("thumbnail") or ""
+    return site_path(t) if t else None
+
+
 def list_thumb(post, table, site: Site, which: str):
     w, h = LIST_THUMB[which]
+    t = post_thumb_src(post)
+    if t and site.real(t):
+        return site.thumb(t, w, h) or site.real(t)
     srcs = [f["stored"] for f in sorted(post["files"], key=lambda f: f["no"]) if f["stored"].lower().endswith(IMG_EXT)]
     if not srcs:
         srcs = [site_path(s) for s in re.findall(r'<img[^>]+src="([^"]+)"', post["content"])]
@@ -353,7 +377,17 @@ def build_pages(content_dir: Path, static_dir: Path, templates, posts: dict, ko_
                     links.append({"href": html_lib.escape(lk), "text": html_lib.escape(lk),
                                   "count": next(snap_links, labels["link_cnt"].format(0))})
             embed = next((youtube_embed(lk) for lk in (p.get("link1"), p.get("link2")) if lk and youtube_embed(lk)), None)
+            gallery = []
+            for g in p.get("gallery", []):
+                gp = site_path(g)
+                if gp and site.real(gp):
+                    th = site.thumb(gp, VIEW_THUMB_W) or site.real(gp)
+                    gallery.append({"large": "%%ROOT%%" + (site.large(gp) or site.real(gp)), "thumb": "%%ROOT%%" + th,
+                                    "alt": html_lib.escape(posixpath.basename(gp))})
+                else:
+                    print(f"  주의: {p.get('_src', table)} gallery 이미지가 사이트에 없습니다: {g}")
             post = {
+                "gallery": gallery,
                 "subject": html_lib.escape(cut(html_lib.unescape(p["subject"]), CUT_VIEW_SUBJECT), quote=False),
                 "view_date": f"{dt[2:4]}-{dt[5:7]}-{dt[8:10]} {dt[11:16]}",
                 "hit": s.get("hit", "0"),
@@ -362,6 +396,9 @@ def build_pages(content_dir: Path, static_dir: Path, templates, posts: dict, ko_
                 "prev": nav(items[i - 1] if i > 0 else None), "next": nav(items[i + 1] if i + 1 < len(items) else None),
             }
             title = html_lib.unescape(p["subject"]) + html_lib.unescape(cfg["view_title_suffix"])
-            out.append((d + f"{p['id']}.html", "board_view.html", dict(common, post=post),
+            view = dict(common, post=post)
+            if p.get("summary"):   # 상세 meta description 1순위(P3-4b)
+                view["description"] = html_lib.escape(" ".join(p["summary"].split()), quote=True)
+            out.append((d + f"{p['id']}.html", "board_view.html", view,
                         dict(title=html_lib.escape(title, quote=True), body_class=cfg["body_class_view"])))
     return out

@@ -73,7 +73,13 @@
 
 		<!-- 본문 내용 시작 { -->
 		<div id="bo_v_con">{{ post.content_html }}</div>
-				<!-- } 본문 내용 끝 -->
+				<!-- } 본문 내용 끝 -->{% if post.gallery %}
+		<!-- 갤러리 시작 { (관리자 화면 gallery 칸, 사진 마크업·확대 보기는 #bo_v_img 와 같음) -->
+		<style>#bo_v_gallery{width:100%;overflow:hidden}#bo_v_gallery a.view_image{display:block}#bo_v_gallery img{margin-bottom:20px;max-width:100%;height:auto}</style>
+		<div id="bo_v_gallery">
+{% for im in post.gallery %}<a href="{{ im.large }}" target="_blank" class="view_image"><img src="{{ im.thumb }}" alt="{{ im.alt }}"/></a>{% endfor %}</div>
+		<!-- } 갤러리 끝 -->
+{% endif %}
 
 {% if post.embed %}
                     <!-- 관련링크 시작 { -->

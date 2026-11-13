@@ -20,6 +20,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import boards
 import cms_posts
 import extras
+import uploads
 from datetime import date, datetime
 
 SITE = Path(__file__).resolve().parent.parent
@@ -27,6 +28,7 @@ TEMPLATES = SITE / "templates"
 CONTENT = SITE / "content"
 STATIC = SITE / "static"
 PUBLIC = SITE / "public"
+UPLOADS = SITE / "uploads"   # 관리자 화면 업로드 이미지(원본, 읽기만). 빌드 때 줄여서 public/uploads/ 로
 SITE_URL = "https://hanbitinnotech.com/"   # canonical·og:image·sitemap용 최종 도메인
 TEMP_BASES = ["/hopage/"]                  # 임시 주소(GitHub Pages 프로젝트 주소)의 시작 경로. 404.html이 이 경로를 떼고 옛 주소를 찾는다
 MENU_YML = SITE / "cms" / "settings" / "menu.yml"   # 한글 메뉴 원본(관리자 화면에서 고침)
@@ -256,6 +258,10 @@ def main():
         rel = Path(d).relative_to(STATIC).as_posix()
         return [n for n in names if (f"{rel}/{n}" if rel != "." else n).lower() in exclude]
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
+    # 1-1) 관리자 화면 업로드 이미지: 긴 변 1920px 이하로 줄여 public/uploads/ 에(P3-4b). 축소본은 필요할 때 만든다
+    up = uploads.Uploads(UPLOADS, PUBLIC / "uploads")
+    up.process()
+    boards.Site.uploads = up
 
     # 2) 페이지 렌더링
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=False, undefined=StrictUndefined,
@@ -325,6 +331,8 @@ def main():
         content_html = (CONTENT / "pages" / m["content"]).read_text(encoding="utf-8")
         if "%%LATEST_NOTICE%%" in content_html:   # D12: 메인 회사소식 = posts.json 최신 글 4건
             content_html = content_html.replace("%%LATEST_NOTICE%%", extras.latest_notice(m["lang"], posts, site))
+        if "%%OUR_PROJECT%%" in content_html:   # P3-4b: 메인 Our Project = 시공사례 featured 글
+            content_html = content_html.replace("%%OUR_PROJECT%%", extras.our_project(posts, site))
         description = seo_desc_ko if key == "ko/index" else m["description"]
         # 메인 팝업: 한글은 popups.yml(P3-3), 영문은 기존 posts.json 방식 그대로(1차 범위 밖)
         popup = ""
@@ -394,6 +402,7 @@ def main():
                          + "\n".join(f"  - {src}: {f}" for src, f in missing))
     print(f"  E-Catalog 파일 {len(posts['boards']['library'])}개 확인")
 
+    up.report(PUBLIC)   # 업로드 이미지 용량, public/ 300MB(D13) 넘으면 경고
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)
     print(f"완료: public/ 파일 {len(files)}개, {size / 1024 / 1024:.1f}MB")

@@ -25,6 +25,8 @@ LABELS = {
     "en": {"writer": "Writer", "date": "Date", "views": "Views", "search_placeholder": "Please enter",
            "link_cnt": "{}회 연결", "list_label": "Notice"},
 }
+# 한글 게시판 목록 라벨(좌측 큰 글 위 표시). 영문은 위 LABELS["en"] 그대로
+KO_LIST_LABEL = {"notice": "회사소식", "media": "시공사례", "library": "E-Catalog"}
 CUT_VIEW_SUBJECT = 70   # 글 화면 머리의 제목은 70자에서 자르고 … (원본 스킨 그대로)
 CUT_LIST_SUBJECT = 60   # 목록 제목은 60자
 
@@ -283,6 +285,8 @@ def build_pages(content_dir: Path, static_dir: Path, templates):
     for table, cfg in boards.items():
         lang, d = cfg["lang"], cfg["dir"]
         labels = LABELS[lang]
+        if lang == "ko":
+            labels = dict(labels, list_label=KO_LIST_LABEL.get(table, labels["list_label"]))
         head = templates.loader.get_source(templates, f"_board_head_{lang}.html")[0]
         items = posts["boards"][table]
         common = dict(lang=lang, page_css=cfg["skin_css"], g5_bo_table=table, g5_editor=cfg["editor"],

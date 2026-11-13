@@ -18,6 +18,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import boards
+import cms_posts
 import extras
 from datetime import date, datetime
 
@@ -39,6 +40,9 @@ POPUP_DEFAULTS = {"width": 450, "height": 660, "top": 150, "left": 10}
 
 class BuildError(Exception):
     """한국어 메시지로 빌드를 멈춘다(종료코드 1)."""
+
+
+BUILD_ERRORS = (BuildError, cms_posts.CmsError)
 
 
 def esc(s) -> str:
@@ -309,7 +313,7 @@ def main():
                     canonical=SITE_URL + ("" if out == "index.html" else out), site_url=SITE_URL,
                     popup_html="", page_css="", g5_bo_table="", g5_editor="", board_head="", board_close="")
 
-    posts = json.loads((CONTENT / "posts.json").read_text(encoding="utf-8"))
+    posts = cms_posts.load_posts(SITE)   # 한글 게시판 = cms/*.md, 영문·팝업 = content/posts.json (P3-4a)
     site = boards.Site(STATIC)
     sitemap_urls = []
 
@@ -332,10 +336,10 @@ def main():
         sitemap_urls.append((out, None))
     print(f"  메인·고정 페이지 {len(meta)}개")
 
-    # 2-2) 게시판 목록·글 (content/posts.json)
+    # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 content/posts.json)
     n_list = n_view = 0
     dates = {f"{b}:{p['id']}": p["datetime"][:10] for b, v in posts["boards"].items() for p in v}
-    for out, tname, ctx, pm in boards.build_pages(CONTENT, STATIC, env, per_page_ko):
+    for out, tname, ctx, pm in boards.build_pages(CONTENT, STATIC, env, posts, per_page_ko):
         if tname is None:   # 검색용 목록 JSON
             (PUBLIC / out).parent.mkdir(parents=True, exist_ok=True)
             (PUBLIC / out).write_text(json.dumps(ctx, ensure_ascii=False), encoding="utf-8")
@@ -346,7 +350,7 @@ def main():
         n_list += tname == "board_list.html"
         n_view += tname == "board_view.html"
         wr = out.rsplit("/", 1)[1][:-5]
-        sitemap_urls.append((out, dates.get(f"{ctx['g5_bo_table']}:{wr}") if wr.isdigit() else None))
+        sitemap_urls.append((out, dates.get(f"{ctx['g5_bo_table']}:{wr}")))   # 글 페이지만 lastmod(목록 쪽은 없음)
     print(f"  게시판 목록 {n_list}쪽, 글 {n_view}건")
 
     # 3) 옛 주소 이동(404.html + redirects.json), sitemap.xml, robots.txt
@@ -382,6 +386,14 @@ def main():
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))
     print(f"  회사정보·팝업 내부 주소 {len(links)}개 확인, 노출 팝업 {len(popups)}개")
 
+    # 6) E-Catalog file 칸: public/ 에 실제 파일이 있어야 한다
+    missing = [(p["_src"], p["file"]) for p in posts["boards"]["library"]
+               if not exists(p["file"])]
+    if missing:
+        raise BuildError("E-Catalog 의 file(PDF)이 사이트에 없습니다:\n"
+                         + "\n".join(f"  - {src}: {f}" for src, f in missing))
+    print(f"  E-Catalog 파일 {len(posts['boards']['library'])}개 확인")
+
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)
     print(f"완료: public/ 파일 {len(files)}개, {size / 1024 / 1024:.1f}MB")
@@ -390,6 +402,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except BuildError as e:
+    except BUILD_ERRORS as e:
         print(f"빌드 실패: {e}", file=sys.stderr)
         sys.exit(1)

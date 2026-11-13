@@ -1,6 +1,6 @@
 """
 4-6: 메인 회사소식(D12), 팝업, 옛 주소 이동(404.html + redirects.json), sitemap.xml·robots.txt.
-build.py가 불러 쓴다. 저장소 안의 파일(content/, static/)만 사용한다.
+build.py가 불러 쓴다. 저장소 안의 파일만 사용한다. 게시글(posts)은 build.py 가 cms_posts.load_posts() 로 읽어 넘긴다.
 """
 import html as html_lib
 import json
@@ -14,7 +14,7 @@ NEWS_THUMB = (443, 243)
 NEWS_TITLE_CUT, NEWS_TEXT_CUT = 15, 45   # 원본 메인 최신글 스킨: 제목 15자 + "…", 본문 45자 + "..."
 
 
-# ───────── D12 메인 회사소식 4건 ─────────
+# ───────── D12 메인 회사소식 4건 (한글: cms/notice 최신 4건, draft 제외) ─────────
 def latest_notice(lang: str, posts: dict, site: "B.Site") -> str:
     table = "notice" if lang == "ko" else "notice_en"
     d = ("en/" if lang == "en" else "") + "board/notice/"
@@ -133,15 +133,16 @@ def redirects(meta: dict, boards_cfg: dict, posts: dict) -> dict:
     add("/page/bipv_pdt.php", {}, "index.html")
     for table, cfg in boards_cfg.items():
         items = posts["boards"][table]
+        old = [p for p in items if isinstance(p["id"], int)]   # 기존 글번호 글만(새 글 YYYYMMDD-HHMMSS 는 옛 주소가 없음)
         pages = max(1, -(-len(items) // cfg["page_rows"]))
         for loc in (None, "ko_KR", "en_US"):
             extra = {"locale": loc} if loc else {}
             add("/bbs/board.php", {"bo_table": table, **extra}, cfg["dir"] + "index.html")
             for n in range(1, pages + 1):
                 add("/bbs/board.php", {"bo_table": table, "page": str(n), **extra}, cfg["dir"] + B.list_page(n))
-            for p in items:
+            for p in old:
                 add("/bbs/board.php", {"bo_table": table, "wr_id": str(p["id"]), **extra}, cfg["dir"] + f"{p['id']}.html")
-        for p in items:
+        for p in old:
             for f in p["files"]:
                 if not f["stored"].lower().endswith(B.IMG_EXT):
                     ext = f["stored"].rsplit(".", 1)[-1].lower()

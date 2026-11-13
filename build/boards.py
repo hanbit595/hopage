@@ -2,7 +2,8 @@
 게시판 빌드 (build.py가 불러 씀). 저장소 안의 파일만 사용한다.
 
 입력
-- content/posts.json           : 게시글(DB 추출). 글을 고치거나 더할 때는 이 파일만 고치면 된다
+- 게시글: build.py 가 cms_posts.load_posts() 로 읽어 넘긴다(posts.json 과 같은 모양)
+  한글 글은 cms/notice|media|library/*.md, 영문 글은 content/posts.json
 - content/boards.json          : 게시판 설정(extract_boards.py가 만듦)
 - content/board_snapshot.json  : 원본 화면에 찍혀 있던 조회수·다운로드 수·연결 수(고정값). 없는 글은 0으로 표시
 - static/                      : 이미지(축소본 thumb-*·원본)와 첨부
@@ -275,10 +276,9 @@ def list_thumb(post, table, site: Site, which: str):
 
 
 # ───────── 페이지 만들기 ─────────
-def build_pages(content_dir: Path, static_dir: Path, templates, ko_page_rows=None):
+def build_pages(content_dir: Path, static_dir: Path, templates, posts: dict, ko_page_rows=None):
     """게시판 목록·글 페이지 정보 목록을 돌려준다: (출력 경로, 템플릿 이름, 템플릿 변수, 페이지 정보).
-    ko_page_rows: 한글 게시판 쪽당 글 수(cms/settings/site.yml per_page). 없으면 boards.json 값."""
-    posts = json.loads((content_dir / "posts.json").read_text(encoding="utf-8"))
+    posts: cms_posts.load_posts() 결과. ko_page_rows: 한글 게시판 쪽당 글 수(cms/settings/site.yml per_page). 없으면 boards.json 값."""
     boards = json.loads((content_dir / "boards.json").read_text(encoding="utf-8"))
     if ko_page_rows:
         for cfg in boards.values():
@@ -330,6 +330,7 @@ def build_pages(content_dir: Path, static_dir: Path, templates, ko_page_rows=Non
                                    "date": f"{q['datetime'][2:4]}.{q['datetime'][5:7]}.{q['datetime'][8:10]}"}
             file_images, downloads = [], []
             snap_files = iter(s.get("files", []))
+            ecat = p.get("file")   # E-Catalog(cms/library) 의 file 칸: 첫 PDF 첨부의 다운로드 주소
             for f in sorted(p["files"], key=lambda f: f["no"]):
                 stored = f["stored"]
                 if stored.lower().endswith(IMG_EXT):
@@ -339,7 +340,10 @@ def build_pages(content_dir: Path, static_dir: Path, templates, ko_page_rows=Non
                 else:
                     sf = next(snap_files, {})
                     ext = posixpath.splitext(stored)[1].lower()
-                    downloads.append({"href": f"%%ROOT%%files/{cfg['slug']}/{p['id']}-{f['no']}{ext}",
+                    href = f"%%ROOT%%files/{cfg['slug']}/{p['id']}-{f['no']}{ext}"
+                    if ecat:
+                        href, ecat = "%%ROOT%%" + ecat.lstrip("/"), None
+                    downloads.append({"href": href,
                                       "name": html_lib.escape(f["source"]), "size": file_size(f["size"]),
                                       "count": sf.get("download", "0"), "date": sf.get("date", dt)})
             links = []

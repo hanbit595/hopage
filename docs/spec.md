@@ -1,6 +1,7 @@
 # 관리자페이지 1차 명세 (v2)
 
 v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·푸터 생성 방식, 5절 비공개 검사, 6절 기술 조건, 8절 검증 기준·9절 확인 필요 신설.
+v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 선택·표시 제목에 program, 기존 글 전용 칸. 2절 한글 글은 posts.json 에서 제거.
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -17,6 +18,7 @@ v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·�
   - cms/media/*.md    → /board/media/<파일명>.html    (시공사례)
   - cms/library/*.md  → /board/library/<파일명>.html  (E-Catalog)
 - ENG 글(notice_en, media_en, library_en)은 content/posts.json 에 그대로 두고 기존 방식으로 빌드한다.
+  한글 글 배열은 posts.json 에서 지웠다(원본은 cms/ 하나). posts.json 에 한글 배열이 다시 생기면 빌드 실패.
 - 목록: /board/<게시판>/index.html, 2페이지부터 page-2.html, page-3.html ... (기존 규칙 유지)
 - cms/settings/menu.yml, site.yml, popups.yml
 - 업로드: uploads/ (기존 data/ 폴더와 겹치지 않게 함), 공개 경로 /uploads
@@ -25,12 +27,21 @@ v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·�
 - 규정상 비공개 현장 게시물은 cms/에 넣지 않는다(공개 저장소이므로 임시저장도 외부에 보임).
 
 ## 3. 필드
-- 회사소식: title, date(YYYY-MM-DD), thumbnail(선택), summary(선택), draft(기본 false), body(HTML)
-- 시공사례: title(현장명), category(select: 태양광발전장치/BIPV/주차장태양광/기타), capacity(문자, 선택),
+- date: "YYYY-MM-DD HH:MM:SS"(기존 글은 원래 작성 시각). "YYYY-MM-DD" 만 있으면 시각 00:00:00 으로 본다.
+  목록 순서: date 최신순, 같은 date 는 파일명 역순(새 형식 YYYYMMDD-HHMMSS 가 기존 글번호보다 앞, 글번호는 숫자 크기로 비교).
+- 회사소식: title, date, thumbnail(선택), summary(선택), draft(기본 false), body(HTML)
+- 시공사례: title(현장명), category(다중 선택 목록, 허용값: 태양광발전장치/BIPV/주차장태양광/기타, 1개 이상 필수),
+  capacity(문자, 선택. 원래 제목의 용량 부분을 글자 그대로. 깔끔히 나눌 수 없는 기존 글은 title 에 두고 비움),
   program(사업구분, 선택), date, thumbnail(선택), gallery(이미지 목록, 선택),
   featured(메인 Our Project 노출, 기본 false), draft, body(선택)
-  목록 표시 제목: "[category] title capacity"
-- E-Catalog: title, date, thumbnail(선택), file(PDF, 필수), body(선택), draft
+  목록·상세 표시 제목: "[category] title capacity" + program 이 있으면 " ㅣ {program}".
+  category 는 선택 순서대로 쉼표로 잇는다(예: [태양광발전장치,BIPV]). 빈 capacity 는 앞 공백 없이 생략.
+  (기존 50번 [태양광발전설비] 는 [태양광발전장치] 로 통일, 2026-11-13 결정)
+- E-Catalog: title, date, thumbnail(선택), file(PDF, 필수, /로 시작하는 사이트 주소, public/ 에 있어야 함), body(선택), draft
+- 기존 글 전용 칸(선택, 관리자 화면에 없어도 됨): link1·link2(관련 링크·YouTube, 기본 ""), files(첨부 목록 [{no, source, stored, size}], 기본 [])
+  E-Catalog 에 files 가 없으면 file 로 첨부 1개를 만든다(다운로드 이름 = 파일 이름, 크기 = 실제 파일 크기).
+  조회수·다운로드 수·연결 수(content/board_snapshot.json)가 없는 새 글은 0, 첨부 날짜는 글 date.
+- thumbnail·summary·gallery 는 1차(P3-4a)에서 검사만 하고 출력에 쓰지 않는다(업로드 처리·Our Project 작업 때 연결).
 - menu.yml: menu[ {label, visible, items[ {label, link, new_window, visible} ]} ]
   대메뉴 클릭 시 첫 번째 노출 소메뉴로 이동한다. link가 /로 시작하면 내부 링크, http로 시작하면 외부 링크다.
 - site.yml: offices[{name, address}], tel, email, brochure(PDF), per_page(기본 7), seo_description

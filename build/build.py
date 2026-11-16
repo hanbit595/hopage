@@ -274,6 +274,7 @@ def main():
     env.filters["esc"] = esc
     env.filters["ml"] = cms_pages.ml     # 고정 페이지 데이터(P4): 여러 줄 문단 들여쓰기
     env.filters["img"] = cms_pages.img   # 고정 페이지 데이터(P4): /로 시작하는 이미지 주소 → %%ROOT%%
+    env.filters["esc_text"] = cms_pages.esc_text   # 영문 고정 페이지(P4-EN1): 화면 글자 이스케이프(R&D 같은 & 는 그대로)
     menus, menu_links = load_menu()
     footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
     popups, popup_links = load_popups()
@@ -336,8 +337,9 @@ def main():
         out = m["out"]
         ctx = common(m["lang"], out, m["title"], m["body_class"])
         content_html = (CONTENT / "pages" / m["content"]).read_text(encoding="utf-8")
-        if m["lang"] == "ko" and out in cms_pages.PAGES:   # P4: 고정 페이지 내용 = cms/pages/<페이지>.yml
-            data = cms_pages.load(cms_pages.PAGES[out], SITE, PUBLIC, renames)
+        cp = cms_pages.page_of(out)   # P4: 고정 페이지 내용 = cms/pages/<페이지>.yml, 영문(P4-EN1) = cms/en/pages/<페이지>.yml
+        if cp:
+            data = cms_pages.load(cp[0], SITE, PUBLIC, renames, cp[1])
             content_html = cms_pages.render(env, content_html, data)
         if "%%LATEST_NOTICE%%" in content_html:   # D12: 메인 회사소식 = posts.json 최신 글 4건
             content_html = content_html.replace("%%LATEST_NOTICE%%", extras.latest_notice(m["lang"], posts, site))

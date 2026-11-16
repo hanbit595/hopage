@@ -9,6 +9,7 @@
 """
 import re
 from datetime import date, datetime
+from html.entities import html5
 from pathlib import Path
 
 import yaml
@@ -23,7 +24,41 @@ PAGES = {
     "page/esg.html": "esg",
     "page/location.html": "location",
 }
-SITE_YML = Path(__file__).resolve().parent.parent / "cms" / "settings" / "site.yml"   # Contact 주소·연락처·메일 원본
+# 영문(P4-EN1): 국문과 완전히 분리. 출력 경로 → cms/en/pages/<이름>.yml (이미지 파일은 공유, 데이터는 별도)
+PAGES_EN = {
+    "en/page/cert.html": "cert",
+}
+ROOT = Path(__file__).resolve().parent.parent
+SITE_YML = ROOT / "cms" / "settings" / "site.yml"            # Contact 주소·연락처·메일 원본(국문)
+SITE_YML_EN = ROOT / "cms" / "en" / "settings" / "site.yml"  # 영문 전용 회사정보(국문 site.yml 재사용 금지)
+
+
+def page_of(out: str):
+    """출력 경로 → (이름, 언어) 또는 None. 데이터 파일로 만드는 고정 페이지인지 판단한다."""
+    if out in PAGES:
+        return PAGES[out], "ko"
+    if out in PAGES_EN:
+        return PAGES_EN[out], "en"
+    return None
+
+
+def data_dir(lang: str) -> str:
+    return "cms/pages" if lang == "ko" else "cms/en/pages"
+
+
+def _is_ref(rest: str) -> bool:
+    """'&' 뒤 글자(rest)가 문자 참조(&#…, &amp; 같은 이름)로 읽힐 수 있는가."""
+    return rest.startswith("#") or any(rest.startswith(k) for k in html5)
+
+
+def esc_text(s) -> str:
+    """영문 화면 글자 이스케이프: <·> 는 바꾸고, '&' 는 문자 참조로 읽힐 수 있을 때만 &amp; 로 바꾼다.
+    (기존 영문 화면의 'R&D' 처럼 글자 그대로 보이는 & 는 원래 표기 그대로 둔다)"""
+    s = str(s)
+    out = []
+    for i, ch in enumerate(s):
+        out.append("&amp;" if ch == "&" and _is_ref(s[i + 1:]) else ch)
+    return "".join(out).replace("<", "&lt;").replace(">", "&gt;")
 
 
 class CmsPageError(Exception):
@@ -33,9 +68,9 @@ class CmsPageError(Exception):
 class Checker:
     """한 yml 파일의 칸 검사 도구. 이미지 존재 여부는 public/ 기준(optimize.py 가 바꾼 이름도 인정)."""
 
-    def __init__(self, name: str, public: Path, renames: dict):
-        self.file = f"cms/pages/{name}.yml"
-        self.public, self.renames = public, renames
+    def __init__(self, name: str, public: Path, renames: dict, lang: str = "ko"):
+        self.file = f"{data_dir(lang)}/{name}.yml"
+        self.public, self.renames, self.lang = public, renames, lang
 
     def fail(self, where, msg):
         raise CmsPageError(f"{self.file} {where}: {msg}" if where else f"{self.file}: {msg}")
@@ -290,10 +325,10 @@ LOADERS = {
 }
 
 
-def load(name: str, site: Path, public: Path, renames: dict) -> dict:
-    """cms/pages/<name>.yml 을 읽어 검사하고, 본문 조각 렌더링에 넘길 값을 돌려준다."""
-    path = site / "cms" / "pages" / f"{name}.yml"
-    c = Checker(name, public, renames)
+def load(name: str, site: Path, public: Path, renames: dict, lang: str = "ko") -> dict:
+    """cms/pages/<name>.yml(영문은 cms/en/pages/<name>.yml)을 읽어 검사하고, 본문 조각 렌더링에 넘길 값을 돌려준다."""
+    path = site / data_dir(lang) / f"{name}.yml"
+    c = Checker(name, public, renames, lang)
     try:
         d = yaml.load(path.read_text(encoding="utf-8"), Loader=CmsLoader)
     except FileNotFoundError:

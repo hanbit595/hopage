@@ -16,250 +16,249 @@ categories:
   - 수상
   - 인증
   - 특허
-
 items:
   - category: 수상
-    name: "녹색경영 표창장"
-    issuer: ""
-    date: ""
+    name: 녹색경영 표창장
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_01_01.png
     visible: true
     order: 1
   - category: 수상
-    name: "부산형 히든챔피언 표창장"
-    issuer: ""
-    date: ""
+    name: 부산형 히든챔피언 표창장
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_01_02.png
     visible: true
     order: 2
   - category: 수상
-    name: "조달청장 표창장"
-    issuer: ""
-    date: ""
+    name: 조달청장 표창장
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_01_03.png
     visible: true
     order: 3
   - category: 인증
-    name: "기업부설연구소인정서"
-    issuer: ""
-    date: ""
+    name: 기업부설연구소인정서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_01.png
     visible: true
     order: 1
   - category: 인증
-    name: "벤처기업확인서"
-    issuer: ""
-    date: ""
+    name: 벤처기업확인서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_02.png
     visible: true
     order: 2
   - category: 인증
-    name: "신용평가등급확인서"
-    issuer: ""
-    date: ""
-    image: /theme/basic/images/cert/cert_02_03.png
+    name: 신용평가등급확인서
+    issuer: ''
+    date: ''
+    image: /uploads/신용등급확인서.png
     visible: true
     order: 3
   - category: 인증
-    name: "장애인기업확인서"
-    issuer: ""
-    date: ""
+    name: 장애인기업확인서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_04.png
     visible: true
     order: 4
   - category: 인증
-    name: "G-PASS지정서"
-    issuer: ""
-    date: ""
+    name: G-PASS지정서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_05.png
     visible: true
     order: 5
   - category: 인증
-    name: "직접생산확인증명서"
-    issuer: ""
-    date: ""
+    name: 직접생산확인증명서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_06.png
     visible: true
     order: 6
   - category: 인증
-    name: "G-PASS기업 등급 증명서"
-    issuer: ""
-    date: ""
+    name: G-PASS기업 등급 증명서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_07.png
     visible: true
     order: 7
   - category: 인증
-    name: "GS 인증서 cctv"
-    issuer: ""
-    date: ""
+    name: GS 인증서 cctv
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_08.png
     visible: true
     order: 8
   - category: 인증
-    name: "GS 인증서 태양광"
-    issuer: ""
-    date: ""
+    name: GS 인증서 태양광
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_09.png
     visible: true
     order: 9
   - category: 인증
-    name: "ISO 9001"
-    issuer: ""
-    date: ""
+    name: ISO 9001
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_10.png
     visible: true
     order: 10
   - category: 인증
-    name: "KS인증서 접속함"
-    issuer: ""
-    date: ""
+    name: KS인증서 접속함
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_11.png
     visible: true
     order: 11
   - category: 인증
-    name: "단체표준제품인증서"
-    issuer: ""
-    date: ""
+    name: 단체표준제품인증서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_12.png
     visible: true
     order: 12
   - category: 인증
-    name: "단체표준인증서"
-    issuer: ""
-    date: ""
+    name: 단체표준인증서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_13.png
     visible: true
     order: 13
   - category: 인증
-    name: "가족친화인증서"
-    issuer: ""
-    date: ""
+    name: 가족친화인증서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_14.png
     visible: true
     order: 14
   - category: 인증
-    name: "조달청 MAS 물품계약"
-    issuer: ""
-    date: ""
+    name: 조달청 MAS 물품계약
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_15.png
     visible: true
     order: 15
   - category: 인증
-    name: "조달청 MAS 물품계약"
-    issuer: ""
-    date: ""
+    name: 조달청 MAS 물품계약
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_16.png
     visible: true
     order: 16
   - category: 인증
-    name: "인적자원개발 우수기관"
-    issuer: ""
-    date: ""
+    name: 인적자원개발 우수기관
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_17.png
     visible: true
     order: 17
   - category: 인증
-    name: "녹색기술인증서"
-    issuer: ""
-    date: ""
+    name: 녹색기술인증서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_18.png
     visible: true
     order: 18
   - category: 인증
-    name: "녹색기술제품확인서"
-    issuer: ""
-    date: ""
+    name: 녹색기술제품확인서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_19.png
     visible: true
     order: 19
   - category: 인증
-    name: "녹색기술인증서"
-    issuer: ""
-    date: ""
+    name: 녹색기술인증서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_20.png
     visible: true
     order: 20
   - category: 인증
-    name: "녹색기술제품확인서"
-    issuer: ""
-    date: ""
+    name: 녹색기술제품확인서
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_02_21.png
     visible: true
     order: 21
   - category: 특허
-    name: "사분면 분할 조명 기능을 갖는 CCTV 시스템"
-    issuer: ""
-    date: ""
+    name: 사분면 분할 조명 기능을 갖는 CCTV 시스템
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_01.png
     visible: true
     order: 1
   - category: 특허
-    name: "삼축 트위스트 내진장치를 구비한 수배전반"
-    issuer: ""
-    date: ""
+    name: 삼축 트위스트 내진장치를 구비한 수배전반
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_02.png
     visible: true
     order: 2
   - category: 특허
-    name: "풍압 저감용 태양광 발전장치"
-    issuer: ""
-    date: ""
+    name: 풍압 저감용 태양광 발전장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_03.png
     visible: true
     order: 3
   - category: 특허
-    name: "태양광모듈 진동감지 기능을 가지는 태양광 발전장치"
-    issuer: ""
-    date: ""
+    name: 태양광모듈 진동감지 기능을 가지는 태양광 발전장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_04.png
     visible: true
     order: 4
   - category: 특허
-    name: "그린 에너지를 이용한 충방전 컨트롤 장치"
-    issuer: ""
-    date: ""
+    name: 그린 에너지를 이용한 충방전 컨트롤 장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_05.png
     visible: true
     order: 5
   - category: 특허
-    name: "태양광 발전장치"
-    issuer: ""
-    date: ""
+    name: 태양광 발전장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_06.png
     visible: true
     order: 6
   - category: 특허
-    name: "양면형 태양광 발전장치"
-    issuer: ""
-    date: ""
+    name: 양면형 태양광 발전장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_07.png
     visible: true
     order: 7
   - category: 특허
-    name: "측면반사판이 구비된 태양광 발전장치"
-    issuer: ""
-    date: ""
+    name: 측면반사판이 구비된 태양광 발전장치
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_08.png
     visible: true
     order: 8
   - category: 특허
-    name: "누설 전류 제한 기능을 구비한 태양광 발전 시스템"
-    issuer: ""
-    date: ""
+    name: 누설 전류 제한 기능을 구비한 태양광 발전 시스템
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_09.png
     visible: true
     order: 9
   - category: 특허
-    name: "태양광 발전 이상의 연속성을 판단 및 제어하는 관리 시스템"
-    issuer: ""
-    date: ""
+    name: 태양광 발전 이상의 연속성을 판단 및 제어하는 관리 시스템
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_10.png
     visible: true
     order: 10
   - category: 특허
-    name: "지락차단에 강인한 태양광 발전 시스템"
-    issuer: ""
-    date: ""
+    name: 지락차단에 강인한 태양광 발전 시스템
+    issuer: ''
+    date: ''
     image: /theme/basic/images/cert/cert_03_11.png
     visible: true
     order: 11

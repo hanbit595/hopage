@@ -1,8 +1,8 @@
-         <div class="sub_wrap sec_all_wrap ov_wrap">
+{# 회사소개(영문): cms/en/pages/hanbit.yml 의 섹션별 제목·문단·사진(P4-EN1). 칸 개수는 아래 애니메이션 스크립트와 맞물려 고정 #}         <div class="sub_wrap sec_all_wrap ov_wrap">
     <div class="s_sec_about_wrap sub_sec_pd sub_sec_top">
         <div class="s_sec_about_mv_bg">
             <video class="bg_video_box" loop muted playsinline autoplay>
-                <source src="%%ROOT%%theme/basic/images/sub/hanbit_about.mov" type="video/mp4" />
+                <source src="{{ hero.video|img }}" type="video/mp4" />
             </video>
         </div>
         <div class="s_sec_about_con_wrap sec_bumo">
@@ -560,7 +560,7 @@
 </div>
             </div>
             <div id="textani" class="sec_tit11 bold600 animate" data-animate="fadeInDown" data-duration="1.0s"
-                data-delay="0.3s"> HANBIT INNOTECH </div>
+                data-delay="0.3s"> {{ hero.title|esc_text }} </div>
         </div>
         <a class="scroll" id="moveDown">
             <div class="txt">SCROLL DOWN</div>
@@ -570,18 +570,14 @@
     <div class="hanbit_all_wrap">
         <div class="hanbit_txt_ani_all_wrap">
             <div class="hanbit_txt_ani_wrap hanbit_txt_ani_01">
-                <div class="hanbit_txt_ani"> HANBIT Innotech is more than just an energy company.<br> We deliver clean
-                    energy and meaningful connectivity to the spaces <br> where people live, learn, and dream. </div>
+                <div class="hanbit_txt_ani"> {{ intro_texts[0]|ml("                    ") }} </div>
             </div>
             <div class="hanbit_txt_ani_wrap hanbit_txt_ani_02">
-                <div class="hanbit_txt_ani"> From design, supervision, and construction to manufacturing, inspection,
-                    and maintenance, we provide comprehensive, one-stop energy solutions that cover the entire
-                    lifecycle, successfully executing a wide range of projects across both public and private sectors.
+                <div class="hanbit_txt_ani"> {{ intro_texts[1]|ml("                    ") }}
                 </div>
             </div>
             <div class="hanbit_txt_ani_wrap hanbit_txt_ani_03">
-                <div class="hanbit_txt_ani"> The energy we create is more than just electricity. <br> It embodies our
-                    commitment to both people and the environment. </div>
+                <div class="hanbit_txt_ani"> {{ intro_texts[2]|ml("                    ") }} </div>
             </div>
         </div>
         <div class="hanbit_wrap">
@@ -591,14 +587,14 @@
                         <div class="hanbit_box hanbit_box_01_01">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_01_01.jpg">
+                                    <img src="{{ photos[0]|img }}">
                                 </div>
                             </div>
                         </div>
                         <div class="hanbit_box hanbit_box_01_02">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_01_02.jpg">
+                                    <img src="{{ photos[1]|img }}">
                                 </div>
                             </div>
                         </div>
@@ -611,14 +607,14 @@
                         <div class="hanbit_box hanbit_box_02_01">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_02_01.jpg">
+                                    <img src="{{ photos[2]|img }}">
                                 </div>
                             </div>
                         </div>
                         <div class="hanbit_box hanbit_box_02_02">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_02_02.jpg">
+                                    <img src="{{ photos[3]|img }}">
                                 </div>
                             </div>
                         </div>
@@ -631,14 +627,14 @@
                         <div class="hanbit_box hanbit_box_03_01">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_03_01.jpg">
+                                    <img src="{{ photos[4]|img }}">
                                 </div>
                             </div>
                         </div>
                         <div class="hanbit_box hanbit_box_03_02">
                             <div class="hanbit_box_img_wrap animate">
                                 <div class="hanbit_box_img">
-                                    <img src="%%ROOT%%theme/basic/images/sub/hanbit_box_03_02.jpg">
+                                    <img src="{{ photos[5]|img }}">
                                 </div>
                             </div>
                         </div>
@@ -651,8 +647,7 @@
         <div class="hanbit_wide_all_wrap">
             <div class="hanbit_wide_wrap">
                 <div class="hanbit_wide_bg"></div>
-                <div class="hanbit_wide_txt"> Through clean energy, we build better lives <br />and a sustainable
-                    tomorrow. </div>
+                <div class="hanbit_wide_txt"> {{ energy_text|ml("                    ") }} </div>
             </div>
         </div>
     </section>
@@ -661,9 +656,7 @@
             <div class="sun_img sun_img_01"></div>
         </div>
         <div class="sun_split__scroll">
-            <div class="sun_txt"> Implementing efficient designs through smart technologies, we provide seamless
-                services from initial design to long-term maintenance. <br> Commitment to environmental and social
-                responsibility drives our pursuit of sustainable value. </div>
+            <div class="sun_txt"> {{ sun_texts[0]|ml("                ") }} </div>
         </div>
     </section>
     <section class="sun_split sun_split--left">
@@ -671,16 +664,13 @@
             <div class="sun_img sun_img_02"></div>
         </div>
         <div class="sun_split__scroll">
-            <div class="sun_txt"> HANBIT Innotech is venturing into next-generation energy sectors, including tailored
-                RE100 solutions, BIPV, and smart energy platforms, positioning ourselves as a trusted partner for our
-                clients and society. </div>
+            <div class="sun_txt"> {{ sun_texts[1]|ml("                ") }} </div>
         </div>
     </section>
     <div class="hanbit_sec_wrap hanbit_ending_sec_wrap">
         <div class="hanbit_ending_wrap animate">
             <div class="hanbit_ending_txt txt_center animate" data-animate="fadeIn" data-duration="1.0s"
-                data-delay="1.0s"> The energy we deliver is <br>
-                <b>a bright promise for a sustainable tomorrow.</b>
+                data-delay="1.0s"> {{ ending_text|ml("                ") }}
             </div>
         </div>
     </div>

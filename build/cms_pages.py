@@ -28,6 +28,7 @@ PAGES = {
 PAGES_EN = {
     "en/page/cert.html": "cert",
     "en/page/history.html": "history",
+    "en/page/hanbit.html": "hanbit",
 }
 ROOT = Path(__file__).resolve().parent.parent
 SITE_YML = ROOT / "cms" / "settings" / "site.yml"            # Contact 주소·연락처·메일 원본(국문)
@@ -260,8 +261,10 @@ def fixed_list(c: Checker, d: dict, key: str, count: int, kind: str):
 def load_hanbit(c: Checker, d: dict) -> dict:
     hero = c.obj(d.get("hero"), "hero")
     texts = lambda key, n: [c.text({key: t}, key, f"{key} {i}번째") for i, t in enumerate(fixed_list(c, d, key, n, "문단"), 1)]
+    # 영문 맨 위 큰 화면은 사진이 아니라 배경 동영상(hero.video). 파일 검사는 사진과 같다(.mov 는 optimize.py 가 바꾼 .mp4 인정)
+    media = "video" if c.lang == "en" else "image"
     return {
-        "hero": {"title": c.text(hero, "title", "hero"), "image": c.image(hero, "image", "hero")},
+        "hero": {"title": c.text(hero, "title", "hero"), media: c.image(hero, media, "hero")},
         "intro_texts": texts("intro_texts", 3),
         "photos": [c.image({"photos": p}, "photos", f"photos {i}번째")
                    for i, p in enumerate(fixed_list(c, d, "photos", 6, "사진"), 1)],

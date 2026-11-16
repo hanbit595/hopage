@@ -19,6 +19,7 @@ from cms_posts import CmsLoader
 PAGES = {
     "page/cert.html": "cert",
     "page/history.html": "history",
+    "page/hanbit.html": "hanbit",
 }
 
 
@@ -203,9 +204,32 @@ def load_history(c: Checker, d: dict) -> dict:
     return {"periods": out}
 
 
+def fixed_list(c: Checker, d: dict, key: str, count: int, kind: str):
+    """개수가 정해진 목록(화면 움직임 스크립트와 맞물린 칸). 개수가 다르면 빌드 실패."""
+    v = c.items(d, key, "")
+    if len(v) != count:
+        c.fail("", f"{key} 는 꼭 {count}개여야 합니다 (현재 {len(v)}개). 화면 구성이 {kind} {count}개로 고정되어 있습니다.")
+    return v
+
+
+def load_hanbit(c: Checker, d: dict) -> dict:
+    hero = c.obj(d.get("hero"), "hero")
+    texts = lambda key, n: [c.text({key: t}, key, f"{key} {i}번째") for i, t in enumerate(fixed_list(c, d, key, n, "문단"), 1)]
+    return {
+        "hero": {"title": c.text(hero, "title", "hero"), "image": c.image(hero, "image", "hero")},
+        "intro_texts": texts("intro_texts", 3),
+        "photos": [c.image({"photos": p}, "photos", f"photos {i}번째")
+                   for i, p in enumerate(fixed_list(c, d, "photos", 6, "사진"), 1)],
+        "energy_text": c.text(d, "energy_text", ""),
+        "sun_texts": texts("sun_texts", 2),
+        "ending_text": c.text(d, "ending_text", ""),
+    }
+
+
 LOADERS = {
     "cert": load_cert,
     "history": load_history,
+    "hanbit": load_hanbit,
 }
 
 

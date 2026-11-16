@@ -14,7 +14,7 @@ NEWS_THUMB = (443, 243)
 NEWS_TITLE_CUT, NEWS_TEXT_CUT = 15, 45   # 원본 메인 최신글 스킨: 제목 15자 + "…", 본문 45자 + "..."
 
 
-# ───────── D12 메인 회사소식 4건 (한글: cms/notice 최신 4건, draft 제외) ─────────
+# ───────── D12 메인 회사소식 4건 (한글: cms/notice, 영문: cms/en/notice 최신 4건, draft 제외) ─────────
 def latest_notice(lang: str, posts: dict, site: "B.Site") -> str:
     table = "notice" if lang == "ko" else "notice_en"
     d = ("en/" if lang == "en" else "") + "board/notice/"

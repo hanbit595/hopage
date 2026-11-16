@@ -261,7 +261,7 @@ def main():
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
     # 1-1) 관리자 화면 업로드 이미지: 긴 변 1920px 이하로 줄여 public/uploads/ 에(P3-4b). 축소본은 필요할 때 만든다
     up = uploads.Uploads(UPLOADS, PUBLIC / "uploads")
-    # P3-5c-2: 글(cms/*.md)·페이지(cms/pages, content/pages)·설정(cms/settings)·영문 글(posts.json)·템플릿에 쓰인 업로드만 넣는다
+    # P3-5c-2: 글(cms/*.md, 영문 cms/en/*.md)·페이지(cms/pages, content/pages)·설정(cms/settings)·팝업(posts.json)·템플릿에 쓰인 업로드만 넣는다
     up.find_used([p for d in (SITE / "cms", CONTENT, TEMPLATES) for p in d.rglob("*")
                   if p.is_file() and p.suffix.lower() in (".md", ".yml", ".yaml", ".json", ".html")
                   and p.name != "redirects.json"])
@@ -327,7 +327,7 @@ def main():
                     canonical=SITE_URL + ("" if out == "index.html" else out), site_url=SITE_URL,
                     popup_html="", page_css="", g5_bo_table="", g5_editor="", board_head="", board_close="")
 
-    posts = cms_posts.load_posts(SITE)   # 한글 게시판 = cms/*.md, 영문·팝업 = content/posts.json (P3-4a)
+    posts = cms_posts.load_posts(SITE)   # 한글 게시판 = cms/*.md(P3-4a), 영문 게시판 = cms/en/*.md(P4-EN2), 영문 팝업 = content/posts.json
     site = boards.Site(STATIC)
     sitemap_urls = []
 
@@ -356,7 +356,7 @@ def main():
         sitemap_urls.append((out, None))
     print(f"  메인·고정 페이지 {len(meta)}개")
 
-    # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 content/posts.json)
+    # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 cms/en/*.md)
     n_list = n_view = 0
     dates = {f"{b}:{p['id']}": p["datetime"][:10] for b, v in posts["boards"].items() for p in v}
     for out, tname, ctx, pm in boards.build_pages(CONTENT, STATIC, env, posts, per_page_ko):
@@ -406,13 +406,13 @@ def main():
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))
     print(f"  회사정보·팝업 내부 주소 {len(links)}개 확인, 노출 팝업 {len(popups)}개")
 
-    # 6) E-Catalog file 칸: public/ 에 실제 파일이 있어야 한다
-    missing = [(p["_src"], p["file"]) for p in posts["boards"]["library"]
-               if not exists(p["file"])]
+    # 6) E-Catalog file 칸(한글 cms/library, 영문 cms/en/library): public/ 에 실제 파일이 있어야 한다
+    ecat = posts["boards"]["library"] + posts["boards"]["library_en"]
+    missing = [(p["_src"], p["file"]) for p in ecat if not exists(p["file"])]
     if missing:
         raise BuildError("E-Catalog 의 file(PDF)이 사이트에 없습니다:\n"
                          + "\n".join(f"  - {src}: {f}" for src, f in missing))
-    print(f"  E-Catalog 파일 {len(posts['boards']['library'])}개 확인")
+    print(f"  E-Catalog 파일 {len(ecat)}개 확인(한글 {len(posts['boards']['library'])}, 영문 {len(posts['boards']['library_en'])})")
 
     up.report(PUBLIC)   # 업로드 이미지 용량, public/ 300MB(D13) 넘으면 경고
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]

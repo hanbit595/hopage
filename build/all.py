@@ -4,7 +4,7 @@
 - 글을 고치거나 새 글을 넣었을 때는 이것만 실행하면 된다. GitHub Actions(.github/workflows/deploy.yml)도 이것을 실행한다.
     python build/all.py          (site/ 폴더에서)
     미리보기: python -m http.server 8000 -d public
-- 새 글 넣는 법: 한글은 cms/<게시판>/YYYYMMDD-HHMMSS.md(관리자 화면이 만듦), 영문은 content/posts.json 의 게시판 목록 맨 앞.
+- 새 글 넣는 법: 한글은 cms/<게시판>/YYYYMMDD-HHMMSS.md, 영문은 cms/en/<게시판>/YYYYMMDD-HHMMSS.md(관리자 화면이 만듦).
   본문·첨부 이미지는 static/data/editor/… 등 본문에 적은 경로에 넣는다. 축소본·확대본은 이 스크립트가 없는 것만 만든다.
 
 ※ extract_pages.py(수집본 crawl/·FTP 원본 original/에서 틀·본문·자산을 다시 뽑기)는 여기에 넣지 않는다.

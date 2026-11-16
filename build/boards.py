@@ -3,7 +3,7 @@
 
 입력
 - 게시글: build.py 가 cms_posts.load_posts() 로 읽어 넘긴다(posts.json 과 같은 모양)
-  한글 글은 cms/notice|media|library/*.md, 영문 글은 content/posts.json
+  한글 글은 cms/notice|media|library/*.md, 영문 글은 cms/en/notice|media|library/*.md (P4-EN2)
 - content/boards.json          : 게시판 설정(extract_boards.py가 만듦)
 - content/board_snapshot.json  : 원본 화면에 찍혀 있던 조회수·다운로드 수·연결 수(고정값). 없는 글은 0으로 표시
 - static/                      : 이미지(축소본 thumb-*·원본)와 첨부

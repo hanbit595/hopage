@@ -1,7 +1,7 @@
 """
 이미지·동영상 최적화 (설계서 4장). build/all.py가 build.py 앞에서 실행한다. 몇 번을 다시 실행해도 결과가 같다.
 
-없는 것만 만든다(새 글을 cms/<게시판>/*.md(영문은 posts.json)에 넣고 이미지를 static/data/... 에 넣은 뒤 all.py만 실행하면 된다)
+없는 것만 만든다(새 글을 cms/<게시판>/*.md(영문은 cms/en/<게시판>/*.md)에 넣고 이미지를 static/data/... 에 넣은 뒤 all.py만 실행하면 된다)
 0) 새 글의 축소본(원본 그누보드와 같은 규칙)
    - 글 화면: 폭 1400px 넘는 이미지 → thumb-{이름}_1400x{높이}.{확장자} (비율 유지, 품질 90)
    - 목록: 첫 이미지(이미지 첨부 → 없으면 본문 첫 이미지) → _900x600(좌측)·_420x280(우측), 가운데 자르기
@@ -43,7 +43,7 @@ IMG_EXT = (".jpg", ".jpeg", ".png")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boards as B   # noqa: E402  (축소본 찾기 규칙을 빌드와 같이 쓴다)
-import cms_posts   # noqa: E402  (게시글 읽기: 한글 cms/*.md, 영문 posts.json — 빌드와 같은 글 목록)
+import cms_posts   # noqa: E402  (게시글 읽기: 한글 cms/*.md, 영문 cms/en/*.md — 빌드와 같은 글 목록)
 
 
 def load(p, default):

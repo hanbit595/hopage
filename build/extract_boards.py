@@ -7,7 +7,7 @@
 - content/board_snapshot.json        : 원본 화면에 찍혀 있던 숫자(조회수, 첨부 다운로드 수·날짜, 관련링크 연결 수). 정적 사이트에서는 고정값
 - static/ : 게시판 화면이 쓰는 이미지(축소본·확대용 원본), 첨부(라이브러리 PDF는 files/library/{글번호}-{순번}.pdf)
 
-글 내용(제목·본문·날짜·첨부 정보)은 cms_posts.load_posts()(한글 cms/*.md, 영문 content/posts.json)를 그대로 쓴다.
+글 내용(제목·본문·날짜·첨부 정보)은 cms_posts.load_posts()(한글 cms/*.md, 영문 cms/en/*.md, boards_meta 는 content/posts.json)를 그대로 쓴다.
 """
 import json
 import re

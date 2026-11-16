@@ -5,6 +5,7 @@ v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 �
 v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail·summary·gallery 출력과 featured_* 칸, 4절 Our Project 칸 배치, 6절 업로드 처리.
 v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 신설. Contact 는 결정 (나)로 site.yml 재사용 연결.
 v2.4 변경(2026-11-16, P4-EN1): 8-2절 영문 완전 분리 원칙(cms/en/)·영문 페이지 칸 목록 신설, 2절 ENG 수정 규칙 변경, 8-1절 Contact 표 정리.
+v2.5 변경(2026-11-16, P4-EN2): 영문 게시판 3종을 cms/en/<게시판>/*.md 로 이전. 2절 ENG 글 규칙 변경, 8-3절 영문 게시판 칸 목록 신설.
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -21,8 +22,9 @@ v2.4 변경(2026-11-16, P4-EN1): 8-2절 영문 완전 분리 원칙(cms/en/)·�
   - cms/notice/*.md   → /board/notice/<파일명>.html   (회사소식)
   - cms/media/*.md    → /board/media/<파일명>.html    (시공사례)
   - cms/library/*.md  → /board/library/<파일명>.html  (E-Catalog)
-- ENG 글(notice_en, media_en, library_en)은 content/posts.json 에 그대로 두고 기존 방식으로 빌드한다.
-  한글 글 배열은 posts.json 에서 지웠다(원본은 cms/ 하나). posts.json 에 한글 배열이 다시 생기면 빌드 실패.
+- ENG 글(notice_en, media_en, library_en)은 cms/en/<게시판>/<파일명>.md 로 관리한다(P4-EN2, 8-3절). 주소 /en/board/<게시판>/<파일명>.html.
+  posts.json 의 게시판 글 배열(boards)은 한글·영문 모두 지웠다. 다시 생기면 빌드 실패.
+  posts.json 에는 영문 메인 팝업(popups)·boards_meta·contents 만 남는다(영문 팝업 빌드, extract_boards.py 가 읽음).
 - 목록: /board/<게시판>/index.html, 2페이지부터 page-2.html, page-3.html ... (기존 규칙 유지)
 - cms/settings/menu.yml, site.yml, popups.yml
 - 업로드: uploads/ (기존 data/ 폴더와 겹치지 않게 함), 공개 경로 /uploads
@@ -146,6 +148,23 @@ v2.4 변경(2026-11-16, P4-EN1): 8-2절 영문 완전 분리 원칙(cms/en/)·�
 | About /en/page/hanbit.html | cms/en/pages/hanbit.yml | hero{title, video}, intro_texts[3], photos[6], energy_text, sun_texts[2], ending_text (영문 맨 위 화면은 동영상이라 hero.image 대신 hero.video) |
 | ESG /en/page/esg.html | cms/en/pages/esg.yml | intro{title, text}, flow_text, pillars[{title, icon, text}], details[{title, items[]}] (항목 앞 '-' 는 틀이 붙임) |
 | Contact /en/page/location.html | cms/en/pages/location.yml + cms/en/settings/site.yml | locations[{office, label, title, map}] (map_indent 없음) + site.yml offices[{name, address}], tel, email |
+
+## 8-3. 영문 게시판(cms/en/<게시판>/*.md) (P4-EN2, 2026-11-16)
+- 원본: cms/en/notice/*.md(Notice) → /en/board/notice/, cms/en/media/*.md(Project Cases) → /en/board/media/,
+  cms/en/library/*.md(E-Catalog) → /en/board/library/. 국문 cms/notice|media|library 와 완전히 따로 둔다.
+- 읽기·검사·정렬·draft·파일명·본문 형식(body_format)·thumbnail·summary·업로드 1920px 처리는 국문과 같은 코드
+  (build/cms_posts.py load_board(lang="en"), boards.py, uploads.py)를 쓴다. 빌드 실패 조건도 5절과 같다
+  (필수 칸 누락, 날짜 형식, 파일명 중복, E-Catalog file 누락·사이트에 없는 파일).
+- 영문 메인 News 4건 = cms/en/notice 최신 4건(draft 제외). 영문 메인 Our Project 는 지금처럼 고정 마크업(글과 연결 안 함).
+- 기존 글은 기존 글번호(예: 73.md), 새 글은 YYYYMMDD-HHMMSS.md. 기존 글 본문은 body_format: html 로 HTML 그대로.
+- 이전 결과: Notice 7건, Project Cases 65건, E-Catalog 0건(빈 폴더는 .gitkeep). 시험용 "test" 글 2건(media 1·2번)은 승인에 따라 이전하지 않음
+  (그 결과 /en/board/media/1.html·2.html, 목록 10쪽의 2건, sitemap 2건, 옛 주소 wr_id=1·2 대응 6건, 3번 글의 Next 링크가 빠짐).
+
+| 게시판 | 폴더 | 칸 (국문과 같은 키 이름) |
+|---|---|---|
+| Notice | cms/en/notice/ | title(필수, 제목 통째로), date(필수, YYYY-MM-DD HH:MM:SS), body, body_format(기존 글 html), thumbnail·summary(선택), draft(기본 false), link1·link2·files(기존 글 전용, 선택) |
+| Project Cases | cms/en/media/ | 위와 같음. title 은 "[PV] 현장명 용량" 처럼 통째로 쓰고 나누지 않는다(category·capacity·program·gallery·featured 칸 없음) |
+| E-Catalog | cms/en/library/ | 위와 같음 + file(필수, /로 시작하는 PDF 주소, public/ 에 있어야 함). files 가 없으면 file 로 첨부 1개 |
 
 ## 9. 확인 필요 (2026-11-13 조사 결과, 수정 없음)
 a) private_guard.py 의 비공개 판별 목록

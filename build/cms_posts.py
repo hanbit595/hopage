@@ -1,14 +1,16 @@
 """
-한글 게시판 글 원본 읽기 (P3-4a). build.py·optimize.py·extract_boards.py 가 불러 쓴다.
+게시판 글 원본 읽기 (한글 P3-4a, 영문 P4-EN2). build.py·optimize.py·extract_boards.py 가 불러 쓴다.
 
 - 한글 글: cms/notice|media|library/<파일명>.md (머리말 YAML + 본문)
+- 영문 글(P4-EN2): cms/en/notice|media|library/<파일명>.md → 게시판 이름 notice_en·media_en·library_en
+  읽기·검사·draft·파일명 규칙은 한글과 같은 load_board() 를 쓴다(lang="en"). 다른 점은 아래 '영문' 참고.
   본문 형식(P3-4b): 머리말 body_format: html 인 글(이전한 기존 글)은 본문 HTML 을 그대로 쓴다.
   그 칸이 없는 글(관리자 화면으로 쓴 새 글)은 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 그대로 통과).
-- 영문 글(notice_en·media_en·library_en)과 팝업 등: content/posts.json 그대로
-- 돌려주는 값은 posts.json 과 같은 모양이다. 글 = {id, subject, datetime, content, link1, link2, files}
+- 팝업(영문 메인)·boards_meta 등: content/posts.json. 게시판 글 배열(boards)이 posts.json 에 다시 생기면 빌드 실패.
+- 돌려주는 값은 예전 posts.json 과 같은 모양이다. 글 = {id, subject, datetime, content, link1, link2, files}
   (기존 게시판·메인 News·sitemap·옛 주소·이미지 최적화 코드를 그대로 쓰기 위해)
 
-파일명: 기존 글은 글번호(99.md), 새 글은 YYYYMMDD-HHMMSS.md → 주소 /board/<게시판>/<파일명>.html
+파일명: 기존 글은 글번호(99.md), 새 글은 YYYYMMDD-HHMMSS.md → 주소 /board/<게시판>/<파일명>.html (영문 /en/board/…)
 순서: date 최신순, 같은 date 는 파일명 역순(새 형식 파일명 > 글번호, 글번호는 숫자 크기로 비교)
 draft: true 인 글은 여기서 빼므로 목록·상세·메인·sitemap·옛 주소 어디에도 나오지 않는다(검사는 똑같이 한다).
 
@@ -24,6 +26,9 @@ draft: true 인 글은 여기서 빼므로 목록·상세·메인·sitemap·옛 
 - E-Catalog: file(필수, 사이트 주소 /… 의 PDF. public/ 에 있는지는 build.py 가 확인)
 - 기존 글 전용(선택, 없으면 기본값): link1·link2(관련 링크, 기본 ""), files(첨부 목록 [{no, source, stored, size}], 기본 [])
   E-Catalog 에서 files 가 없으면 file 로 첨부 1개를 만든다(이름 = 파일 이름, 크기 = 실제 파일 크기)
+- 영문: 세 게시판 모두 title 을 통째로 표시 제목으로 쓴다(시공사례도 category·capacity·program 으로 나누지 않음,
+        예: "[PV] Hanbit Gimhae Factory 168.96kW"). 시공사례 featured_* 칸 없음(영문 메인 Our Project 는 고정 마크업).
+        E-Catalog file 칸 규칙은 한글과 같다.
 """
 import html
 import json
@@ -36,6 +41,7 @@ import markdown
 import yaml
 
 KO_BOARDS = ("notice", "media", "library")
+EN_BOARDS = ("notice", "media", "library")   # cms/en/<게시판>/ → 게시판 이름 <게시판>_en (P4-EN2)
 BOARD_NAMES = {"notice": "회사소식", "media": "시공사례", "library": "E-Catalog"}
 CATEGORIES = ("태양광발전장치", "BIPV", "주차장태양광", "기타")
 DEFAULT_TIME = "00:00:00"   # date 에 시각이 없을 때
@@ -179,16 +185,17 @@ def read_md(path: Path, where: str = None):
     return fm, m.group(2).strip("\r\n")
 
 
-def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft=False):
-    """cms/<board>/*.md → posts.json 모양의 글 목록(정렬됨)."""
+def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft=False, lang="ko"):
+    """cms/<board>/*.md(영문은 cms_dir=cms/en, lang="en") → posts.json 모양의 글 목록(정렬됨)."""
     folder = cms_dir / board
+    prefix = "cms/" + ("en/" if lang == "en" else "") + board
     if not folder.is_dir():
-        raise CmsError(f"게시판 폴더가 없습니다: cms/{board}/")
+        raise CmsError(f"게시판 폴더가 없습니다: {prefix}/")
     seen, items = {}, []
     for path in sorted(folder.iterdir()):
         if not path.is_file() or path.suffix.lower() != ".md":
             continue
-        where = f"cms/{board}/{path.name}"
+        where = f"{prefix}/{path.name}"
         name = path.stem
         if not NAME_RE.fullmatch(name):
             raise CmsError(f"{where}: 파일명은 글번호(예: 99.md) 또는 YYYYMMDD-HHMMSS.md 형식이어야 합니다.")
@@ -211,7 +218,7 @@ def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft
                 "link1": _text(fm, "link1", where), "link2": _text(fm, "link2", where), "files": _files(fm, where),
                 "thumbnail": _text(fm, "thumbnail", where).strip(), "summary": _text(fm, "summary", where).strip()}
 
-        if board == "media":
+        if board == "media" and lang == "ko":
             cats = fm.get("category")
             if isinstance(cats, str):
                 cats = [cats]
@@ -261,12 +268,15 @@ def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft
 
 
 def load_posts(site_dir: Path):
-    """content/posts.json(영문·팝업 등) + cms/ 한글 게시판 → posts.json 모양 전체."""
+    """content/posts.json(영문 팝업·boards_meta 등) + cms/ 한글 게시판 + cms/en/ 영문 게시판 → posts.json 모양 전체."""
     posts = json.loads((site_dir / "content" / "posts.json").read_text(encoding="utf-8"))
-    left = [b for b in KO_BOARDS if b in posts.get("boards", {})]
+    left = list(posts.get("boards") or {})
     if left:
-        raise CmsError(f"content/posts.json 에 한글 게시판 배열({', '.join(left)})이 남아 있습니다. "
-                       "한글 글의 원본은 cms/ 하나뿐이어야 합니다.")
+        raise CmsError(f"content/posts.json 에 게시판 글 배열({', '.join(left)})이 남아 있습니다. "
+                       "게시판 글의 원본은 cms/(한글)·cms/en/(영문) 하나뿐이어야 합니다.")
+    posts["boards"] = {}
     for b in KO_BOARDS:
         posts["boards"][b] = load_board(b, site_dir / "cms", site_dir / "static")
+    for b in EN_BOARDS:
+        posts["boards"][b + "_en"] = load_board(b, site_dir / "cms" / "en", site_dir / "static", lang="en")
     return posts

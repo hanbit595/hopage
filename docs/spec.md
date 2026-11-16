@@ -3,6 +3,7 @@
 v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·푸터 생성 방식, 5절 비공개 검사, 6절 기술 조건, 8절 검증 기준·9절 확인 필요 신설.
 v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 선택·표시 제목에 program, 기존 글 전용 칸. 2절 한글 글은 posts.json 에서 제거.
 v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail·summary·gallery 출력과 featured_* 칸, 4절 Our Project 칸 배치, 6절 업로드 처리.
+v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 신설. Contact 페이지는 멈춤(사유 8-1절).
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -100,6 +101,33 @@ v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail�
 - public/en/ 은 완전히 같아야 한다.
 - 한글 페이지는 메뉴·푸터·게시판·메인 Our Project/News 영역 외에는 차이가 없어야 한다.
 - 기존 게시판 URL(/board/<게시판>/index.html, page-N.html, <글번호>.html) 누락 0건.
+
+## 8-1. 고정 페이지 데이터(cms/pages/*.yml) (P4, 2026-11-16)
+- 한글 고정 페이지 일부의 내용을 cms/pages/<페이지>.yml 에서 읽어 만든다. 레이아웃·마크업·클래스는 그대로 두고,
+  본문 조각(content/pages/ko/page/<페이지>.html)의 내용 자리만 Jinja 칸({{ }}·{% for %})으로 바꿨다.
+- 읽기·검사: build/cms_pages.py (PAGES 표에 있는 페이지만). build.py 가 고정 페이지를 만들 때 불러 쓴다. ENG 페이지는 그대로.
+- 빌드 실패(한국어 메시지 + 종료코드 1): 필수 칸 누락, 날짜·연도·월 형식 오류, 이미지 파일이 public/ 에 없음(optimize.py 가 바꾼 이름 인정),
+  그 밖에 없는 구분, 같은 연도 중복, 고정 개수 칸의 개수 불일치.
+- 글자 칸: 제목·명칭은 HTML 이스케이프. 문단·내용 칸은 <br>·<b> 등 HTML 그대로. 여러 줄 문단은 줄마다 원래 들여쓰기를 붙여 출력.
+- 이미지 칸: /로 시작하는 사이트 안 주소.
+
+| 페이지 | 파일 | 칸 |
+|---|---|---|
+| 인증 및 수상 /page/cert.html | cms/pages/cert.yml | categories[구분 이름, 표시 순서], items[{category 구분, name 명칭, issuer 발급기관(선택·기록용), date 날짜(선택·기록용, YYYY-MM-DD 또는 YYYY-MM), image 인증서 이미지, visible 노출(기본 true), order 순서(구분 안에서 작은 수 먼저)}]. 노출 항목이 없는 구분은 숨김 |
+| 연혁 /page/history.html | cms/pages/history.yml | periods[{title 기간 제목, anchor 주소 이름표(선택, 기본 his-N), image 사진, years[{year 4자리, months[{month "01"~"12", items[내용, 한 달 2칸 가능]}]}]}]. 연도·월은 큰 값이 위로 자동 정렬, 기간은 홀수째 사진 왼쪽·짝수째 오른쪽 |
+| 회사소개 /page/hanbit.html | cms/pages/hanbit.yml | hero{title, image}, intro_texts[3], photos[6], energy_text, sun_texts[2], ending_text. 개수는 애니메이션 스크립트와 맞물려 고정. 숫자 표시 영역은 페이지에 없음, 배경 사진 2곳은 CSS 고정 |
+| ESG 경영 /page/esg.html | cms/pages/esg.yml | intro{title, text}, flow_text, pillars[{title, icon, text}], details[{title, items[]}] |
+
+- 공통 머리 영역(맨 위 큰 화면의 "에너지를 넘어, …" 문구)은 여러 고정 페이지가 같이 쓰는 문구라 데이터로 빼지 않았다.
+- 멈춘 페이지: Contact(/page/location.html) — 전환하지 않음.
+  사유: 지시대로 주소·전화·메일을 site.yml 에서 재사용하면 화면 글자가 바뀐다(새 차이 0 불가).
+  - 주소 4곳 중 3곳 표기가 다름: 페이지 "부산시 해운대구 삼어로 133번나길 14" / site.yml "부산 해운대구 …",
+    "김해시 상동면 …" / "김해 상동면 …", "전남 나주시 빛가람로 680 , 706" / "… 680, 706" (본사 주소는 같음)
+  - 전화: 페이지 "051-913-0120" / site.yml "+82-51-913-0120" (형식 변환 규칙으로는 맞출 수 있음). 메일은 같음.
+  - 결정 필요: (가) site.yml 표기로 통일(Contact 화면 3곳 글자 바뀜) (나) 페이지 표기로 site.yml 을 고침(푸터 3곳 바뀜)
+    (다) 현 상태 유지. 결정 뒤 설계안: location.yml 에 사업장별 subtit·tit·지도(embed 주소, 좌표 lat·lng)만 두고
+    주소·전화·메일은 site.yml offices 를 순서로 연결. 지도 iframe 의 embed 주소(pb=…)에 좌표(!2d경도!3d위도)와
+    주소 문자열(base64)이 함께 들어 있어, 좌표만 칸으로 빼면 지도 표시 내용이 어긋날 수 있으므로 embed 주소 전체를 한 칸으로 두는 것을 권장.
 
 ## 9. 확인 필요 (2026-11-13 조사 결과, 수정 없음)
 a) private_guard.py 의 비공개 판별 목록

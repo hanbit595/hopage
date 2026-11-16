@@ -20,6 +20,7 @@ PAGES = {
     "page/cert.html": "cert",
     "page/history.html": "history",
     "page/hanbit.html": "hanbit",
+    "page/esg.html": "esg",
 }
 
 
@@ -226,10 +227,30 @@ def load_hanbit(c: Checker, d: dict) -> dict:
     }
 
 
+def load_esg(c: Checker, d: dict) -> dict:
+    intro = c.obj(d.get("intro"), "intro")
+    pillars = []
+    for i, p in enumerate(c.items(d, "pillars", ""), 1):
+        p = c.obj(p, f"pillars {i}번째")
+        where = f"pillars {i}번째 '{p.get('title') or ''}'"
+        pillars.append({"title": c.text(p, "title", where), "icon": c.image(p, "icon", where),
+                        "text": c.text(p, "text", where)})
+    details = []
+    for i, b in enumerate(c.items(d, "details", ""), 1):
+        b = c.obj(b, f"details {i}번째")
+        where = f"details {i}번째 '{b.get('title') or ''}'"
+        details.append({"title": c.text(b, "title", where),
+                        "items": [c.text({"항목": t}, "항목", f"{where} items {n}번째")
+                                  for n, t in enumerate(c.items(b, "items", where), 1)]})
+    return {"intro": {"title": c.text(intro, "title", "intro"), "text": c.text(intro, "text", "intro")},
+            "flow_text": c.text(d, "flow_text", ""), "pillars": pillars, "details": details}
+
+
 LOADERS = {
     "cert": load_cert,
     "history": load_history,
     "hanbit": load_hanbit,
+    "esg": load_esg,
 }
 
 

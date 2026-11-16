@@ -3,6 +3,8 @@
 
 - 본문 조각의 레이아웃·마크업·클래스는 그대로 두고, 내용이 들어갈 자리만 Jinja 칸({{ }}·{% for %})으로 바꿨다.
 - build.py 가 한글 고정 페이지를 만들 때 PAGES 에 있는 페이지는 이 모듈로 데이터를 읽고 검사한 뒤 조각을 렌더링한다.
+- 영문(P4-EN1): PAGES_EN 의 페이지는 cms/en/pages/<페이지>.yml(Contact 는 cms/en/settings/site.yml)로 같은 방식으로 만든다.
+  국문과 완전히 분리(데이터 파일 별도, 이미지 파일만 공유). 영문 조각의 글자 칸은 esc_text 로 이스케이프한다.
 - 빌드 실패(한국어 메시지 + 종료코드 1): 필수 칸 누락, 날짜·월 형식 오류, 이미지 파일이 public/ 에 없음.
 - 글자 칸: 제목·명칭은 HTML 이스케이프, 문단·내용 칸은 <br>·<b> 같은 HTML 을 그대로 쓴다.
   여러 줄 문단은 줄마다 원래 들여쓰기를 붙여 출력한다(빈 줄은 들여쓰기 없이).
@@ -30,6 +32,7 @@ PAGES_EN = {
     "en/page/history.html": "history",
     "en/page/hanbit.html": "hanbit",
     "en/page/esg.html": "esg",
+    "en/page/location.html": "location",
 }
 ROOT = Path(__file__).resolve().parent.parent
 SITE_YML = ROOT / "cms" / "settings" / "site.yml"            # Contact 주소·연락처·메일 원본(국문)
@@ -301,9 +304,15 @@ def domestic_tel(tel: str) -> str:
 
 def load_location(c: Checker, d: dict) -> dict:
     """Contact: 사업장 이름·지도는 location.yml, 주소·연락처·메일은 site.yml(원본 하나)."""
-    sc = Checker("site", c.public, c.renames)
-    sc.file = "cms/settings/site.yml"
-    site = sc.obj(yaml.load(SITE_YML.read_text(encoding="utf-8"), Loader=CmsLoader), "")
+    # 영문(P4-EN1)은 영문 전용 회사정보 cms/en/settings/site.yml (국문 site.yml 재사용 안 함)
+    sc = Checker("site", c.public, c.renames, c.lang)
+    sc.file, site_yml = ("cms/settings/site.yml", SITE_YML) if c.lang == "ko" else ("cms/en/settings/site.yml", SITE_YML_EN)
+    try:
+        site = sc.obj(yaml.load(site_yml.read_text(encoding="utf-8"), Loader=CmsLoader), "")
+    except FileNotFoundError:
+        raise CmsPageError(f"회사정보 파일이 없습니다: {sc.file}")
+    except yaml.YAMLError as e:
+        raise CmsPageError(f"{sc.file} 형식 오류: {e}")
     offices = {}
     for i, o in enumerate(sc.items(site, "offices", ""), 1):
         o = sc.obj(o, f"offices {i}번째")
@@ -315,7 +324,7 @@ def load_location(c: Checker, d: dict) -> dict:
         where = f"locations {i}번째 '{L.get('title') or ''}'"
         office = c.text(L, "office", where).strip()
         if office not in offices:
-            c.fail(where, f"office '{office}' 이(가) site.yml offices 이름({', '.join(offices)})에 없습니다.")
+            c.fail(where, f"office '{office}' 이(가) {sc.file} offices 이름({', '.join(offices)})에 없습니다.")
         m = c.text(L, "map", where).strip()
         if not m.startswith("https://www.google.com/maps/embed"):
             c.fail(where, f"map 은 https://www.google.com/maps/embed 로 시작하는 구글 지도 삽입 주소여야 합니다 (현재: '{m[:60]}')")

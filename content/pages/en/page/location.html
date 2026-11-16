@@ -848,114 +848,36 @@
     </div>
    <div class="sec_wrap location_all_wrap">
     <div class="sec_in">
+{#- Contact(영문): cms/en/pages/location.yml(사업장 이름·지도) + cms/en/settings/site.yml(주소·연락처·메일) (P4-EN1) #}
+{%- for o in locations %}
 
         <div class="locationWrap">
-            <div class="subtit">Headquarters </div>
-            <div class="tit">HANBIT Innotech Headquarters</div>
+            <div class="subtit">{{ o.label }}</div>
+            <div class="tit">{{ o.title|esc_text }}</div>
             <div class="map_wrap">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3258.9921275907936!2d129.1259743!3d35.231566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568922779c130bd%3A0xa8c5b1289058d235!2z67aA7IKw6rSR7Jet7IucIOq4iOygleq1rCDqsJzsoozroZwgMjYz!5e0!3m2!1sko!2skr!4v1766712640606!5m2!1sko!2skr"
+                    src="{{ o.map|esc }}"
                     width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
                 <div class="map_info_wrap">
                     <table>
                         <tr>
                             <th>Address</th>
-                            <td>301-1, Building A, 263 Gaejwa-ro, Geumjeong-gu, Busan</td>
+                            <td>{{ o.address|esc_text }}</td>
                         </tr>
                         <tr>
                             <th>Tel</th>
-                            <td>051-913-0120</td>
+                            <td>{{ tel|esc_text }}</td>
                         </tr>
                         <tr>
                             <th>Email</th>
-                            <td>hkele@hanmail.net</td>
+                            <td>{{ email|esc_text }}</td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-
-        <div class="locationWrap">
-            <div class="subtit">R&D Center </div>
-            <div class="tit">HANBIT Innotech Factory & R&D Center </div>
-            <div class="map_wrap">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3259.9278512440196!2d129.11578477632767!3d35.20826605580942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568924e730f4047%3A0x3b12bb711ddaabdc!2z67aA7IKw6rSR7Jet7IucIO2VtOyatOuMgOq1rCDsgrzslrTroZwxMzPrsojrgpjquLggMTQ!5e0!3m2!1sko!2skr!4v1766713603304!5m2!1sko!2skr"
-                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                <div class="map_info_wrap">
-                    <table>
-                        <tr>
-                            <th>Address</th>
-                            <td>14, Sameo-ro 133beon-na-gil, Haeundae-gu, Busan</td>
-                        </tr>
-                        <tr>
-                            <th>Tel</th>
-                            <td>051-913-0120</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>hkele@hanmail.net</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="locationWrap">
-            <div class="subtit">Gimhae Factory</div>
-            <div class="tit">HANBIT Innotech Gimhae Factory</div>
-            <div class="map_wrap">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3254.407354168297!2d128.91434487633205!3d35.34553564834088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568bc6376dad965%3A0xebe9c2d6fa932cd0!2z6rK97IOB64Ko64-EIOq5gO2VtOyLnCDsg4Hrj5nrqbQg64-Z67aB66GcMTEzNeuyiOq4uCA3OS0xNA!5e0!3m2!1sko!2skr!4v1766713564160!5m2!1sko!2skr"
-                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                <div class="map_info_wrap">
-                    <table>
-                        <tr>
-                            <th>Address</th>
-                            <td>79-14, Dongbuk-ro 1135beon-gil, Sangdong-myeon, Gimhae-si</td>
-                        </tr>
-                        <tr>
-                            <th>Tel</th>
-                            <td>051-913-0120</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>hkele@hanmail.net</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="locationWrap">
-            <div class="subtit">Naju Office </div>
-            <div class="tit">HANBIT Innotech Naju Office</div>
-            <div class="map_wrap">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3267.4353266462194!2d126.78356407632161!3d35.020837865967366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357225f41f0156f3%3A0x1f4cc6e269cec31!2z7KCE652864Ko64-EIOuCmOyjvOyLnCDruZvqsIDrnozroZwgNjgw!5e0!3m2!1sko!2skr!4v1766713535181!5m2!1sko!2skr"
-                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                <div class="map_info_wrap">
-                    <table>
-                        <tr>
-                            <th>Address</th>
-                            <td>#706, 680 Bitgaram-ro, Naju-si, Jeollanam-do</td>
-                        </tr>
-                        <tr>
-                            <th>Tel</th>
-                            <td>051-913-0120</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>hkele@hanmail.net</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+{%- endfor %}
 
     </div>
 </div>

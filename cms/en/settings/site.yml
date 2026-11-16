@@ -1,0 +1,16 @@
+# 영문 회사정보(영문 페이지 전용). build/cms_pages.py 가 읽는다. 국문 cms/settings/site.yml 과 완전히 분리되어 있다.
+# - offices: 사업장 이름(name, 영문 Contact 의 office 칸과 연결하는 열쇠)과 영문 주소(address)
+# - tel: 대표 전화(국제 표기). 영문 Contact 화면에는 국내 표기(051-…)로 바뀌어 나온다
+# - email: 대표 메일
+# 지금은 영문 Contact 페이지만 이 파일을 쓴다. 영문 하단 푸터 연결은 다음 단계(P4-EN3)에서 한다.
+offices:
+  - name: "Head Office"
+    address: "301-1, Building A, 263 Gaejwa-ro, Geumjeong-gu, Busan"
+  - name: "Factory / R&D Center"
+    address: "14, Sameo-ro 133beon-na-gil, Haeundae-gu, Busan"
+  - name: "Gimhae Factory"
+    address: "79-14, Dongbuk-ro 1135beon-gil, Sangdong-myeon, Gimhae-si"
+  - name: "Naju Office"
+    address: "#706, 680 Bitgaram-ro, Naju-si, Jeollanam-do"
+tel: "+82-51-913-0120"
+email: "hkele@hanmail.net"

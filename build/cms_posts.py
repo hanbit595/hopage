@@ -6,7 +6,8 @@
   읽기·검사·draft·파일명 규칙은 한글과 같은 load_board() 를 쓴다(lang="en"). 다른 점은 아래 '영문' 참고.
   본문 형식(P3-4b): 머리말 body_format: html 인 글(이전한 기존 글)은 본문 HTML 을 그대로 쓴다.
   그 칸이 없는 글(관리자 화면으로 쓴 새 글)은 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 그대로 통과).
-- 팝업(영문 메인)·boards_meta 등: content/posts.json. 게시판 글 배열(boards)이 posts.json 에 다시 생기면 빌드 실패.
+- boards_meta 등: content/posts.json. 게시판 글 배열(boards)이나 팝업(popups, P4-EN3 에서 cms/en/settings/popups.yml 로 옮김)이
+  posts.json 에 다시 생기면 빌드 실패.
 - 돌려주는 값은 예전 posts.json 과 같은 모양이다. 글 = {id, subject, datetime, content, link1, link2, files}
   (기존 게시판·메인 News·sitemap·옛 주소·이미지 최적화 코드를 그대로 쓰기 위해)
 
@@ -268,12 +269,15 @@ def load_board(board: str, cms_dir: Path, static_dir: Path = None, include_draft
 
 
 def load_posts(site_dir: Path):
-    """content/posts.json(영문 팝업·boards_meta 등) + cms/ 한글 게시판 + cms/en/ 영문 게시판 → posts.json 모양 전체."""
+    """content/posts.json(boards_meta 등) + cms/ 한글 게시판 + cms/en/ 영문 게시판 → posts.json 모양 전체."""
     posts = json.loads((site_dir / "content" / "posts.json").read_text(encoding="utf-8"))
     left = list(posts.get("boards") or {})
     if left:
         raise CmsError(f"content/posts.json 에 게시판 글 배열({', '.join(left)})이 남아 있습니다. "
                        "게시판 글의 원본은 cms/(한글)·cms/en/(영문) 하나뿐이어야 합니다.")
+    if "popups" in posts:   # P4-EN3: 영문 팝업 원본은 cms/en/settings/popups.yml 하나뿐
+        raise CmsError("content/posts.json 에 popups 가 남아 있습니다. 팝업 원본은 cms/settings/popups.yml(한글)·"
+                       "cms/en/settings/popups.yml(영문) 하나뿐이어야 합니다.")
     posts["boards"] = {}
     for b in KO_BOARDS:
         posts["boards"][b] = load_board(b, site_dir / "cms", site_dir / "static")

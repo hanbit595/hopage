@@ -45,32 +45,6 @@
    "mobile_page_rows": 8
   }
  ],
- "popups": [
-  {
-   "id": 2,
-   "subject": "국제그린에너지엑스포ㅣ한빛이노텍",
-   "begin": "2026-03-10 00:00:00",
-   "end": "2026-04-10 23:59:59",
-   "width": 450,
-   "height": 660,
-   "left": 150,
-   "top": 100,
-   "disable_hours": 24,
-   "content": "<p><img src=\"http://www.hanbitinnotech.com/data/editor/2603/3b973b780d436418b6b1d2aafbf7e0d9_1773129555_0472.jpg\" title=\"3b973b780d436418b6b1d2aafbf7e0d9_1773129555_0472.jpg\" alt=\"3b973b780d436418b6b1d2aafbf7e0d9_1773129555_0472.jpg\"></p><p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href=\"http://hanbitinnotech.com\" rel=\"nofollow\"><span style=\"color:rgb(154,154,154);\">http://hanbitinnotech.com</span></a><br style=\"clear:both;\">&nbsp;</p>"
-  },
-  {
-   "id": 3,
-   "subject": "햇빛소득마을 RESCO",
-   "begin": "2026-05-06 00:00:00",
-   "end": "2026-12-31 00:00:00",
-   "width": 450,
-   "height": 660,
-   "left": 10,
-   "top": 150,
-   "disable_hours": 24,
-   "content": "<p><img src=\"http://www.hanbitinnotech.com/data/editor/2605/8ff05b45953783ab60f04bdda10a57c4_1778041614_95.jpg\" title=\"8ff05b45953783ab60f04bdda10a57c4_1778041614_95.jpg\"><br style=\"clear:both;\">&nbsp;</p>"
-  }
- ],
  "contents": [
   {
    "id": "company",

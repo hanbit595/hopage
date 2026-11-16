@@ -33,11 +33,17 @@ UPLOADS = SITE / "uploads"   # 관리자 화면 업로드 이미지(원본, 읽�
 SITE_URL = "https://hanbitinnotech.com/"   # canonical·og:image·sitemap용 최종 도메인
 TEMP_BASES = ["/hopage/"]                  # 임시 주소(GitHub Pages 프로젝트 주소)의 시작 경로. 404.html이 이 경로를 떼고 옛 주소를 찾는다
 MENU_YML = SITE / "cms" / "settings" / "menu.yml"   # 한글 메뉴 원본(관리자 화면에서 고침)
-MENU_SLOT = re.compile(r"%%MENU_KO:(\w+)%%")         # 템플릿·본문 조각의 한글 메뉴 자리표시
+MENU_SLOT = {"ko": re.compile(r"%%MENU_KO:(\w+)%%"),   # 템플릿·본문 조각의 메뉴 자리표시(한글·영문)
+             "en": re.compile(r"%%MENU_EN:(\w+)%%")}
 MENU_FORMS = {"mega", "mobile", "drop_main", "drop_sub", "subtab"}
 SITE_YML = SITE / "cms" / "settings" / "site.yml"       # 회사정보·기본설정(한글 푸터, 게시판 쪽당 글 수, 메인 설명문)
 POPUPS_YML = SITE / "cms" / "settings" / "popups.yml"   # 한글 메인 팝업
 FOOTER_SLOT = "%%FOOTER_KO%%"                           # _tail_ko.html·메인 본문의 한글 푸터 자리표시
+# 영문(P4-EN3): 국문과 완전히 분리된 cms/en/settings/ 의 메뉴·회사정보·팝업
+MENU_YML_EN = SITE / "cms" / "en" / "settings" / "menu.yml"
+SITE_YML_EN = SITE / "cms" / "en" / "settings" / "site.yml"
+POPUPS_YML_EN = SITE / "cms" / "en" / "settings" / "popups.yml"
+FOOTER_SLOT_EN = "%%FOOTER_EN%%"                        # _tail_en.html·영문 메인 본문의 영문 푸터 자리표시
 POPUP_DEFAULTS = {"width": 450, "height": 660, "top": 150, "left": 10}
 
 
@@ -55,16 +61,18 @@ def esc(s) -> str:
     return s.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-def load_menu():
-    """cms/settings/menu.yml → (노출 메뉴 목록, 검사할 내부 주소 목록). 형식이 틀리면 BuildError."""
+def load_menu(path: Path = MENU_YML):
+    """메뉴 파일(한글 cms/settings/menu.yml, 영문 cms/en/settings/menu.yml) → (노출 메뉴 목록, 검사할 내부 주소 목록).
+    형식이 틀리면 BuildError. 내부 주소 검사 목록의 위치 설명에는 파일 경로를 붙인다."""
+    fname = path.relative_to(SITE).as_posix()
     try:
-        data = yaml.safe_load(MENU_YML.read_text(encoding="utf-8"))
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        raise BuildError(f"메뉴 파일이 없습니다: {MENU_YML.relative_to(SITE).as_posix()}")
+        raise BuildError(f"메뉴 파일이 없습니다: {fname}")
     except yaml.YAMLError as e:
-        raise BuildError(f"menu.yml 형식 오류: {e}")
+        raise BuildError(f"{fname} 형식 오류: {e}")
     if not isinstance(data, dict) or not isinstance(data.get("menu"), list):
-        raise BuildError("menu.yml 에 menu: 목록이 없습니다.")
+        raise BuildError(f"{fname} 에 menu: 목록이 없습니다.")
 
     def href(link, where):
         link = str(link or "").strip()
@@ -72,35 +80,35 @@ def load_menu():
             return "%%ROOT%%" + link.lstrip("/"), link
         if re.match(r"^https?://", link):
             return link, None
-        raise BuildError(f"menu.yml {where}: link 는 / 또는 http 로 시작해야 합니다 (현재: '{link}')")
+        raise BuildError(f"{fname} {where}: link 는 / 또는 http 로 시작해야 합니다 (현재: '{link}')")
 
     menus, internal = [], []
     for i, m in enumerate(data["menu"], 1):
         if not isinstance(m, dict) or not str(m.get("label") or "").strip():
-            raise BuildError(f"menu.yml {i}번째 대메뉴: label 이 없습니다.")
+            raise BuildError(f"{fname} {i}번째 대메뉴: label 이 없습니다.")
         name = f"대메뉴 '{m['label']}'"
         if m.get("visible", True) is False:
             continue
         items = []
         for j, s in enumerate(m.get("items") or [], 1):
             if not isinstance(s, dict) or not str(s.get("label") or "").strip():
-                raise BuildError(f"menu.yml {name}의 {j}번째 소메뉴: label 이 없습니다.")
+                raise BuildError(f"{fname} {name}의 {j}번째 소메뉴: label 이 없습니다.")
             if s.get("visible", True) is False:
                 continue
             where = f"{name} > 소메뉴 '{s['label']}'"
             h, inner = href(s.get("link"), where)
             if inner:
-                internal.append((inner, where))
+                internal.append((inner, f"{fname} {where}"))
             items.append({"label": str(s["label"]).strip(), "href": h, "new_window": bool(s.get("new_window")),
                           "cls": str(s.get("class") or f"sub_menu_{j:02d}")})
         if str(m.get("link") or "").strip():
             h, inner = href(m["link"], name)
             if inner:
-                internal.append((inner, name))
+                internal.append((inner, f"{fname} {name}"))
         elif items:
             h = items[0]["href"]   # 비우면 첫 번째 노출 소메뉴로
         else:
-            raise BuildError(f"menu.yml {name}: link 가 비어 있고 노출된 소메뉴도 없습니다.")
+            raise BuildError(f"{fname} {name}: link 가 비어 있고 노출된 소메뉴도 없습니다.")
         menus.append({"label": str(m["label"]).strip(), "href": h, "cls": str(m.get("class") or f"menu_{i:02d}"),
                       "items": items})
     return menus, internal
@@ -114,11 +122,11 @@ def read_yml(path: Path, key: str):
     except FileNotFoundError:
         raise BuildError(f"설정 파일이 없습니다: {name}")
     except yaml.YAMLError as e:
-        raise BuildError(f"{path.name} 형식 오류: {e}")
+        raise BuildError(f"{name} 형식 오류: {e}")
     except ValueError as e:   # YAML 이 날짜로 읽다가 실패(예: 2026-02-30)
-        raise BuildError(f"{path.name} 날짜 형식 오류(없는 날짜): {e}")
+        raise BuildError(f"{name} 날짜 형식 오류(없는 날짜): {e}")
     if not isinstance(data, dict) or key not in data:
-        raise BuildError(f"{path.name} 에 {key}: 항목이 없습니다.")
+        raise BuildError(f"{name} 에 {key}: 항목이 없습니다.")
     return data
 
 
@@ -134,40 +142,54 @@ def site_link(link, where, required=True):
     raise BuildError(f"{where}: 주소는 / 또는 http 로 시작해야 합니다 (현재: '{link}')")
 
 
-def load_site():
-    """cms/settings/site.yml → (푸터 템플릿 변수, 게시판 쪽당 글 수, 메인 설명문, 검사할 내부 주소 목록)."""
-    d = read_yml(SITE_YML, "offices")
+def load_footer(path: Path, brochure_required: bool):
+    """회사정보 파일 → (푸터 템플릿 변수, 원본 dict, 글자 칸 읽기 함수, 검사할 내부 주소 목록). 한글·영문 공통."""
+    fname = path.relative_to(SITE).as_posix()
+    d = read_yml(path, "offices")
 
     def text(k):
         v = d.get(k)
         if not isinstance(v, (str, int)) or not str(v).strip():
-            raise BuildError(f"site.yml: {k} 가 비어 있습니다.")
+            raise BuildError(f"{fname}: {k} 가 비어 있습니다.")
         return str(v).strip()
     if not isinstance(d["offices"], list) or not d["offices"]:
-        raise BuildError("site.yml: offices 목록이 비어 있습니다.")
+        raise BuildError(f"{fname}: offices 목록이 비어 있습니다.")
     offices = []
     for i, o in enumerate(d["offices"], 1):
         if not isinstance(o, dict) or not str(o.get("name") or "").strip() or not str(o.get("address") or "").strip():
-            raise BuildError(f"site.yml: offices {i}번째 항목에 name·address 가 모두 있어야 합니다.")
+            raise BuildError(f"{fname}: offices {i}번째 항목에 name·address 가 모두 있어야 합니다.")
         name = str(o["name"]).strip()
         offices.append({"name": esc(name), "address": esc(str(o["address"]).strip()),
                         "comment": name.replace("--", "-").replace(">", "")})
-    brochure, inner = site_link(d.get("brochure"), "site.yml brochure")
+    brochure, inner = site_link(d.get("brochure"), f"{fname} brochure", required=brochure_required)
+    footer = {"offices": offices, "tel": esc(text("tel")), "email": esc(text("email")), "brochure": brochure}
+    links = [(inner, f"{fname} brochure")] if inner else []
+    return footer, d, text, links
+
+
+def load_site():
+    """cms/settings/site.yml → (푸터 템플릿 변수, 게시판 쪽당 글 수, 메인 설명문, 검사할 내부 주소 목록)."""
+    footer, d, text, links = load_footer(SITE_YML, brochure_required=True)
     per = d.get("per_page")
     if isinstance(per, bool) or not isinstance(per, int) or per < 1:
         raise BuildError(f"site.yml: per_page 는 1 이상의 숫자여야 합니다 (현재: '{per}')")
-    footer = {"offices": offices, "tel": esc(text("tel")), "email": esc(text("email")), "brochure": brochure}
-    links = [(inner, "site.yml brochure")] if inner else []
     return footer, per, esc(text("seo_description")), links
 
 
-def load_popups():
-    """cms/settings/popups.yml → (HTML 에 넣을 active 팝업 목록, 검사할 내부 주소 목록).
+def load_site_en():
+    """cms/en/settings/site.yml → (영문 푸터 템플릿 변수, 검사할 내부 주소 목록). brochure 는 선택(비우면 기존처럼 '#')."""
+    footer, _, _, links = load_footer(SITE_YML_EN, brochure_required=False)
+    return footer, links
+
+
+def load_popups(path: Path = POPUPS_YML):
+    """팝업 파일(한글 cms/settings/popups.yml, 영문 cms/en/settings/popups.yml) → (HTML 에 넣을 active 팝업 목록, 검사할 내부 주소 목록).
     날짜 형식 오류, start > end, active 팝업의 image 누락은 BuildError. 기간 비교는 브라우저가 한다."""
-    d = read_yml(POPUPS_YML, "popups")
+    fname = path.relative_to(SITE).as_posix()
+    d = read_yml(path, "popups")
     items = d["popups"] or []
     if not isinstance(items, list):
-        raise BuildError("popups.yml: popups 는 목록이어야 합니다.")
+        raise BuildError(f"{fname}: popups 는 목록이어야 합니다.")
 
     def day(v, where):
         if isinstance(v, datetime):
@@ -179,37 +201,37 @@ def load_popups():
                 return date.fromisoformat(v.strip())
         except ValueError:
             pass
-        raise BuildError(f"popups.yml {where}: 날짜 형식 오류 (YYYY-MM-DD 로 적어야 합니다, 현재: '{v}')")
+        raise BuildError(f"{fname} {where}: 날짜 형식 오류 (YYYY-MM-DD 로 적어야 합니다, 현재: '{v}')")
 
     out, links, ids = [], [], set()
     for i, p in enumerate(items, 1):
         if not isinstance(p, dict):
-            raise BuildError(f"popups.yml {i}번째 팝업: 형식이 잘못되었습니다.")
+            raise BuildError(f"{fname} {i}번째 팝업: 형식이 잘못되었습니다.")
         where = f"{i}번째 팝업 '{p.get('title') or ''}'"
         start, end = day(p.get("start"), where + " start"), day(p.get("end"), where + " end")
         if start > end:
-            raise BuildError(f"popups.yml {where}: 시작일(start {start})이 종료일(end {end})보다 늦습니다.")
+            raise BuildError(f"{fname} {where}: 시작일(start {start})이 종료일(end {end})보다 늦습니다.")
         pid = p.get("id", i) if p.get("id") not in (None, "") else i
         if isinstance(pid, bool) or not isinstance(pid, int) or pid < 1:
-            raise BuildError(f"popups.yml {where}: id 는 1 이상의 숫자여야 합니다 (현재: '{pid}')")
+            raise BuildError(f"{fname} {where}: id 는 1 이상의 숫자여야 합니다 (현재: '{pid}')")
         if pid in ids:
-            raise BuildError(f"popups.yml {where}: id {pid} 가 다른 팝업과 겹칩니다.")
+            raise BuildError(f"{fname} {where}: id {pid} 가 다른 팝업과 겹칩니다.")
         ids.add(pid)
         if p.get("active", True) is False:
             continue   # active: false → HTML 에 넣지 않음
         if not str(p.get("image") or "").strip():
-            raise BuildError(f"popups.yml {where}: 노출(active) 팝업에 image 가 없습니다.")
-        src, inner = site_link(p["image"], f"popups.yml {where} image")
+            raise BuildError(f"{fname} {where}: 노출(active) 팝업에 image 가 없습니다.")
+        src, inner = site_link(p["image"], f"{fname} {where} image")
         if inner:
-            links.append((inner, f"popups.yml {where} image"))
-        href, inner = site_link(p.get("link"), f"popups.yml {where} link", required=False)
+            links.append((inner, f"{fname} {where} image"))
+        href, inner = site_link(p.get("link"), f"{fname} {where} link", required=False)
         if inner:
-            links.append((inner, f"popups.yml {where} link"))
+            links.append((inner, f"{fname} {where} link"))
         size = {}
         for k, dv in POPUP_DEFAULTS.items():
             v = p.get(k, dv) if p.get(k) not in (None, "") else dv
             if isinstance(v, bool) or not isinstance(v, int) or v < 0:
-                raise BuildError(f"popups.yml {where}: {k} 는 0 이상의 숫자여야 합니다 (현재: '{v}')")
+                raise BuildError(f"{fname} {where}: {k} 는 0 이상의 숫자여야 합니다 (현재: '{v}')")
             size[k] = v
         out.append(dict(size, id=pid, src=src, href=href, name=esc(posixpath.basename(str(p["image"]).strip())),
                         begin=f"{start.isoformat()} 00:00:00", end=f"{end.isoformat()} 23:59:59"))
@@ -224,26 +246,6 @@ def root_of(out: str) -> str:
 
 def rel(from_out: str, to_out: str) -> str:
     return posixpath.relpath(to_out, posixpath.dirname(from_out) or ".")
-
-
-def apply_active(html: str, target: str) -> str:
-    """상단 메뉴(PC·모바일)에서 target 소메뉴와 그 대메뉴에 원본과 같은 방식으로 active를 붙인다."""
-    if not target:
-        return html
-    start, end = html.find('<div class="header_all_wrap">'), html.find("<!-- } 상단 끝 -->")
-    region = html[start:end]
-    chunks = re.split(r'(?=<div class="menu menu_\d+ ">)', region)
-    # 원본 메뉴에는 '<a ... class="sub_menu_a " >'처럼 > 앞에 공백이 있는 링크도 있다(E-Catalog)
-    link = re.escape(f'<a href="{target}" class="sub_menu_a "') + r"(\s*)>"
-    for i, c in enumerate(chunks):
-        if not re.search(link, c):
-            continue
-        c = re.sub(r'^<div class="menu (menu_\d+) ">', r'<div class="menu \1 active">', c, count=1)
-        c = c.replace('class="menu_a void_link "', 'class="menu_a void_link active"', 1)
-        c = re.sub(r'<div class="sub_menu (sub_menu_\d+) ">(\s*)' + link,
-                   lambda m: f'<div class="sub_menu {m.group(1)} active">{m.group(2)}<a href="{target}" class="sub_menu_a active"{m.group(3)}>', c)
-        chunks[i] = c
-    return html[:start] + "".join(chunks) + html[end:]
 
 
 def main():
@@ -261,7 +263,7 @@ def main():
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
     # 1-1) 관리자 화면 업로드 이미지: 긴 변 1920px 이하로 줄여 public/uploads/ 에(P3-4b). 축소본은 필요할 때 만든다
     up = uploads.Uploads(UPLOADS, PUBLIC / "uploads")
-    # P3-5c-2: 글(cms/*.md, 영문 cms/en/*.md)·페이지(cms/pages, content/pages)·설정(cms/settings)·팝업(posts.json)·템플릿에 쓰인 업로드만 넣는다
+    # P3-5c-2: 글(cms/*.md, 영문 cms/en/*.md)·페이지(cms/pages, content/pages)·설정·팝업(cms/settings, cms/en/settings)·템플릿에 쓰인 업로드만 넣는다
     up.find_used([p for d in (SITE / "cms", CONTENT, TEMPLATES) for p in d.rglob("*")
                   if p.is_file() and p.suffix.lower() in (".md", ".yml", ".yaml", ".json", ".html")
                   and p.name != "redirects.json"])
@@ -275,24 +277,32 @@ def main():
     env.filters["ml"] = cms_pages.ml     # 고정 페이지 데이터(P4): 여러 줄 문단 들여쓰기
     env.filters["img"] = cms_pages.img   # 고정 페이지 데이터(P4): /로 시작하는 이미지 주소 → %%ROOT%%
     env.filters["esc_text"] = cms_pages.esc_text   # 영문 고정 페이지(P4-EN1): 화면 글자 이스케이프(R&D 같은 & 는 그대로)
-    menus, menu_links = load_menu()
+    menus_ko, menu_links_ko = load_menu(MENU_YML)
+    menus_en, menu_links_en = load_menu(MENU_YML_EN)   # 영문 메뉴(P4-EN3)
+    menu_links = menu_links_ko + menu_links_en
     footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
-    popups, popup_links = load_popups()
+    footer_vars_en, site_links_en = load_site_en()     # 영문 푸터(P4-EN3)
+    popups, popup_links = load_popups(POPUPS_YML)
+    popups_en, popup_links_en = load_popups(POPUPS_YML_EN)   # 영문 메인 팝업(P4-EN3)
     now = datetime.now(extras.KST)
-    # 한글 푸터(P3-3): site.yml 값 + 빌드 시점 연도. 템플릿 끝 줄바꿈은 자리표시 자리에 없던 것이라 뗀다
-    footer_ko = env.get_template("_footer_ko.html").render(year=now.year, **footer_vars).rstrip("\n")
-    menu_macro = env.get_template("_menu_ko.html").module.menu_set
+    # 푸터(한글 P3-3, 영문 P4-EN3): site.yml 값 + 빌드 시점 연도. 템플릿 끝 줄바꿈은 자리표시 자리에 없던 것이라 뗀다
+    footers = {"ko": (FOOTER_SLOT, env.get_template("_footer_ko.html").render(year=now.year, **footer_vars).rstrip("\n")),
+               "en": (FOOTER_SLOT_EN, env.get_template("_footer_en.html").render(year=now.year, **footer_vars_en).rstrip("\n"))}
+    menu_sets = {"ko": (menus_ko, env.get_template("_menu_ko.html").module.menu_set),
+                 "en": (menus_en, env.get_template("_menu_en.html").module.menu_set)}
     menu_cache = {}
 
-    def fill_menu(html, active, out):
-        """%%MENU_KO:형태%% → menu.yml 로 그린 한글 메뉴(현재 페이지 active 포함)."""
+    def fill_menu(html, lang, active, out):
+        """%%MENU_KO:형태%%·%%MENU_EN:형태%% → 언어별 menu.yml 로 그린 메뉴(현재 페이지 active 포함)."""
+        menus, macro = menu_sets[lang]
+
         def sub(m):
             if m.group(1) not in MENU_FORMS:
-                raise BuildError(f"{out}: 알 수 없는 메뉴 형태 %%MENU_KO:{m.group(1)}%%")
-            if active not in menu_cache:
-                menu_cache[active] = str(menu_macro(menus, active))
-            return menu_cache[active]
-        return MENU_SLOT.sub(sub, html)
+                raise BuildError(f"{out}: 알 수 없는 메뉴 형태 {m.group(0)}")
+            if (lang, active) not in menu_cache:
+                menu_cache[(lang, active)] = str(macro(menus, active))
+            return menu_cache[(lang, active)]
+        return MENU_SLOT[lang].sub(sub, html)
     meta = json.loads((CONTENT / "pages" / "meta.json").read_text(encoding="utf-8"))
     desc = {lang: meta[f"{lang}/index"]["description"] for lang in ("ko", "en")}
     desc["ko"] = seo_desc_ko   # 한글 메인·게시판 설명문은 site.yml seo_description
@@ -303,11 +313,9 @@ def main():
     def write(out, html, lang, pair, active):
         """공통 후처리: 현재 메뉴 표시, KOR/ENG 주소(D1), 바뀐 파일 이름, 상대경로."""
         ko_out, en_out = (out, pair) if lang == "ko" else (pair, out)
-        if lang == "ko":
-            html = fill_menu(html, active, out)   # 한글: 메뉴를 menu.yml 로 그리면서 active 표시(P3-2)
-            html = html.replace(FOOTER_SLOT, footer_ko)   # 한글: 푸터를 site.yml 로 그림(P3-3)
-        else:
-            html = apply_active(html, active)     # 영문: 기존 복사본 메뉴에 active 표시
+        # 메뉴를 언어별 menu.yml 로 그리면서 active 표시(한글 P3-2, 영문 P4-EN3), 푸터를 언어별 site.yml 로 그림(P3-3, P4-EN3)
+        html = fill_menu(html, lang, active, out)
+        html = html.replace(*footers[lang])
         if out == "index.html":
             # 옛 영문 메인 주소(/?locale=en_US)는 없는 주소가 아니라서 404.html을 거치지 않는다 → 국문 메인에서 바로 영문 메인으로
             html = html.replace("<head>", "<head>\n<script>if(/[?&]locale=en_US(&|$)/.test(location.search))"
@@ -327,7 +335,7 @@ def main():
                     canonical=SITE_URL + ("" if out == "index.html" else out), site_url=SITE_URL,
                     popup_html="", page_css="", g5_bo_table="", g5_editor="", board_head="", board_close="")
 
-    posts = cms_posts.load_posts(SITE)   # 한글 게시판 = cms/*.md(P3-4a), 영문 게시판 = cms/en/*.md(P4-EN2), 영문 팝업 = content/posts.json
+    posts = cms_posts.load_posts(SITE)   # 한글 게시판 = cms/*.md(P3-4a), 영문 게시판 = cms/en/*.md(P4-EN2), boards_meta = content/posts.json
     site = boards.Site(STATIC)
     sitemap_urls = []
 
@@ -346,10 +354,10 @@ def main():
         if "%%OUR_PROJECT%%" in content_html:   # P3-4b: 메인 Our Project = 시공사례 featured 글
             content_html = content_html.replace("%%OUR_PROJECT%%", extras.our_project(posts, site))
         description = seo_desc_ko if key == "ko/index" else m["description"]
-        # 메인 팝업: 한글은 popups.yml(P3-3), 영문은 기존 posts.json 방식 그대로(1차 범위 밖)
+        # 메인 팝업: 한글은 cms/settings/popups.yml(P3-3), 영문은 cms/en/settings/popups.yml(P4-EN3)
         popup = ""
         if m.get("is_main"):
-            popup = extras.popup_html(popups) if m["lang"] == "ko" else extras.popup_html_en(posts, site, now)
+            popup = extras.popup_html(popups if m["lang"] == "ko" else popups_en)
         ctx.update(description=description, page_css=m.get("page_css", ""), content_html=content_html,
                    popup_html=popup)
         write(out, tpl.render(**ctx), m["lang"], m["pair"], m.get("active"))
@@ -388,15 +396,15 @@ def main():
     (PUBLIC / "robots.txt").write_text(extras.robots(SITE_URL), encoding="utf-8", newline="\n")
     print(f"  옛 주소 대응 {len(red)}건, sitemap {len(sitemap_urls)}개 주소")
 
-    # 4) 메뉴 내부 주소 검사: menu.yml 의 /로 시작하는 link 가 public/ 에 없으면 빌드 실패
+    # 4) 메뉴 내부 주소 검사: 한글·영문 menu.yml 의 /로 시작하는 link 가 public/ 에 없으면 빌드 실패
     missing = [(link, where) for link, where in menu_links if not (PUBLIC / link.lstrip("/").split("#")[0].split("?")[0]).is_file()]
     if missing:
         raise BuildError("menu.yml 에 사이트에 없는 주소가 있습니다:\n"
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))
-    print(f"  메뉴 내부 주소 {len(menu_links)}개 확인")
+    print(f"  메뉴 내부 주소 {len(menu_links)}개 확인(한글 {len(menu_links_ko)}, 영문 {len(menu_links_en)})")
 
-    # 5) site.yml(회사소개서)·popups.yml(이미지·링크) 내부 주소 검사
-    links = site_links + popup_links
+    # 5) site.yml(회사소개서)·popups.yml(이미지·링크) 내부 주소 검사(한글·영문)
+    links = site_links + popup_links + site_links_en + popup_links_en
     def exists(link):
         p = link.lstrip("/").split("#")[0].split("?")[0]
         return (PUBLIC / renames.get(p, p)).is_file()   # optimize.py 가 이름을 바꾼 파일(PNG→JPG 등)도 인정
@@ -404,7 +412,7 @@ def main():
     if missing:
         raise BuildError("설정 파일에 사이트에 없는 주소가 있습니다:\n"
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))
-    print(f"  회사정보·팝업 내부 주소 {len(links)}개 확인, 노출 팝업 {len(popups)}개")
+    print(f"  회사정보·팝업 내부 주소 {len(links)}개 확인, 노출 팝업 한글 {len(popups)}개·영문 {len(popups_en)}개")
 
     # 6) E-Catalog file 칸(한글 cms/library, 영문 cms/en/library): public/ 에 실제 파일이 있어야 한다
     ecat = posts["boards"]["library"] + posts["boards"]["library_en"]

@@ -160,26 +160,6 @@ def popup_wrap(items: list) -> str:
             + "".join(items) + "\n</div>\n\n<script src=\"%%ROOT%%hb/popup.js\"></script>\n<!-- } 팝업레이어 끝 -->")
 
 
-def popup_html_en(posts: dict, site: "B.Site", build_time: datetime) -> str:
-    """영문 메인 팝업: 1차 범위 밖이라 기존 방식 그대로(content/posts.json popups, 빌드 시점에 끝난 팝업 제외)."""
-    items = []
-    for p in posts.get("popups", []):
-        end = datetime.strptime(p["end"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
-        if end < build_time:
-            continue
-        content = B.render_content(p["content"], site, "%%ROOT%%")
-        items.append(f"""
-    <div id="hd_pops_{p['id']}" class="hd_pops" style="top:{p['top']}px;left:{p['left']}px" data-begin="{p['begin']}" data-end="{p['end']}">
-        <div class="hd_pops_con" style="width:{p['width']}px;height:{p['height']}px">
-            {content}        </div>
-        <div class="hd_pops_footer">
-            <button class="hd_pops_reject hd_pops_{p['id']} {p['disable_hours']}"><strong>{p['disable_hours']}</strong>시간 동안 다시 열람하지 않습니다.</button>
-            <button class="hd_pops_close hd_pops_{p['id']}">닫기 <i class="fa fa-times" aria-hidden="true"></i></button>
-        </div>
-    </div>""")
-    return popup_wrap(items)
-
-
 # ───────── 옛 주소 → 새 주소 ─────────
 def redirects(meta: dict, boards_cfg: dict, posts: dict) -> dict:
     """옛 주소(경로?정리된 쿼리) → 새 주소(사이트 루트 기준 상대경로). 404.html이 이 표로 이동한다."""

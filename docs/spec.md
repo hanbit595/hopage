@@ -6,6 +6,7 @@ v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail�
 v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 신설. Contact 는 결정 (나)로 site.yml 재사용 연결.
 v2.4 변경(2026-11-16, P4-EN1): 8-2절 영문 완전 분리 원칙(cms/en/)·영문 페이지 칸 목록 신설, 2절 ENG 수정 규칙 변경, 8-1절 Contact 표 정리.
 v2.5 변경(2026-11-16, P4-EN2): 영문 게시판 3종을 cms/en/<게시판>/*.md 로 이전. 2절 ENG 글 규칙 변경, 8-3절 영문 게시판 칸 목록 신설.
+v2.6 변경(2026-11-16, P4-EN3): 영문 메뉴·푸터·메인 팝업을 cms/en/settings/menu.yml·site.yml·popups.yml 로 생성. 8-4절 신설, 2절·8-2절·9절 c 정리.
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -24,7 +25,8 @@ v2.5 변경(2026-11-16, P4-EN2): 영문 게시판 3종을 cms/en/<게시판>/*.m
   - cms/library/*.md  → /board/library/<파일명>.html  (E-Catalog)
 - ENG 글(notice_en, media_en, library_en)은 cms/en/<게시판>/<파일명>.md 로 관리한다(P4-EN2, 8-3절). 주소 /en/board/<게시판>/<파일명>.html.
   posts.json 의 게시판 글 배열(boards)은 한글·영문 모두 지웠다. 다시 생기면 빌드 실패.
-  posts.json 에는 영문 메인 팝업(popups)·boards_meta·contents 만 남는다(영문 팝업 빌드, extract_boards.py 가 읽음).
+  posts.json 에는 boards_meta·contents 만 남는다(extract_boards.py 가 읽음). 영문 메인 팝업(popups)은 P4-EN3 에서
+  cms/en/settings/popups.yml 로 옮기고 지웠다. popups 가 다시 생기면 빌드 실패.
 - 목록: /board/<게시판>/index.html, 2페이지부터 page-2.html, page-3.html ... (기존 규칙 유지)
 - cms/settings/menu.yml, site.yml, popups.yml
 - 업로드: uploads/ (기존 data/ 폴더와 겹치지 않게 함), 공개 경로 /uploads
@@ -138,8 +140,7 @@ v2.5 변경(2026-11-16, P4-EN2): 영문 게시판 3종을 cms/en/<게시판>/*.m
 - 영문 글자 칸은 esc_text 로 이스케이프한다: <·> 는 바꾸고, & 는 문자 참조로 읽힐 수 있을 때만 &amp; 로 바꾼다(기존 'R&D' 표기 유지).
 - 검증: 전환 전 빌드 결과와 비교해 국문 차이 0, 영문은 승인한 차이 외 0 이어야 커밋한다.
   P4-EN1 승인 차이 1건: 영문 Credit Rating Certificate 이미지를 국문과 같은 /uploads/신용등급확인서.png 로 교체.
-- 영문 하단 푸터는 아직 기존 복사본(templates/_tail_en.html)이다. cms/en/settings/site.yml 로 연결하는 것은 P4-EN3.
-  (푸터 주소 표기는 Contact 화면 표기와 다르다. 예: "A-Dong 301-1, … Busan, Korea" ↔ "301-1, Building A, … Busan". 연결 때 결정 필요)
+- 영문 하단 푸터·메뉴·메인 팝업은 P4-EN3 에서 cms/en/settings/ 로 연결했다(8-4절). 푸터 주소는 Contact 화면 표기로 통일.
 
 | 페이지 | 파일 | 칸 (국문과 다른 점) |
 |---|---|---|
@@ -166,6 +167,29 @@ v2.5 변경(2026-11-16, P4-EN2): 영문 게시판 3종을 cms/en/<게시판>/*.m
 | Project Cases | cms/en/media/ | 위와 같음. title 은 "[PV] 현장명 용량" 처럼 통째로 쓰고 나누지 않는다(category·capacity·program·gallery·featured 칸 없음) |
 | E-Catalog | cms/en/library/ | 위와 같음 + file(필수, /로 시작하는 PDF 주소, public/ 에 있어야 함). files 가 없으면 file 로 첨부 1개 |
 
+## 8-4. 영문 메뉴·푸터·메인 팝업(cms/en/settings/) (P4-EN3, 2026-11-16)
+- 국문 P3-2·P3-3 과 같은 방식. 국문 파일(cms/settings/*, _menu_ko·_footer_ko 등)과 따로 두며 서로 읽지 않는다.
+- 메뉴: cms/en/settings/menu.yml → templates/_menu_en.html(국문과 같은 마크업의 영문 전용 조각).
+  영문 메뉴 복사본 65벌(_top_en 2, _board_head_en 3, content/pages/en/page/*.html 25개 60벌, 분포는 9절 c 의 국문과 같음)을
+  %%MENU_EN:형태%%(mega·mobile·drop_main·drop_sub·subtab) 자리표시로 바꿨다. 현재 페이지 active 는 국문과 같은 규칙(기존 apply_active 는 삭제).
+- 푸터: cms/en/settings/site.yml(offices·tel·email, brochure 선택) → templates/_footer_en.html.
+  _tail_en.html 과 영문 메인 본문(content/pages/en/index.html)의 %%FOOTER_EN%% 자리. Copyright 연도는 빌드 시점.
+  brochure 를 비우면 Company Profile 은 기존처럼 href="#" 새 창 링크. 같은 site.yml 을 영문 Contact 도 쓴다(주소·연락처 원본 하나).
+- 메인 팝업: cms/en/settings/popups.yml → 국문과 같은 extras.popup_html(같은 칸·같은 검사·data-begin/data-end 브라우저 판단·24시간 보지 않기).
+  기존처럼 빌드 시점에 끝난 팝업을 거르지 않는다(끝난 팝업은 active: false 로 둠).
+- 빌드 실패: 국문과 같다(메뉴 내부 link 가 public/ 에 없음, 팝업 날짜 형식·start>end·active 팝업 image 누락, 설정의 내부 주소가 public/ 에 없음).
+  오류 메시지에 파일 경로(cms/en/settings/…)를 붙인다.
+- 승인 차이(2026-11-16): ① 영문 푸터 주소를 영문 Contact 표기로 통일 ② 메뉴 복사본 안의 주석 처리된 깨진 링크
+  "BIPV Wall & Window System"(없는 bipv_pdt.html) 제거 ③ Copyright 연도 자동(2025 → 빌드 연도) ④ 영문 로고 title "HANBIT Innotech"
+  ⑤ 공통화로 빠지는 HTML 주석·공백. 그리고 사용자 확인으로 영문 팝업 종료를 날짜만 쓰는 규칙에 맞춰
+  data-end "2026-12-31 00:00:00" → "2026-12-30 23:59:59"(1초 차이, en/index.html 1개).
+
+| 화면 | 파일 | 칸 |
+|---|---|---|
+| 영문 메뉴(상단·모바일·경로 드롭다운·하위 탭) | cms/en/settings/menu.yml | menu[{label, link, visible, class, items[{label, link, new_window, visible, class}]}] (국문 3절 menu.yml 과 같음, 링크는 /en/…) |
+| 영문 푸터·Contact | cms/en/settings/site.yml | offices[{name, address}], tel, email, brochure(선택) |
+| 영문 메인 팝업 | cms/en/settings/popups.yml | popups[{title, image, link, start, end, active, id, width, height, top, left}] (국문과 같음) |
+
 ## 9. 확인 필요 (2026-11-13 조사 결과, 수정 없음)
 a) private_guard.py 의 비공개 판별 목록
 - 저장소 안 파일에는 없다. 목록은 저장소 바깥 D:\homepage\private\posts\{게시판}\{글번호}\ 폴더(글 사진은 그 안 post.json)와
@@ -186,5 +210,5 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
   - 3벌(경로 드롭다운 2 + 하위 탭 1), 15개: bipv, building, carport, cert, de_system, epc, esg, finance, history, housing, kpso, location, pv, self_energy, solar_village
   - 2벌(경로 드롭다운 2만), 5개: carbon, hanbit, re100, vnm, zeb
   - 1벌(하위 탭만), 5개: combiner, fire_cert, inverter, monitoring, structure
-- 합계 한글 27개 파일 65벌. (ENG도 _top_en·_board_head_en·content/pages/en/page/*.html 에 같은 구조로 65벌 있으나 1차 범위 밖)
+- 합계 한글 27개 파일 65벌. (ENG도 _top_en·_board_head_en·content/pages/en/page/*.html 에 같은 구조로 65벌 → P4-EN3 에서 공통화, 8-4절)
 - 푸터: templates/_tail_ko.html 1벌 + 메인 content/pages/ko/index.html 안에 별도 1벌.

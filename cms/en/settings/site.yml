@@ -2,7 +2,9 @@
 # - offices: 사업장 이름(name, 영문 Contact 의 office 칸과 연결하는 열쇠)과 영문 주소(address)
 # - tel: 대표 전화(국제 표기). 영문 Contact 화면에는 국내 표기(051-…)로 바뀌어 나온다
 # - email: 대표 메일
-# 지금은 영문 Contact 페이지만 이 파일을 쓴다. 영문 하단 푸터 연결은 다음 단계(P4-EN3)에서 한다.
+# - brochure: 선택. 영문 푸터 Company Profile 의 PDF 주소(/로 시작하면 사이트 안, 빌드 때 public/ 에 없으면 빌드 실패).
+#             비우거나 없으면 기존 화면처럼 링크 없는(#) 버튼으로 둔다
+# 쓰는 곳: 영문 모든 페이지 하단 푸터(templates/_footer_en.html, P4-EN3)와 영문 Contact 페이지.
 offices:
   - name: "Head Office"
     address: "301-1, Building A, 263 Gaejwa-ro, Geumjeong-gu, Busan"

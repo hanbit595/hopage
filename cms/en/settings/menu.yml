@@ -1,0 +1,182 @@
+# 영문 메뉴(영문 페이지의 상단 메가메뉴·모바일 메뉴·경로 드롭다운·하위 탭 공통). build/build.py 가 읽어 templates/_menu_en.html 로 만든다.
+# 국문 cms/settings/menu.yml 과 완전히 분리된 영문 전용 파일이다(국문 메뉴에는 영향 없음).
+# - link: /로 시작하면 사이트 안 주소(빌드 때 public/ 에 없으면 빌드 실패), http로 시작하면 외부 주소. 영문 페이지는 /en/… 주소
+# - 대메뉴 link 를 비우면 첫 번째 노출(visible: true) 소메뉴 주소로 이동한다
+# - visible: false 면 영문 모든 메뉴 형태에서 숨긴다. new_window: true 면 새 창
+# - class: 기존 화면 마크업 유지용(menu_05, sub_menu_03 등). 디자인에 쓰이지 않으며, 새 항목은 비워 두면 자동으로 붙는다
+menu:
+  - label: "About Us"
+    link: "/en/page/hanbit.html"
+    visible: true
+    class: menu_05
+    items:
+      - label: "Hanbit Innotech"
+        link: "/en/page/hanbit.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "History"
+        link: "/en/page/history.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "Certification"
+        link: "/en/page/cert.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "ESG"
+        link: "/en/page/esg.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Contact"
+        link: "/en/page/location.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "Business"
+    link: "/en/page/pv.html"
+    visible: true
+    class: menu_01
+    items:
+      - label: "Solar EPC"
+        link: "/en/page/epc.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "PV"
+        link: "/en/page/pv.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "BIPV"
+        link: "/en/page/bipv.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Solar Carport"
+        link: "/en/page/carport.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Solar Village"
+        link: "/en/page/solar_village.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "KPSO"
+        link: "/en/page/kpso.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Distributed Energy"
+        link: "/en/page/de_system.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "Products"
+    link: "/en/page/inverter.html"
+    visible: true
+    class: menu_02
+    items:
+      - label: "Structure Fabrication"
+        link: "/en/page/structure.html"
+        new_window: false
+        visible: true
+        class: sub_menu_06
+      - label: "PV Combiner Box"
+        link: "/en/page/combiner.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Fire Resistance Cert"
+        link: "/en/page/fire_cert.html"
+        new_window: false
+        visible: true
+        class: sub_menu_05
+      - label: "Smart Monitoring System"
+        link: "/en/page/monitoring.html"
+        new_window: false
+        visible: true
+        class: sub_menu_04
+      - label: "Inverter"
+        link: "/en/page/inverter.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+  - label: "Carbon Neutrality"
+    link: "/en/page/re100.html"
+    visible: true
+    class: menu_03
+    items:
+      - label: "RE100"
+        link: "/en/page/re100.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "Zero Energy Building"
+        link: "/en/page/zeb.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "VNM"
+        link: "/en/page/vnm.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "Carbon Credits"
+        link: "/en/page/carbon.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+  - label: "Gov. Support"
+    link: "/en/page/housing.html"
+    visible: true
+    class: menu_04
+    items:
+      - label: "Residential Support"
+        link: "/en/page/housing.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "Building Support"
+        link: "/en/page/building.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "Energy Self-Sufficiency"
+        link: "/en/page/self_energy.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03
+      - label: "Financial Support"
+        link: "/en/page/finance.html"
+        new_window: false
+        visible: true
+        class: sub_menu_04
+  - label: "PR Center"
+    link: "/en/board/notice/index.html"
+    visible: true
+    class: menu_06
+    items:
+      - label: "Notice"
+        link: "/en/board/notice/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_01
+      - label: "Project Cases"
+        link: "/en/board/media/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_02
+      - label: "Blog"
+        link: "https://blog.naver.com/hkele"
+        new_window: true
+        visible: true
+        class: sub_menu_03
+      - label: "E-Catalog"
+        link: "/en/board/library/index.html"
+        new_window: false
+        visible: true
+        class: sub_menu_03

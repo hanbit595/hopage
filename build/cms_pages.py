@@ -21,7 +21,9 @@ PAGES = {
     "page/history.html": "history",
     "page/hanbit.html": "hanbit",
     "page/esg.html": "esg",
+    "page/location.html": "location",
 }
+SITE_YML = Path(__file__).resolve().parent.parent / "cms" / "settings" / "site.yml"   # Contact 주소·연락처·메일 원본
 
 
 class CmsPageError(Exception):
@@ -246,11 +248,45 @@ def load_esg(c: Checker, d: dict) -> dict:
             "flow_text": c.text(d, "flow_text", ""), "pillars": pillars, "details": details}
 
 
+def domestic_tel(tel: str) -> str:
+    """site.yml tel(+82-51-913-0120) → Contact 화면 국내 표기(051-913-0120). 이미 국내 표기면 그대로."""
+    return re.sub(r"^\+82[-\s]?(\d)", r"0\1", tel.strip())
+
+
+def load_location(c: Checker, d: dict) -> dict:
+    """Contact: 사업장 이름·지도는 location.yml, 주소·연락처·메일은 site.yml(원본 하나)."""
+    sc = Checker("site", c.public, c.renames)
+    sc.file = "cms/settings/site.yml"
+    site = sc.obj(yaml.load(SITE_YML.read_text(encoding="utf-8"), Loader=CmsLoader), "")
+    offices = {}
+    for i, o in enumerate(sc.items(site, "offices", ""), 1):
+        o = sc.obj(o, f"offices {i}번째")
+        offices[sc.text(o, "name", f"offices {i}번째").strip()] = sc.text(o, "address", f"offices {i}번째").strip()
+    tel, email = domestic_tel(sc.text(site, "tel", "")), sc.text(site, "email", "").strip()
+    out = []
+    for i, L in enumerate(c.items(d, "locations", ""), 1):
+        L = c.obj(L, f"locations {i}번째")
+        where = f"locations {i}번째 '{L.get('title') or ''}'"
+        office = c.text(L, "office", where).strip()
+        if office not in offices:
+            c.fail(where, f"office '{office}' 이(가) site.yml offices 이름({', '.join(offices)})에 없습니다.")
+        m = c.text(L, "map", where).strip()
+        if not m.startswith("https://www.google.com/maps/embed"):
+            c.fail(where, f"map 은 https://www.google.com/maps/embed 로 시작하는 구글 지도 삽입 주소여야 합니다 (현재: '{m[:60]}')")
+        ind = c.number(L, "map_indent", where)
+        if not isinstance(ind, int) or not 0 <= ind <= 40:
+            c.fail(where, f"map_indent 는 0~40 숫자여야 합니다 (현재: {ind!r})")
+        out.append({"label": c.text(L, "label", where), "title": c.text(L, "title", where), "map": m,
+                    "indent": " " * ind, "address": offices[office]})
+    return {"locations": out, "tel": tel, "email": email}
+
+
 LOADERS = {
     "cert": load_cert,
     "history": load_history,
     "hanbit": load_hanbit,
     "esg": load_esg,
+    "location": load_location,
 }
 
 

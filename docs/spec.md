@@ -3,7 +3,7 @@
 v2 변경(2026-11-13): 1절 빌드 경로, 2절 게시판 원본, 4절 메뉴·푸터 생성 방식, 5절 비공개 검사, 6절 기술 조건, 8절 검증 기준·9절 확인 필요 신설.
 v2.1 변경(2026-11-13, P3-4a): 3절 date 형식, 시공사례 category 다중 선택·표시 제목에 program, 기존 글 전용 칸. 2절 한글 글은 posts.json 에서 제거.
 v2.2 변경(2026-11-13, P3-4b): 2절 본문 형식(body_format), 3절 thumbnail·summary·gallery 출력과 featured_* 칸, 4절 Our Project 칸 배치, 6절 업로드 처리.
-v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 신설. Contact 페이지는 멈춤(사유 8-1절).
+v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 신설. Contact 는 결정 (나)로 site.yml 재사용 연결.
 
 ## 1. 구조
 - 관리자 화면 저장소: hanbit595/hpadmin (D:\hpadmin) → https://admin.hanbitinnotech.com (GitHub Pages, 가비아 CNAME)
@@ -117,13 +117,11 @@ v2.3 변경(2026-11-16, P4): 8-1절 고정 페이지 데이터(cms/pages/*.yml) 
 | 연혁 /page/history.html | cms/pages/history.yml | periods[{title 기간 제목, anchor 주소 이름표(선택, 기본 his-N), image 사진, years[{year 4자리, months[{month "01"~"12", items[내용, 한 달 2칸 가능]}]}]}]. 연도·월은 큰 값이 위로 자동 정렬, 기간은 홀수째 사진 왼쪽·짝수째 오른쪽 |
 | 회사소개 /page/hanbit.html | cms/pages/hanbit.yml | hero{title, image}, intro_texts[3], photos[6], energy_text, sun_texts[2], ending_text. 개수는 애니메이션 스크립트와 맞물려 고정. 숫자 표시 영역은 페이지에 없음, 배경 사진 2곳은 CSS 고정 |
 | ESG 경영 /page/esg.html | cms/pages/esg.yml | intro{title, text}, flow_text, pillars[{title, icon, text}], details[{title, items[]}] |
+| Contact /page/location.html | cms/pages/location.yml + cms/settings/site- Contact(2026-11-16 결정 (나)): site.yml 주소 표기를 Contact 화면 표기로 맞춤(부산시 해운대구…, 김해시 상동면…, 680 , 706).
+  그 결과 바뀐 것은 한글 모든 페이지 하단 푸터 주소 3줄뿐(승인된 차이). 주소·연락처·메일의 원본은 site.yml 하나.
+  지도는 embed 주소 안에 좌표(!2d경도!3d위도)와 주소 글자(base64)가 함께 들어 있어 주소 전체를 map 한 칸으로 뺐다.
 
-- 공통 머리 영역(맨 위 큰 화면의 "에너지를 넘어, …" 문구)은 여러 고정 페이지가 같이 쓰는 문구라 데이터로 빼지 않았다.
-- 멈춘 페이지: Contact(/page/location.html) — 전환하지 않음.
-  사유: 지시대로 주소·전화·메일을 site.yml 에서 재사용하면 화면 글자가 바뀐다(새 차이 0 불가).
-  - 주소 4곳 중 3곳 표기가 다름: 페이지 "부산시 해운대구 삼어로 133번나길 14" / site.yml "부산 해운대구 …",
-    "김해시 상동면 …" / "김해 상동면 …", "전남 나주시 빛가람로 680 , 706" / "… 680, 706" (본사 주소는 같음)
-  - 전화: 페이지 "051-913-0120" / site.yml "+82-51-913-0120" (형식 변환 규칙으로는 맞출 수 있음). 메일은 같음.
+은 같음.
   - 결정 필요: (가) site.yml 표기로 통일(Contact 화면 3곳 글자 바뀜) (나) 페이지 표기로 site.yml 을 고침(푸터 3곳 바뀜)
     (다) 현 상태 유지. 결정 뒤 설계안: location.yml 에 사업장별 subtit·tit·지도(embed 주소, 좌표 lat·lng)만 두고
     주소·전화·메일은 site.yml offices 를 순서로 연결. 지도 iframe 의 embed 주소(pb=…)에 좌표(!2d경도!3d위도)와

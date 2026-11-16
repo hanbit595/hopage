@@ -18,6 +18,7 @@ from cms_posts import CmsLoader
 # 출력 경로(public/ 기준) → cms/pages/<이름>.yml
 PAGES = {
     "page/cert.html": "cert",
+    "page/history.html": "history",
 }
 
 
@@ -166,8 +167,45 @@ def load_cert(c: Checker, d: dict) -> dict:
     return {"groups": out}
 
 
+def load_history(c: Checker, d: dict) -> dict:
+    out, anchors = [], set()
+    for i, p in enumerate(c.items(d, "periods", ""), 1):
+        p = c.obj(p, f"periods {i}번째")
+        where = f"periods {i}번째 '{p.get('title') or ''}'"
+        anchor = c.text(p, "anchor", where, required=False).strip() or f"his-{i}"
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", anchor):
+            c.fail(where, f"anchor 는 영문·숫자·-·_ 만 쓸 수 있습니다 (현재: '{anchor}')")
+        if anchor in anchors:
+            c.fail(where, f"anchor '{anchor}' 이(가) 다른 기간과 겹칩니다.")
+        anchors.add(anchor)
+        years, seen = [], set()
+        for j, y in enumerate(c.items(p, "years", where), 1):
+            y = c.obj(y, f"{where} years {j}번째")
+            yw = f"{where} years {j}번째"
+            year = c.year(y, "year", yw)
+            if year in seen:
+                c.fail(yw, f"연도 {year} 가 같은 기간 안에 두 번 있습니다(한 연도로 합쳐 주세요).")
+            seen.add(year)
+            yw = f"{where} {year}년"
+            months = []
+            for k, m in enumerate(c.items(y, "months", yw), 1):
+                m = c.obj(m, f"{yw} months {k}번째")
+                mw = f"{yw} months {k}번째"
+                month = c.month(m, "month", mw)
+                rows = [c.text({"내용": t}, "내용", f"{yw} {month}월 items {n}번째")
+                        for n, t in enumerate(c.items(m, "items", f"{yw} {month}월"), 1)]
+                months.append({"month": month, "items": rows})
+            months.sort(key=lambda m: m["month"], reverse=True)   # 큰 달이 위(같은 달은 적은 순서)
+            years.append({"year": year, "months": months})
+        years.sort(key=lambda y: y["year"], reverse=True)          # 큰 연도가 위
+        out.append({"title": c.text(p, "title", where), "anchor": anchor, "image": c.image(p, "image", where),
+                    "years": years})
+    return {"periods": out}
+
+
 LOADERS = {
     "cert": load_cert,
+    "history": load_history,
 }
 
 

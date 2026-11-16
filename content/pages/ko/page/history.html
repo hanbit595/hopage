@@ -71,186 +71,48 @@
                             </div>
                         </div>
                     </div>
-                    <div id="his-now-2020" class="history_con_box pdt_box_wrap">
-                        <div class="history_con_01 history_con_left history_con_img">
-                            <ul class="history_con_tit_wrap">
-                                <span class="his_tit">Now - 2020</span>
-                                <img src="%%ROOT%%theme/basic/images/sub/his_01.jpg" alt="">
-                            </ul>
-                        </div>
-                        <div class="history_con_01 history_con_right ">
+{#- 연혁: cms/pages/history.yml 의 기간 묶음 → 연도 → 월 → 내용(P4). 홀수째 묶음은 사진 왼쪽, 짝수째는 사진 오른쪽 #}
+{%- macro his_list(p) %}
                             <div class="history_con_list">
+{%- for y in p.years %}
                                 <li class="history_con">
-                                    <div class="his_year">2024</div>
+                                    <div class="his_year">{{ y.year }}</div>
                                     <div class="ssgap"></div>
                                     <table class="his_info">
+{%- for m in y.months %}
                                         <tr>
-                                            <th>09</th>
-                                            <td> 정보통신공사업 등록</td>
+                                            <th>{{ m.month }}</th>
+{%- for t in m['items'] %}
+                                            <td>{{ t|ml("                                            ") }}</td>
+{%- endfor %}
                                         </tr>
+{%- endfor %}
                                     </table>
                                 </li>
-                                <li class="history_con">
-                                    <div class="his_year">2023</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>일반소방시설설계업(전기) 등록</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>녹색인증</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2022</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>건물일체형 태양광발전장치(BIPV)<br>나라장터 종합쇼핑몰 등록</td>
-                                            <td>가족친화기업 인증</td>
-                                        </tr>
-                                        <tr>
-                                            <th>09</th>
-                                            <td>인적자원개발 우수기관 인증</td>
-                                        </tr>
-                                        <tr>
-                                            <th>05</th>
-                                            <td>금속창호 · 지붕건축물조립공사업 등록</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>2022년 신재생에너지 참여기업 선정</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>G-PASS 인증(태양광발전장치)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2021</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>07</th>
-                                            <td>한국에너지공단 신재생에너지 설비 <br>
-                                            A/S 전담기업 지정</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>KS 인증(태양광 발전용 접속함)</td>
-                                        </tr>
-                                    </table>
-                                </li>
+{%- endfor %}
                             </div>
-                        </div>
-                    </div>
-                    <div id="his-2019-2014" class="history_con_box pdt_box_wrap">
-                        <div class="history_con_02 history_con_left ">
-                            <div class="history_con_list">
-                                <li class="history_con">
-                                    <div class="his_year">2016</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>10</th>
-                                            <td>K마크 인증(태양광발전시스템)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>05</th>
-                                            <td>GS 인증(CCTV 모니터링-휴먼CV1.0)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>지능형전력망사업증 등록(산업통상자원부)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>에너지절약전문기업 등록(한국에너지공단)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2015</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>09</th>
-                                            <td>GS 인증(진동감시형태양광발전모니터링)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2014</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>11</th>
-                                            <td>Q마크 인증 취득(태양광발전장치)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>기업부설연구소 설립</td>
-                                            <td>수배전반, MCC, 분전반, 태양광발전장치 <br>
-                                            직접생산제조등록(중소기업중앙회) </td>
-                                        </tr>
-                                        <tr>
-                                            <th>01</th>
-                                            <td>한국자동제어조합 가입</td>
-                                            <td>벤처기업등록 </td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2013</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>자동제어반 및 자동제어시스템 직접생산제조등록(중소기업중앙회)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>10</th>
-                                            <td>상호변경 주식회사 한빛이노텍</td>
-                                        </tr>
-                                        <tr>
-                                            <th>09</th>
-                                            <td>조달청다수공급자계약체결(태양광발전장치 23종)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2011</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>11</th>
-                                            <td>신재생에너지 전문기업등록 ISO9001:2008, ISO14001:2004</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>품질시스템인증 획득</td>
-                                            <td>전기공사 등록증 취득</td>
-                                        </tr>
-                                        <tr>
-                                            <th>01</th>
-                                            <td>에이치케이전력 설립</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                            </div>
-                        </div>
-                        <div class="history_con_02 history_con_right history_con_img">
+{%- endmacro %}
+{%- macro his_img(p) %}
                             <ul class="history_con_tit_wrap">
-                                <span class="his_tit">2016 ~ 2011</span>
-                                <img src="%%ROOT%%theme/basic/images/sub/his_02.jpg" alt="">
+                                <span class="his_tit">{{ p.title|esc }}</span>
+                                <img src="{{ p.image|img }}" alt="">
                             </ul>
+{%- endmacro %}
+{%- for p in periods %}
+                    <div id="{{ p.anchor }}" class="history_con_box pdt_box_wrap">
+{%- if loop.index is odd %}
+                        <div class="history_con_01 history_con_left history_con_img">{{ his_img(p) }}
                         </div>
+                        <div class="history_con_01 history_con_right ">{{ his_list(p) }}
+                        </div>
+{%- else %}
+                        <div class="history_con_02 history_con_left ">{{ his_list(p) }}
+                        </div>
+                        <div class="history_con_02 history_con_right history_con_img">{{ his_img(p) }}
+                        </div>
+{%- endif %}
                     </div>
+{%- endfor %}
                 </div>
             </div>
         </div>

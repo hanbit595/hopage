@@ -863,191 +863,48 @@
                             </div>
                         </div>
                     </div>
-                    <div id="his-now-2020" class="history_con_box pdt_box_wrap">
-                        <div class="history_con_01 history_con_left history_con_img">
-                            <ul class="history_con_tit_wrap">
-                                <span class="his_tit">Now - 2020</span>
-                                <img src="%%ROOT%%theme/basic/images/sub/his_01.jpg" alt="">
-                            </ul>
-                        </div>
-                        <div class="history_con_01 history_con_right ">
+{#- 연혁(영문): cms/en/pages/history.yml 의 기간 묶음 → 연도 → 월 → 내용(P4-EN1). 홀수째 묶음은 사진 왼쪽, 짝수째는 사진 오른쪽 #}
+{%- macro his_list(p) %}
                             <div class="history_con_list">
+{%- for y in p.years %}
                                 <li class="history_con">
-                                    <div class="his_year">2024</div>
+                                    <div class="his_year">{{ y.year }}</div>
                                     <div class="ssgap"></div>
                                     <table class="his_info">
+{%- for m in y.months %}
                                         <tr>
-                                            <th>09</th>
-                                            <td>Information & Communication Construction Business License</td>
+                                            <th>{{ m.month }}</th>
+{%- for t in m['items'] %}
+                                            <td>{{ t|ml("                                            ") }}</td>
+{%- endfor %}
                                         </tr>
+{%- endfor %}
                                     </table>
                                 </li>
-                                <li class="history_con">
-                                    <div class="his_year">2023</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>General Fire Protection System Design License (Electrical)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>Green Technology Certification</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2022</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>Building Integrated Photovoltaics (BIPV) Registered on Nara Marketplace
-                                                (Public Procurement Service)</td>
-                                            <td>Family-Friendly Corporate Certification</td>
-                                        </tr>
-                                        <tr>
-                                            <th>09</th>
-                                            <td>Best HRD (Human Resources Development) Certification</td>
-                                        </tr>
-                                        <tr>
-                                            <th>05</th>
-                                            <td>License for Metal Construction, Windows, & Roof Installation</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>Designated Renewable Energy Participant Company (2022)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>G-PASS Certification (PV Systems)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2021</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>07</th>
-                                            <td>Designated Renewable Energy A/S Provider BY Korea Energy Agency (KEA)
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>KS Certified (PV Combiner Box)</td>
-                                        </tr>
-                                    </table>
-                                </li>
+{%- endfor %}
                             </div>
-                        </div>
-                    </div>
-                    <div id="his-2019-2014" class="history_con_box pdt_box_wrap">
-                        <div class="history_con_02 history_con_left ">
-                            <div class="history_con_list">
-                                <li class="history_con">
-                                    <div class="his_year">2016</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>10</th>
-                                            <td>K-Mark Certified (PV Systems)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>05</th>
-                                            <td>GS Certified (CCTV Monitoring - Human CV 1.0)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>Registered Smart Grid Business Operator (Ministry of Trade, Industry and
-                                                Energy: MOTIE)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>Registered ESCO (Energy Service Company) by KEA</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2015</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>09</th>
-                                            <td>GS Certified (Vibration-Based PV Monitoring System)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2014</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>11</th>
-                                            <td>Q-Mark Certified (PV Systems)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>04</th>
-                                            <td>Established Corporate R&D Center</td>
-                                            <td>Switchgear, MCC, Distribution Boards, and PV Systems <br> Direct
-                                                Manufacturing Certificate (KBIZ)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>01</th>
-                                            <td>Member of Korea Automatic Control Cooperatives (KACC)</td>
-                                            <td>Certified Venture Business</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2013</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>12</th>
-                                            <td>Direct Manufacturing Certificate for Automatic Control Panels & Systems
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>10</th>
-                                            <td>Renamed to HANBIT Innotech Co., Ltd.</td>
-                                        </tr>
-                                        <tr>
-                                            <th>09</th>
-                                            <td>Awarded MAS (Multiple Award Schedule) Contract (23 PV System types) by
-                                                Public Procurement Service (PPS)</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                                <li class="history_con">
-                                    <div class="his_year">2011</div>
-                                    <div class="ssgap"></div>
-                                    <table class="his_info">
-                                        <tr>
-                                            <th>11</th>
-                                            <td>Registered Renewable Energy Specialist Company ISO9001:2008,
-                                                ISO14001:2004</td>
-                                        </tr>
-                                        <tr>
-                                            <th>03</th>
-                                            <td>Acquired Quality Management System Certification</td>
-                                            <td>Acquired Electrical Contractor License</td>
-                                        </tr>
-                                        <tr>
-                                            <th>01</th>
-                                            <td>Established HK Power</td>
-                                        </tr>
-                                    </table>
-                                </li>
-                            </div>
-                        </div>
-                        <div class="history_con_02 history_con_right history_con_img">
+{%- endmacro %}
+{%- macro his_img(p) %}
                             <ul class="history_con_tit_wrap">
-                                <span class="his_tit">2016 ~ 2011</span>
-                                <img src="%%ROOT%%theme/basic/images/sub/his_02.jpg" alt="">
+                                <span class="his_tit">{{ p.title|esc_text }}</span>
+                                <img src="{{ p.image|img }}" alt="">
                             </ul>
+{%- endmacro %}
+{%- for p in periods %}
+                    <div id="{{ p.anchor }}" class="history_con_box pdt_box_wrap">
+{%- if loop.index is odd %}
+                        <div class="history_con_01 history_con_left history_con_img">{{ his_img(p) }}
                         </div>
+                        <div class="history_con_01 history_con_right ">{{ his_list(p) }}
+                        </div>
+{%- else %}
+                        <div class="history_con_02 history_con_left ">{{ his_list(p) }}
+                        </div>
+                        <div class="history_con_02 history_con_right history_con_img">{{ his_img(p) }}
+                        </div>
+{%- endif %}
                     </div>
+{%- endfor %}
                 </div>
             </div>
         </div>

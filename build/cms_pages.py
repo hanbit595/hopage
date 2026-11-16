@@ -27,6 +27,7 @@ PAGES = {
 # 영문(P4-EN1): 국문과 완전히 분리. 출력 경로 → cms/en/pages/<이름>.yml (이미지 파일은 공유, 데이터는 별도)
 PAGES_EN = {
     "en/page/cert.html": "cert",
+    "en/page/history.html": "history",
 }
 ROOT = Path(__file__).resolve().parent.parent
 SITE_YML = ROOT / "cms" / "settings" / "site.yml"            # Contact 주소·연락처·메일 원본(국문)
@@ -88,7 +89,8 @@ class Checker:
             self.fail(where, f"필수 칸 {key} 목록이 비어 있습니다.")
         return v
 
-    def text(self, d, key, where, required=True):
+    def text(self, d, key, where, required=True, keep_end=False):
+        """keep_end(영문 연혁 내용만): | 로 적은 여러 줄 칸의 끝 줄바꿈 1개를 남긴다(기존 영문 화면의 '…\\n    </td>' 표기 유지)."""
         v = d.get(key)
         if v is None or (isinstance(v, str) and not v.strip()):
             if required:
@@ -98,7 +100,8 @@ class Checker:
             self.fail(where, f"{key} 는 글자여야 합니다 (현재: {v!r}). 글자 그대로 쓰려면 따옴표로 감싸세요.")
         if isinstance(v, (date, datetime)):
             v = v.isoformat()
-        return str(v).rstrip("\n")   # 여러 줄 칸(|)의 끝 줄바꿈은 뗀다
+        s = str(v).rstrip("\n")   # 여러 줄 칸(|)의 끝 줄바꿈은 뗀다
+        return s + "\n" if keep_end and str(v).endswith("\n") else s
 
     def flag(self, d, key, where, default=True):
         v = d.get(key)
@@ -167,9 +170,13 @@ class Checker:
 
 
 def ml(v, indent: str) -> str:
-    """여러 줄 문단: 둘째 줄부터 원래 들여쓰기(indent)를 붙인다. 빈 줄은 들여쓰기 없이."""
+    """여러 줄 문단: 둘째 줄부터 원래 들여쓰기(indent)를 붙인다. 빈 줄은 들여쓰기 없이.
+    끝 줄바꿈이 남은 칸(영문 연혁 keep_end)은 마지막 빈 줄에도 들여쓰기를 붙여 닫는 태그 줄을 맞춘다."""
     lines = str(v).split("\n")
-    return "\n".join([lines[0]] + [indent + s if s else "" for s in lines[1:]])
+    rest = [indent + s if s else "" for s in lines[1:]]
+    if len(lines) > 1 and lines[-1] == "":
+        rest[-1] = indent
+    return "\n".join([lines[0]] + rest)
 
 
 def img(path: str) -> str:
@@ -231,7 +238,7 @@ def load_history(c: Checker, d: dict) -> dict:
                 m = c.obj(m, f"{yw} months {k}번째")
                 mw = f"{yw} months {k}번째"
                 month = c.month(m, "month", mw)
-                rows = [c.text({"내용": t}, "내용", f"{yw} {month}월 items {n}번째")
+                rows = [c.text({"내용": t}, "내용", f"{yw} {month}월 items {n}번째", keep_end=c.lang == "en")
                         for n, t in enumerate(c.items(m, "items", f"{yw} {month}월"), 1)]
                 months.append({"month": month, "items": rows})
             months.sort(key=lambda m: m["month"], reverse=True)   # 큰 달이 위(같은 달은 적은 순서)

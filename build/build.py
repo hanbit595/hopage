@@ -261,6 +261,10 @@ def main():
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
     # 1-1) 관리자 화면 업로드 이미지: 긴 변 1920px 이하로 줄여 public/uploads/ 에(P3-4b). 축소본은 필요할 때 만든다
     up = uploads.Uploads(UPLOADS, PUBLIC / "uploads")
+    # P3-5c-2: 글(cms/*.md)·페이지(cms/pages, content/pages)·설정(cms/settings)·영문 글(posts.json)·템플릿에 쓰인 업로드만 넣는다
+    up.find_used([p for d in (SITE / "cms", CONTENT, TEMPLATES) for p in d.rglob("*")
+                  if p.is_file() and p.suffix.lower() in (".md", ".yml", ".yaml", ".json", ".html")
+                  and p.name != "redirects.json"])
     up.process()
     boards.Site.uploads = up
 

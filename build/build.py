@@ -18,6 +18,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import boards
+import cms_pages
 import cms_posts
 import extras
 import uploads
@@ -44,7 +45,7 @@ class BuildError(Exception):
     """한국어 메시지로 빌드를 멈춘다(종료코드 1)."""
 
 
-BUILD_ERRORS = (BuildError, cms_posts.CmsError)
+BUILD_ERRORS = (BuildError, cms_posts.CmsError, cms_pages.CmsPageError)
 
 
 def esc(s) -> str:
@@ -267,6 +268,8 @@ def main():
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=False, undefined=StrictUndefined,
                       keep_trailing_newline=True)
     env.filters["esc"] = esc
+    env.filters["ml"] = cms_pages.ml     # 고정 페이지 데이터(P4): 여러 줄 문단 들여쓰기
+    env.filters["img"] = cms_pages.img   # 고정 페이지 데이터(P4): /로 시작하는 이미지 주소 → %%ROOT%%
     menus, menu_links = load_menu()
     footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
     popups, popup_links = load_popups()
@@ -329,6 +332,9 @@ def main():
         out = m["out"]
         ctx = common(m["lang"], out, m["title"], m["body_class"])
         content_html = (CONTENT / "pages" / m["content"]).read_text(encoding="utf-8")
+        if m["lang"] == "ko" and out in cms_pages.PAGES:   # P4: 고정 페이지 내용 = cms/pages/<페이지>.yml
+            data = cms_pages.load(cms_pages.PAGES[out], SITE, PUBLIC, renames)
+            content_html = cms_pages.render(env, content_html, data)
         if "%%LATEST_NOTICE%%" in content_html:   # D12: 메인 회사소식 = posts.json 최신 글 4건
             content_html = content_html.replace("%%LATEST_NOTICE%%", extras.latest_notice(m["lang"], posts, site))
         if "%%OUR_PROJECT%%" in content_html:   # P3-4b: 메인 Our Project = 시공사례 featured 글

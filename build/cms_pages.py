@@ -29,6 +29,7 @@ PAGES_EN = {
     "en/page/cert.html": "cert",
     "en/page/history.html": "history",
     "en/page/hanbit.html": "hanbit",
+    "en/page/esg.html": "esg",
 }
 ROOT = Path(__file__).resolve().parent.parent
 SITE_YML = ROOT / "cms" / "settings" / "site.yml"            # Contact 주소·연락처·메일 원본(국문)

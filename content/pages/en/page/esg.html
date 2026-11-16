@@ -847,84 +847,43 @@
         </div>
     </div>
     <div class="sec_wrap">
-      <div class="sec_in">
+      <div class="sec_in">{# ESG 경영(영문): cms/en/pages/esg.yml 의 소개·흐르는 글자·원 3개·상세 상자(P4-EN1). 항목 앞 '-' 는 틀이 붙인다 #}
     <div class="aboutTitle txt_center sec_pd100">
         <h3 class="sub_title sec_tit6 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
-            <b> Designing a Sustainable Tomorrow </b>
+            <b> {{ intro.title|esc_text }} </b>
         </h3>
         <div class="ssgap"></div>
         <p class="info sec_txt2"> 
-            HANBIT Innotech practices sustainable energy management <br/>
-            where Environment (E), Social (S), and Governance (G) are in balance,<br/>
-             grounded in technology, responsibility, and trust. </p>
+            {{ intro.text|ml("            ") }} </p>
     </div>
 </div>
 <div class="esg_circle_wrap">
-    <div class="flow_txt flow-wrap"><span>HANBIT’S ENVIRONMENT · SOCIAL · GOVERNANCE</span></div>
+    <div class="flow_txt flow-wrap"><span>{{ flow_text|esc_text }}</span></div>
     <ul class="esg_circle_list">
+{%- for c in pillars %}
         <li>
-            <div class="tit">Environment</div>
-            <div class="ico"><img src="%%ROOT%%theme/basic/images/sub/esg_ico_01.png" alt=""></div>
+            <div class="tit">{{ c.title|esc_text }}</div>
+            <div class="ico"><img src="{{ c.icon|img }}" alt=""></div>
             <div class="txt"> 
-                Achieving Carbon Neutrality through <br> 
-                BIPV · ESS · Recycling Technologies </div>
+                {{ c.text|ml("                ") }} </div>
         </li>
-        <li>
-            <div class="tit">Social</div>
-            <div class="ico"><img src="%%ROOT%%theme/basic/images/sub/esg_ico_02.png" alt=""></div>
-            <div class="txt"> 
-                Creating Shared Value through <br> 
-                Public Projects · Education · <br/>
-                Social Contribution </div>
-        </li>
-        <li>
-            <div class="tit">Governance</div>
-            <div class="ico"><img src="%%ROOT%%theme/basic/images/sub/esg_ico_03.png" alt=""></div>
-            <div class="txt"> 
-                Establishing an Ethical, Fair, <br> 
-                ESG-Based Management System </div>
-        </li>
+{%- endfor %}
     </ul>
 </div>
 
       <div class="esg_detail_wrap">
     <div class="esg_detail_list">
+{%- for d in details %}
 
         <div class="esg_wrap">
-            <div class="tit">A Sustainable Future Powered by Eco-friendly Energy</div>
+            <div class="tit">{{ d.title|esc_text }}</div>
             <ul class="clist">
-                <li>-Building Integrated Photovoltaics (BIPV) and Energy Storage System (ESS)</li>
-                <li>-Recycling of end-of-life solar panels and batteries</li>
-                <li>-Creating a resource-circulating energy ecosystem</li>
+{%- for t in d['items'] %}
+                <li>-{{ t }}</li>
+{%- endfor %}
             </ul>
         </div>
-
-        <div class="esg_wrap">
-            <div class="tit">Energy Transition Together with the Community</div>
-            <ul class="clist">
-                <li>-Public sector energy welfare projects</li>
-                <li>-Solar energy education programs</li>
-                <li>-Ongoing community contribution initiatives</li>
-            </ul>
-        </div>
-
-        <div class="esg_wrap">
-            <div class="tit">Establishing a Governance Framework built on Ethics, Fairness, and ESG Principles</div>
-            <ul class="clist">
-                <li>-Compliance with regulations and ethical management</li>
-                <li>-Structured and fair decision-making process</li>
-                <li>-Strengthening social responsibility through ESG management</li>
-            </ul>
-        </div>
-
-        <div class="esg_wrap">
-            <div class="tit">Realization of ESG Management</div>
-            <ul class="clist">
-                <li>-Simultaneously strengthens eco-friendly brand image and fulfills social responsibility</li>
-                <li>-High-efficiency solar power technology development</li>
-                <li>-Optimization of energy production, storage, and utilization through smart technologies</li>
-            </ul>
-        </div>
+{%- endfor %}
 
     </div>
 </div>

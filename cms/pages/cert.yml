@@ -23,14 +23,14 @@ items:
     date: ''
     image: /theme/basic/images/cert/cert_01_01.png
     visible: true
-    order: 1
+    order: 2
   - category: 수상
     name: 부산형 히든챔피언 표창장
     issuer: ''
     date: ''
     image: /theme/basic/images/cert/cert_01_02.png
     visible: true
-    order: 2
+    order: 1
   - category: 수상
     name: 조달청장 표창장
     issuer: ''
@@ -50,7 +50,7 @@ items:
     issuer: ''
     date: ''
     image: /theme/basic/images/cert/cert_02_02.png
-    visible: true
+    visible: false
     order: 2
   - category: 인증
     name: 신용평가등급확인서
@@ -262,3 +262,10 @@ items:
     image: /theme/basic/images/cert/cert_03_11.png
     visible: true
     order: 11
+  - category: "수상"
+    name: "[시험] 3-2d 인증"
+    issuer: ""
+    date: ""
+    image: "/theme/basic/images/cert/cert_01_01.png"
+    visible: true
+    order: 4

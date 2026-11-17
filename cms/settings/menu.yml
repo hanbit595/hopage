@@ -17,7 +17,7 @@ menu:
       - label: "연혁"
         link: "/page/history.html"
         new_window: false
-        visible: false
+        visible: true
         class: sub_menu_02
       - label: "인증 및 수상"
         link: "/page/cert.html"

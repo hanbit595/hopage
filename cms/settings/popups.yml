@@ -10,8 +10,8 @@ popups:
   - title: "햇빛소득마을 RESCO"
     image: "/data/editor/2605/8ff05b45953783ab60f04bdda10a57c4_1778041614_95.jpg"
     link: ""
-    start: 2026-07-01
-    end: 2026-12-31
+    start: 2026-05-06
+    end: 2026-12-30
     active: true
     id: 3
     width: 450

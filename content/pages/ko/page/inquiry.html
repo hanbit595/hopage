@@ -1,0 +1,79 @@
+{#- 견적문의 폼. 받는 곳: 관리자 서버(admin.hanbitinnotech.com/api/inquiry, 칸 이름은 관리자 3-2f 보고 기준).
+    전송·안내 문구는 theme/basic/js/hb_inquiry.js. 메일 주소는 여기에 적지 않는다(받는 메일은 관리자 서버 설정) -#}
+{%- set lang = "ko" %}{% set nav = true %}{% set headline = "태양광 설치 견적을 <br>편하게 문의해 주세요." %}
+{%- include "_page_head.html" %}
+<form class="hb_form" id="hb_inquiry" action="https://admin.hanbitinnotech.com/api/inquiry" method="post" novalidate data-lang="ko">
+    <input type="hidden" name="lang" value="ko">
+    <p class="hb_req_note"><em>*</em> 표시는 필수 입력입니다.</p>
+    <fieldset class="hb_row">
+        <legend>고객 구분 <em>*</em></legend>
+        <div class="hb_choice">
+            <label><input type="radio" name="customer_type" value="personal" required> 개인</label>
+            <label><input type="radio" name="customer_type" value="company"> 기업</label>
+            <label><input type="radio" name="customer_type" value="public"> 공공기관</label>
+        </div>
+    </fieldset>
+    <div class="hb_row">
+        <label for="iq_place">설치 장소 <em>*</em></label>
+        <select id="iq_place" name="place" required>
+            <option value="">선택해 주세요</option>
+            <option value="house">주택</option>
+            <option value="building">건물</option>
+            <option value="factory">공장</option>
+            <option value="parking">주차장</option>
+            <option value="land">토지</option>
+            <option value="etc">기타</option>
+        </select>
+    </div>
+    <div class="hb_row">
+        <label for="iq_region">지역 <em>*</em></label>
+        <input type="text" id="iq_region" name="region" maxlength="100" placeholder="예: 부산 해운대구" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_scale">설치 규모</label>
+        <input type="text" id="iq_scale" name="scale" maxlength="100" placeholder="예: 100kW, 지붕 500㎡ (선택)">
+    </div>
+    <div class="hb_row">
+        <label for="iq_interest">관심 분야</label>
+        <input type="text" id="iq_interest" name="interest" maxlength="100" placeholder="예: 지붕 태양광, BIPV, 정부지원사업 (선택)">
+    </div>
+    <div class="hb_row">
+        <label for="iq_name">이름 <em>*</em></label>
+        <input type="text" id="iq_name" name="name" maxlength="50" autocomplete="name" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_phone">연락처 <em>*</em></label>
+        <input type="tel" id="iq_phone" name="phone" maxlength="30" autocomplete="tel" placeholder="예: 010-1234-5678" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_email">이메일 <em>*</em></label>
+        <input type="email" id="iq_email" name="email" maxlength="100" autocomplete="email" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_message">문의 내용 <em>*</em></label>
+        <textarea id="iq_message" name="message" rows="7" maxlength="3000" required></textarea>
+    </div>
+    <div class="hb_hp" aria-hidden="true">
+        <label for="iq_website">홈페이지(입력하지 마세요)</label>
+        <input type="text" id="iq_website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    <div class="hb_agree">
+        <p class="hb_agree_tit">개인정보 수집·이용 동의 (필수)</p>
+        <ul>
+            <li><b>수집 항목</b>: 고객 구분, 설치 장소, 지역, 설치 규모·관심 분야(입력한 경우), 이름, 연락처, 이메일, 문의 내용</li>
+            <li><b>수집·이용 목적</b>: 견적 문의 확인, 상담 및 회신</li>
+            <li><b>보유·이용 기간</b>: 문의 접수일로부터 1년 (기간이 지나면 지체 없이 파기)</li>
+            <li>동의를 거부할 권리가 있으며, 동의하지 않으면 견적 문의를 할 수 없습니다.</li>
+        </ul>
+        <p class="hb_agree_link">자세한 내용은 <a href="%%ROOT%%page/privacy.html" target="_blank">개인정보처리방침</a>을 확인해 주세요.</p>
+        <label class="hb_agree_chk"><input type="checkbox" name="agree" value="true" required> 위 내용을 확인했으며 개인정보 수집·이용에 동의합니다.</label>
+    </div>
+    <div class="hb_status" role="status" aria-live="polite" hidden></div>
+    <div class="hb_btns"><button type="submit" class="hb_submit">문의 보내기</button></div>
+</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="%%ROOT%%theme/basic/js/hb_inquiry.js"></script>

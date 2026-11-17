@@ -179,3 +179,13 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_03
+      - label: "FAQ"
+        link: "/page/faq.html"
+        new_window: false
+        visible: true
+        class: sub_menu_05
+      - label: "견적문의"
+        link: "/page/inquiry.html"
+        new_window: false
+        visible: true
+        class: sub_menu_06

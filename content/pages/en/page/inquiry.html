@@ -1,0 +1,79 @@
+{#- 영문 견적문의 폼. 받는 곳: 관리자 서버(admin.hanbitinnotech.com/api/inquiry, 칸 이름은 관리자 3-2f 보고 기준).
+    전송·안내 문구는 theme/basic/js/hb_inquiry.js. 메일 주소는 여기에 적지 않는다 -#}
+{%- set lang = "en" %}{% set nav = true %}{% set headline = "Request a quote <br>for your solar project." %}
+{%- include "_page_head.html" %}
+<form class="hb_form" id="hb_inquiry" action="https://admin.hanbitinnotech.com/api/inquiry" method="post" novalidate data-lang="en">
+    <input type="hidden" name="lang" value="en">
+    <p class="hb_req_note">Fields marked <em>*</em> are required.</p>
+    <fieldset class="hb_row">
+        <legend>Customer type <em>*</em></legend>
+        <div class="hb_choice">
+            <label><input type="radio" name="customer_type" value="personal" required> Individual</label>
+            <label><input type="radio" name="customer_type" value="company"> Company</label>
+            <label><input type="radio" name="customer_type" value="public"> Public institution</label>
+        </div>
+    </fieldset>
+    <div class="hb_row">
+        <label for="iq_place">Installation site <em>*</em></label>
+        <select id="iq_place" name="place" required>
+            <option value="">Please select</option>
+            <option value="house">House</option>
+            <option value="building">Building</option>
+            <option value="factory">Factory</option>
+            <option value="parking">Parking lot</option>
+            <option value="land">Land</option>
+            <option value="etc">Other</option>
+        </select>
+    </div>
+    <div class="hb_row">
+        <label for="iq_region">Region <em>*</em></label>
+        <input type="text" id="iq_region" name="region" maxlength="100" placeholder="e.g. Haeundae-gu, Busan" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_scale">Project size</label>
+        <input type="text" id="iq_scale" name="scale" maxlength="100" placeholder="e.g. 100 kW, 500 m² roof (optional)">
+    </div>
+    <div class="hb_row">
+        <label for="iq_interest">Area of interest</label>
+        <input type="text" id="iq_interest" name="interest" maxlength="100" placeholder="e.g. rooftop PV, BIPV, carport (optional)">
+    </div>
+    <div class="hb_row">
+        <label for="iq_name">Name <em>*</em></label>
+        <input type="text" id="iq_name" name="name" maxlength="50" autocomplete="name" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_phone">Phone <em>*</em></label>
+        <input type="tel" id="iq_phone" name="phone" maxlength="30" autocomplete="tel" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_email">Email <em>*</em></label>
+        <input type="email" id="iq_email" name="email" maxlength="100" autocomplete="email" required>
+    </div>
+    <div class="hb_row">
+        <label for="iq_message">Message <em>*</em></label>
+        <textarea id="iq_message" name="message" rows="7" maxlength="3000" required></textarea>
+    </div>
+    <div class="hb_hp" aria-hidden="true">
+        <label for="iq_website">Website (leave blank)</label>
+        <input type="text" id="iq_website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    <div class="hb_agree">
+        <p class="hb_agree_tit">Consent to collection and use of personal information (required)</p>
+        <ul>
+            <li><b>Items collected</b>: customer type, installation site, region, project size and area of interest (if entered), name, phone, email, message</li>
+            <li><b>Purpose</b>: reviewing your inquiry, consultation and reply</li>
+            <li><b>Retention period</b>: 1 year from the date of inquiry (destroyed without delay afterwards)</li>
+            <li>You have the right to refuse consent; however, without consent we cannot accept your inquiry.</li>
+        </ul>
+        <p class="hb_agree_link">See our <a href="%%ROOT%%page/privacy.html" target="_blank">Privacy Policy (Korean)</a> for details.</p>
+        <label class="hb_agree_chk"><input type="checkbox" name="agree" value="true" required> I have read the above and agree to the collection and use of my personal information.</label>
+    </div>
+    <div class="hb_status" role="status" aria-live="polite" hidden></div>
+    <div class="hb_btns"><button type="submit" class="hb_submit">Send inquiry</button></div>
+</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="%%ROOT%%theme/basic/js/hb_inquiry.js"></script>

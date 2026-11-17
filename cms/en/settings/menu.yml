@@ -180,3 +180,13 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_03
+      - label: "FAQ"
+        link: "/en/page/faq.html"
+        new_window: false
+        visible: true
+        class: sub_menu_05
+      - label: "Request a Quote"
+        link: "/en/page/inquiry.html"
+        new_window: false
+        visible: true
+        class: sub_menu_06

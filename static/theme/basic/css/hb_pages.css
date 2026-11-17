@@ -1,0 +1,67 @@
+/* FAQ·견적문의·개인정보처리방침 (content/pages/{ko,en}/page/{faq,inquiry,privacy}.html). 게시판 화면과 같은 틀 안에서 쓴다 */
+.hb_page { max-width: 1000px; color: #222; font-size: 16px; line-height: 1.7; word-break: keep-all; }
+.hb_page a { color: #3a8afd; }
+
+/* FAQ */
+.hb_tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 30px; padding: 0; list-style: none; }
+.hb_tabs button { padding: 10px 22px; border: 1px solid #d0d3db; border-radius: 30px; background: #fff; color: #444; font-size: 15px; cursor: pointer; }
+.hb_tabs button.on, .hb_tabs button:hover { border-color: #3a8afd; background: #3a8afd; color: #fff; }
+.hb_faq_list { margin: 0; border-top: 2px solid #222; }
+.hb_faq_item { border-bottom: 1px solid #e3e5ea; }
+.hb_faq_item dt { margin: 0; }
+.hb_faq_item dt button { display: flex; align-items: flex-start; gap: 14px; width: 100%; padding: 22px 50px 22px 10px; border: 0; background: none; text-align: left; font-size: 17px; font-weight: 600; color: #222; cursor: pointer; position: relative; }
+.hb_faq_item dt button:after { content: ""; position: absolute; right: 18px; top: 30px; width: 10px; height: 10px; border-right: 2px solid #888; border-bottom: 2px solid #888; transform: rotate(45deg); transition: transform .2s; }
+.hb_faq_item.on dt button:after { transform: rotate(-135deg); top: 34px; }
+.hb_faq_item .q, .hb_faq_item .a { flex: none; font-weight: 700; font-size: 18px; color: #3a8afd; }
+.hb_faq_item .a { color: #2fca83; }
+.hb_cat { flex: none; padding: 1px 10px; border-radius: 4px; background: #f1f1f1; font-size: 13px; font-weight: 500; color: #666; line-height: 24px; }
+.hb_faq_item dd { display: flex; gap: 14px; margin: 0; padding: 22px 20px 26px 10px; background: #f7f8fa; }
+.hb_faq_item dd[hidden] { display: none; }
+.hb_faq_item dd .txt { flex: 1; min-width: 0; }
+.hb_empty { padding: 60px 0; text-align: center; color: #888; border-top: 2px solid #222; border-bottom: 1px solid #e3e5ea; }
+.hb_more { margin-top: 30px; text-align: center; color: #666; }
+
+/* 견적문의 폼 */
+.hb_form { margin: 0; }
+.hb_req_note { margin-bottom: 20px; font-size: 14px; color: #666; }
+.hb_form em { font-style: normal; color: #d82424; }
+.hb_row { display: flex; align-items: flex-start; gap: 20px; margin: 0; padding: 16px 0; border: 0; border-bottom: 1px solid #e3e5ea; }
+.hb_row > label, .hb_row > legend { flex: none; width: 160px; padding-top: 10px; font-weight: 600; }
+fieldset.hb_row { display: flex; min-width: 0; }
+fieldset.hb_row > legend { float: left; padding: 10px 0 0; }
+.hb_row input[type=text], .hb_row input[type=tel], .hb_row input[type=email], .hb_row select, .hb_row textarea {
+    flex: 1; width: 100%; min-width: 0; height: 46px; padding: 0 14px; border: 1px solid #d0d3db; border-radius: 4px; font-size: 16px; color: #222; background: #fff; box-sizing: border-box; }
+.hb_row textarea { height: auto; padding: 12px 14px; resize: vertical; }
+.hb_row input:focus, .hb_row select:focus, .hb_row textarea:focus { outline: 2px solid #3a8afd; outline-offset: -1px; }
+.hb_choice { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-top: 10px; }
+.hb_choice label { cursor: pointer; }
+.hb_hp { position: absolute !important; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.hb_agree { margin-top: 30px; padding: 24px 26px; border: 1px solid #e3e5ea; border-radius: 6px; background: #f7f8fa; font-size: 15px; }
+.hb_agree_tit { margin-bottom: 10px; font-weight: 700; font-size: 16px; }
+.hb_agree ul { margin: 0 0 10px; padding-left: 18px; list-style: disc; }
+.hb_agree li { margin: 3px 0; }
+.hb_agree_chk { display: block; margin-top: 14px; font-weight: 600; cursor: pointer; }
+.hb_agree_chk input { margin-right: 6px; }
+.hb_status { margin-top: 24px; padding: 14px 18px; border-radius: 4px; font-weight: 600; }
+.hb_status.ing { background: #eef4ff; color: #2a5db0; }
+.hb_status.ok { background: #e9f9f1; color: #1d7a50; }
+.hb_status.err { background: #fdeeee; color: #b42020; }
+.hb_btns { margin-top: 30px; text-align: center; }
+.hb_submit { min-width: 220px; height: 56px; padding: 0 30px; border: 0; border-radius: 30px; background: #3a8afd; color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; }
+.hb_submit:disabled { opacity: .6; cursor: wait; }
+
+/* 개인정보처리방침 */
+.hb_doc h2 { margin: 36px 0 10px; font-size: 20px; font-weight: 700; }
+.hb_doc p { margin: 0 0 10px; }
+.hb_doc ul { margin: 0 0 10px; padding-left: 20px; list-style: disc; }
+.hb_doc li { margin: 4px 0; }
+
+@media (max-width: 768px) {
+    .hb_page { font-size: 15px; }
+    .hb_row { flex-direction: column; gap: 8px; }
+    .hb_row > label, .hb_row > legend { width: auto; padding-top: 0; }
+    fieldset.hb_row > legend { float: none; }
+    .hb_choice { padding-top: 0; }
+    .hb_faq_item dt button { font-size: 16px; gap: 10px; padding-right: 40px; flex-wrap: wrap; }
+    .hb_agree { padding: 18px 16px; }
+}

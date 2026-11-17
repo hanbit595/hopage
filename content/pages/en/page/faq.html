@@ -1,0 +1,30 @@
+{#- FAQ(자주 묻는 질문): cms/en/faq.yml → build/cms_faq.py. 분류 탭 + 질문 클릭 시 답변 펼침(theme/basic/js/hb_faq.js) -#}
+{%- set lang = "en" %}{% set nav = true %}{% set headline = "Frequently asked <br>questions." %}
+{%- include "_page_head.html" %}
+<div class="hb_faq" data-hb-faq>
+{%- if items %}
+    <ul class="hb_tabs" role="tablist">
+        <li><button type="button" class="on" data-cat="all" role="tab" aria-selected="true">All</button></li>
+{%- for c in categories %}
+        <li><button type="button" data-cat="{{ loop.index }}" role="tab" aria-selected="false">{{ c }}</button></li>
+{%- endfor %}
+    </ul>
+    <dl class="hb_faq_list">
+{%- for it in items %}
+        <div class="hb_faq_item" data-cat="{{ it.cat }}">
+            <dt><button type="button" aria-expanded="false" aria-controls="faq-a{{ loop.index }}" id="faq-q{{ loop.index }}"><span class="q">Q</span><span class="hb_cat">{{ it.category }}</span><span class="txt">{{ it.question }}</span></button></dt>
+            <dd id="faq-a{{ loop.index }}" role="region" aria-labelledby="faq-q{{ loop.index }}" hidden><span class="a">A</span><div class="txt">{{ it.answer }}</div></dd>
+        </div>
+{%- endfor %}
+    </dl>
+{%- else %}
+    <p class="hb_empty">No questions have been posted yet.</p>
+{%- endif %}
+    <p class="hb_more">Can't find your answer? <a href="%%ROOT%%en/page/inquiry.html">Request a quote</a> and we will get back to you.</p>
+</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="%%ROOT%%theme/basic/js/hb_faq.js"></script>

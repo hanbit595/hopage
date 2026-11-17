@@ -174,7 +174,7 @@ def redirects(meta: dict, boards_cfg: dict, posts: dict) -> dict:
         for path in ("/", "/index.php"):
             add(path, {"locale": loc}, pre + "index.html")
         for m in meta.values():
-            if m["lang"] == lang and "/page/" in "/" + m["out"]:
+            if m["lang"] == lang and "/page/" in "/" + m["out"] and not m.get("new"):   # new: 옛 .php 주소가 없는 새 페이지
                 name = m["out"].rsplit("/", 1)[1][:-5]
                 add(f"/page/{name}.php", {"locale": loc}, m["out"])
                 if lang == "ko":

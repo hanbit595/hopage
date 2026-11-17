@@ -23,6 +23,7 @@ periods:
           - month: "09"
             items:
               - " 정보통신공사업 등록"
+              - "[시험] 3-2d 연혁 줄"
       - year: 2023
         months:
           - month: "12"

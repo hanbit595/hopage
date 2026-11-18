@@ -1,3 +1,4 @@
+public: false   # 공개 스위치. true 이고 visible: true 질문이 1개 이상일 때만 FAQ 페이지·메뉴·sitemap 을 만든다
 # FAQ(영문 자주 묻는 질문). 관리자 화면(admin2)에서 고친다. 국문 cms/faq.yml 과 따로 관리한다.
 # items: category(분류), question(질문), answer(답변, HTML), order(순서, 작은 수 먼저), visible(노출)
 items: []

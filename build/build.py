@@ -62,9 +62,10 @@ def esc(s) -> str:
     return s.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-def load_menu(path: Path = MENU_YML):
+def load_menu(path: Path = MENU_YML, hidden=frozenset()):
     """메뉴 파일(한글 cms/settings/menu.yml, 영문 cms/en/settings/menu.yml) → (노출 메뉴 목록, 검사할 내부 주소 목록).
-    형식이 틀리면 BuildError. 내부 주소 검사 목록의 위치 설명에는 파일 경로를 붙인다."""
+    형식이 틀리면 BuildError. 내부 주소 검사 목록의 위치 설명에는 파일 경로를 붙인다.
+    hidden: 공개 스위치로 꺼진 새 페이지 주소(/page/faq.html 등). 그 주소의 소메뉴는 visible: false 처럼 뺀다."""
     fname = path.relative_to(SITE).as_posix()
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -94,7 +95,7 @@ def load_menu(path: Path = MENU_YML):
         for j, s in enumerate(m.get("items") or [], 1):
             if not isinstance(s, dict) or not str(s.get("label") or "").strip():
                 raise BuildError(f"{fname} {name}의 {j}번째 소메뉴: label 이 없습니다.")
-            if s.get("visible", True) is False:
+            if s.get("visible", True) is False or str(s.get("link") or "").strip() in hidden:
                 continue
             where = f"{name} > 소메뉴 '{s['label']}'"
             h, inner = href(s.get("link"), where)
@@ -163,7 +164,11 @@ def load_footer(path: Path, brochure_required: bool):
         offices.append({"name": esc(name), "address": esc(str(o["address"]).strip()),
                         "comment": name.replace("--", "-").replace(">", "")})
     brochure, inner = site_link(d.get("brochure"), f"{fname} brochure", required=brochure_required)
-    footer = {"offices": offices, "tel": esc(text("tel")), "email": esc(text("email")), "brochure": brochure}
+    inquiry = d.get("inquiry_public", False)   # P5-2 견적문의 공개 스위치(없으면 false)
+    if not isinstance(inquiry, bool):
+        raise BuildError(f"{fname}: inquiry_public 은 true 또는 false 여야 합니다 (현재: '{inquiry}')")
+    footer = {"offices": offices, "tel": esc(text("tel")), "email": esc(text("email")), "brochure": brochure,
+              "inquiry_public": inquiry}
     links = [(inner, f"{fname} brochure")] if inner else []
     return footer, d, text, links
 
@@ -278,11 +283,15 @@ def main():
     env.filters["ml"] = cms_pages.ml     # 고정 페이지 데이터(P4): 여러 줄 문단 들여쓰기
     env.filters["img"] = cms_pages.img   # 고정 페이지 데이터(P4): /로 시작하는 이미지 주소 → %%ROOT%%
     env.filters["esc_text"] = cms_pages.esc_text   # 영문 고정 페이지(P4-EN1): 화면 글자 이스케이프(R&D 같은 & 는 그대로)
-    menus_ko, menu_links_ko = load_menu(MENU_YML)
-    menus_en, menu_links_en = load_menu(MENU_YML_EN)   # 영문 메뉴(P4-EN3)
-    menu_links = menu_links_ko + menu_links_en
     footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
     footer_vars_en, site_links_en = load_site_en()     # 영문 푸터(P4-EN3)
+    # P5-2 공개 스위치: 꺼진 FAQ·견적문의·개인정보처리방침은 페이지·메뉴·sitemap 에서 뺀다
+    new_sw = cms_faq.switches(SITE, {"ko": footer_vars["inquiry_public"], "en": footer_vars_en["inquiry_public"]})
+    new_off = cms_faq.off_pages(new_sw)
+    hidden = frozenset("/" + o for o in new_off)
+    menus_ko, menu_links_ko = load_menu(MENU_YML, hidden)
+    menus_en, menu_links_en = load_menu(MENU_YML_EN, hidden)   # 영문 메뉴(P4-EN3)
+    menu_links = menu_links_ko + menu_links_en
     popups, popup_links = load_popups(POPUPS_YML)
     popups_en, popup_links_en = load_popups(POPUPS_YML_EN)   # 영문 메인 팝업(P4-EN3)
     now = datetime.now(extras.KST)
@@ -342,8 +351,12 @@ def main():
 
     # 2-1) 메인·고정 페이지
     tpl = env.get_template("page.html")
+    n_pages = 0
     for key, m in meta.items():
         out = m["out"]
+        if out in new_off:   # P5-2 공개 스위치로 꺼진 새 페이지
+            continue
+        n_pages += 1
         ctx = common(m["lang"], out, m["title"], m["body_class"])
         content_html = (CONTENT / "pages" / m["content"]).read_text(encoding="utf-8")
         cp = cms_pages.page_of(out)   # P4: 고정 페이지 내용 = cms/pages/<페이지>.yml, 영문(P4-EN1) = cms/en/pages/<페이지>.yml
@@ -352,7 +365,7 @@ def main():
             content_html = cms_pages.render(env, content_html, data)
         np = cms_faq.page_of(out)   # FAQ(cms/faq.yml, cms/en/faq.yml)·견적문의·개인정보처리방침
         if np:
-            content_html = cms_pages.render(env, content_html, cms_faq.context(np[0], np[1], SITE, footer_vars))
+            content_html = cms_pages.render(env, content_html, cms_faq.context(np[0], np[1], SITE, footer_vars, new_sw))
         if "%%LATEST_NOTICE%%" in content_html:   # D12: 메인 회사소식 = posts.json 최신 글 4건
             content_html = content_html.replace("%%LATEST_NOTICE%%", extras.latest_notice(m["lang"], posts, site))
         if "%%OUR_PROJECT%%" in content_html:   # P3-4b: 메인 Our Project = 시공사례 featured 글
@@ -366,7 +379,9 @@ def main():
                    popup_html=popup)
         write(out, tpl.render(**ctx), m["lang"], m["pair"], m.get("active"))
         sitemap_urls.append((out, None))
-    print(f"  메인·고정 페이지 {len(meta)}개")
+    for a in cms_faq.unused_assets(new_sw):   # 꺼진 새 페이지만 쓰는 CSS·JS 는 공개하지 않음
+        (PUBLIC / a).unlink(missing_ok=True)
+    print(f"  메인·고정 페이지 {n_pages}개" + (f"(공개 스위치로 뺀 새 페이지 {len(new_off)}개)" if new_off else ""))
 
     # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 cms/en/*.md)
     n_list = n_view = 0

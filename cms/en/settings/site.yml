@@ -16,3 +16,6 @@ offices:
     address: "#706, 680 Bitgaram-ro, Naju-si, Jeollanam-do"
 tel: "+82-51-913-0120"
 email: "hkele@hanmail.net"
+# - inquiry_public: 영문 견적문의 공개 스위치(true/false). false 면 영문 Request a Quote 메뉴·페이지를 만들지 않고,
+#   푸터 "Contact Us"는 en/page/location.html 로 연결하며 푸터 Privacy Policy 링크를 숨긴다
+inquiry_public: false

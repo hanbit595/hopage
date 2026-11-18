@@ -16,4 +16,7 @@ tel: "+82-51-913-0120"
 email: "hkele@hanmail.net"
 brochure: "/theme/basic/images/Hanbit_Catalog.pdf"
 per_page: 7
+# - inquiry_public: 견적문의 공개 스위치(true/false). false 면 견적문의 메뉴·페이지와 개인정보처리방침 페이지를 만들지 않고,
+#   푸터 "문의하기"는 오시는 길(page/location.html)로 연결하며 푸터 개인정보처리방침 링크를 숨긴다
+inquiry_public: false
 seo_description: "한빛이노텍은 태양광·BIPV·RE100 기반의 친환경 에너지 솔루션 전문기업으로, 건물·산업단지·주차장 태양광 및 태양광 EPC 사업을 통해 탄소중립과 에너지 자립을 실현합니다. 분산에너지와 통합 에너지 플랫폼을 기반으로 지속가능한 미래를 구축합니다."

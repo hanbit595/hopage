@@ -20,7 +20,7 @@
 {%- else %}
     <p class="hb_empty">등록된 질문이 없습니다.</p>
 {%- endif %}
-    <p class="hb_more">원하는 답을 찾지 못하셨다면 <a href="%%ROOT%%page/inquiry.html">견적문의</a>로 남겨 주세요.</p>
+    <p class="hb_more">원하는 답을 찾지 못하셨다면 {% if inquiry %}<a href="%%ROOT%%page/inquiry.html">견적문의</a>로 남겨 주세요.{% else %}<a href="%%ROOT%%page/location.html">오시는 길</a>의 연락처로 문의해 주세요.{% endif %}</p>
 </div>
 				</div>
 			</div>

@@ -28,7 +28,7 @@ editor_mode: "html"
                     <div class="buis_tit">
                         <div class="num">01</div>
                         <div class="tit">BIM설계</div>
-                        <div class="txt">설치 단계에서부터 발전량 시뮬레이션과 구조 안정성을 정밀 검토하여, 수십 년간 안정적인 운영이 가능한 설계 기반을 구축.</div>
+                        <div class="txt">설치 단계에서부터 발전량 시뮬레이션과 구조 안정성을 정밀 검토하여, 수십 년간 안정적인 운영이 가능한 설계 기반을 구축합니다.</div>
                     </div>
                     <ul class="buis_detail_list">
                         <li class="buis_detail_card">

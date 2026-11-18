@@ -1,0 +1,172 @@
+---
+title: "HANBIT Innotech"
+path: "/page/pv.html"
+editor_mode: "html"
+---
+
+    <div class="sec_wrap">
+        <div class="sec_in">
+          <!--   <h3 class="sub_title sec_tit7 sec_pd100 txt_center animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                <b>
+                   주요사업
+                </b>
+            </h3>  -->
+            <div class="subnav sec_pd50 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                <ul>
+                    <li>
+                        <a href="#pv1" class="go_ani">건물형태양광</a>
+                    </li>
+                    <li>
+                        <a href="#pv2" class="go_ani">영농형태양광</a>
+                    </li>
+                    <li>
+                        <a href="#pv3" class="go_ani">수상태양광</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="buis_sec_all_wrap">
+                <section class="buis_section buis_section_01">
+                <div class="go_target" id="pv1"></div>
+                    <div class="buis_tit">
+                        <div class="num">01</div>
+                        <div class="tit">건물형 태양광</div>
+                        <div class="txt">기존 건축물의 옥상이나 외벽 등에 설치하여, 별도의 부지 없이 효율적인 에너지 생산이 가능한 모델입니다.</div>
+                    </div>
+                    <div class="buis_img">
+                        <img src="/theme/basic/images/sub/pv_01.jpg" alt="">
+                    </div>
+                    <ul class="buis_detail_list">
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_01_01.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">자가소비형 모델</div>
+                                <div class="txt">
+                                    건물에서 생산한 전기를 자체적으로 소비하여 <br>
+                                    전기요금을 절감하는 형태입니다.<br>
+                                    공장, 물류창고, 상업시설 등에서 많이 활용되며, <br>
+                                    잉여 전력은 한전에 판매할 수도 있습니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_01_02.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">공공지원사업 모델</div>
+                                <div class="txt">
+                                    정부나 지자체의 보조금 및 지원사업을 통해 <br>
+                                    설치비 부담을 줄이고 친환경 정책에 동참할 수 <br>
+                                    있는 모델입니다. 공공건물, 학교, 복지시설 <br>
+                                    등에서 에너지 자립형 시스템 구축에 적합합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_01_03.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">임대·민간투자 모델</div>
+                                <div class="txt">
+                                    건물주는 옥상·부지를 임대하고, 민간 투자자가 <br>
+                                    설치와 운영을 담당하는 수익형 모델입니다. <br>
+                                    초기 투자비 부담 없이 임대료 및 발전 수익을 통한 <br>
+                                    안정적인 수익 창출이 가능합니다.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <section class="buis_section buis_section_02">
+                <div class="go_target" id="pv2"></div>
+                    <div class="buis_tit">
+                        <div class="num">02</div>
+                        <div class="tit">영농형 태양광</div>
+                        <div class="txt">농업과 태양광 발전을 결합하여 토지 활용 가치를 극대화하고 농업 생산과 에너지 생산을 동시에 실현하는 모델입니다.</div>
+                    </div>
+                    <div class="buis_img">
+                        <img src="/theme/basic/images/sub/pv_02.jpg" alt="">
+                    </div>
+                    <ul class="buis_detail_list">
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_02_01.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">농지 복합형 모델</div>
+                                <div class="txt">
+                                농작물 재배 공간 위에 태양광 구조물을 설치해 <br>
+                                    농사와 발전을 병행합니다. 농지 생산성을 <br>
+                                    유지하면서 부가 수익을 창출할 수 있습니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_02_02.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">협동조합·법인 모델</div>
+                                <div class="txt">
+                                농민들이 협동조합 또는 법인을 구성하여 공동으로 <br>
+                                    투자·운영하는 방식입니다. 수익을 구성원과 <br>
+                                    지역사회에 공유함으로써 농촌 공동체의 경제적 <br>
+                                    자립을 촉진합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_02_03.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">임대/현물거래 모델</div>
+                                <div class="txt">
+                                농지를 임대하거나 발전량을 현물로 거래하여 <br>
+                                안정적인 수익을 확보하는 형태로 농지 소유주와 <br>
+                                발전사업자 간 상생 모델로 각광받고 있습니다.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <section class="buis_section buis_section_03">
+                <div class="go_target" id="pv3"></div>
+                    <div class="buis_tit">
+                        <div class="num">03</div>
+                        <div class="tit">수상 태양광</div>
+                        <div class="txt">유휴 수면 공간을 활용하여 설치하는 친환경형 발전 방식으로, 토지 훼손 없이 높은 발전 효율을 확보할 수 있습니다.</div>
+                    </div>
+                    <div class="buis_img">
+                        <img src="/theme/basic/images/sub/pv_03.jpg" alt="">
+                    </div>
+                    <ul class="buis_detail_list">
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_03_01.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">공공저수지·댐 활용 모델</div>
+                                <div class="txt">
+                                농업용 저수지나 댐 수면 위에 설치하여 대규모 <br>
+                                발전이 가능하며, 공공기관 주도로 안정적인 <br>
+                                사업 운영이 가능합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_03_02.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">민간컨소시엄 모델</div>
+                                <div class="txt">
+                                민간 기업들이 컨소시엄을 구성해 공동 투자· <br>
+                                    운영하는 방식으로, 기술력과 자본을 결합해 <br>
+                                    효율적인 프로젝트 추진이 가능합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                            <div class="ico"><img src="/theme/basic/images/sub/pv_ico_03_03.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">지역 환원형 모델</div>
+                                <div class="txt">
+                                발전 수익의 일부를 지역 주민·지자체에 환원하는 <br>
+                                    상생형 사업으로, 지역사회와 함께 지속가능한 <br>
+                                    에너지 생태계를 구축합니다.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>

@@ -19,11 +19,11 @@ import yaml
 from cms_posts import CmsLoader
 
 # 출력 경로(public/ 기준) → cms/pages/<이름>.yml
+# ESG 는 P6 에서 자유 페이지(cms/free/esg.md·cms/en/free/esg.md, build/cms_free.py)로 옮김. cms/pages/esg.yml 은 남기지만 빌드에 안 씀
 PAGES = {
     "page/cert.html": "cert",
     "page/history.html": "history",
     "page/hanbit.html": "hanbit",
-    "page/esg.html": "esg",
     "page/location.html": "location",
 }
 # 영문(P4-EN1): 국문과 완전히 분리. 출력 경로 → cms/en/pages/<이름>.yml (이미지 파일은 공유, 데이터는 별도)
@@ -31,7 +31,6 @@ PAGES_EN = {
     "en/page/cert.html": "cert",
     "en/page/history.html": "history",
     "en/page/hanbit.html": "hanbit",
-    "en/page/esg.html": "esg",
     "en/page/location.html": "location",
 }
 ROOT = Path(__file__).resolve().parent.parent

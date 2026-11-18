@@ -19,6 +19,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 import boards
 import cms_faq
+import cms_free
 import cms_pages
 import cms_posts
 import extras
@@ -363,6 +364,8 @@ def main():
         if cp:
             data = cms_pages.load(cp[0], SITE, PUBLIC, renames, cp[1])
             content_html = cms_pages.render(env, content_html, data)
+        if cms_free.SLOT in content_html:   # P6 자유 페이지: 틀(content/pages) + 본문(cms/free/<이름>.md, 영문 cms/en/free)
+            content_html = cms_free.fill(content_html, cms_free.load(SITE, out))
         np = cms_faq.page_of(out)   # FAQ(cms/faq.yml, cms/en/faq.yml)·견적문의·개인정보처리방침
         if np:
             content_html = cms_pages.render(env, content_html, cms_faq.context(np[0], np[1], SITE, footer_vars, new_sw))

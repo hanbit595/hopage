@@ -1,0 +1,65 @@
+---
+title: "HANBIT Innotech"
+path: "/en/page/combiner.html"
+editor_mode: "visual"
+---
+
+    <div class="sec_wrap">
+        <div class="sec_in">
+            <div class="sec_pd100">
+                <h3 class="sub_title sec_tit7 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                    <b>
+                    Solar Combiner Box
+                    </b>
+                </h3>
+                <div class="ssgap"></div>
+                <p class="sec_txt2"> 
+                A high-reliability core safety device certified with Green Technology, integrating power aggregation, protection, and control to support stable power generation operation.
+                </p> 
+                <div class="gap"></div>
+                <div class="product_preview">
+                    <div class="view_slider_wrap2 grid-2">
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/combiner01.png">
+                            <p class="sec_tit2 bold600">20CH Combiner Box Front Enclosure</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/combiner02.png">
+                            <p class="sec_tit2 bold600">20CH Combiner Box Interior</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap blubg">
+            <div class="sec_in">
+                <section class="comb_feat">
+                    <div class="comb_feat_in grid-2">
+                        <div class="buis_tit">
+                            <div class="tit2"> Key Features</div>
+                        </div>
+                        <div class="comb_detail_wrap">
+                            <div class="comb_detail">
+                                <div class="tit">Standard Type 8CH, 16CH</div>
+                                <div class="info">
+                                Collects DC power generated from multiple solar modules and delivers it to the inverter,<br>
+                                preventing module conflicts or reverse current caused by differences in module output and providing protection.
+                                </div>
+                            </div>
+                            <div class="comb_detail">
+                                <div class="tit">Green Certified Technology Product</div>
+                                <div class="img_wrap">
+                                    <img src="/theme/basic/images/pdt/comb_cert_01.png" alt="">
+                                    <img src="/theme/basic/images/pdt/comb_cert_02.png" alt="">
+                                </div>
+                                <ul class="clist">
+                                    <li>Solar power generation system applied with leakage current monitoring, blocking, and reduction technology</li>
+                                    <li>Solar power generation system equipped with solar module vibration detection function</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>

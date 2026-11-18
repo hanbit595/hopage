@@ -1,0 +1,192 @@
+---
+title: "HANBIT Innotech"
+path: "/page/vnm.html"
+editor_mode: "visual"
+---
+
+    <div class="carbon-top-wrap">
+        <div class="sec_in sec_pd50">
+            <div class="carbon-top-img">
+                <img src="/theme/basic/images/sub/vnm.png">
+            </div>
+            </div>
+            <div class="re_feat_section">
+                <span>
+                누구나 태양광 에너지의 혜택을 받을 수 있는 가상상계거래 제도로,<br>
+                <b>자신의 지붕에 태양전지를 설치하지 않고도 태양에너지의 혜택을 누릴 수 있는 서비스</b>입니다.
+                </span>
+            </div>
+        </div>
+        <div class="metering-process-wrap">
+            <div class="metering-process-in sec_in">
+                <h3 class="title">
+                NEM(Net Energy Metering)
+                </h3>
+                <div class="subtxt">상계제도</div>
+                <ul class="list">
+                    <li class="item">
+                        <div class="num">01</div>
+                        <div class="tit">태양광 발전</div>
+                        <div class="detail">
+                        지붕 태양광으로 전기 생산
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">02</div>
+                        <div class="tit">건물 우선 사용</div>
+                        <div class="detail">
+                        생산 전력 즉시 자체 소비
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">03</div>
+                        <div class="tit">잉여전력 발생</div>
+                        <div class="detail">
+                        사용하고 남은 전력
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">04</div>
+                        <div class="tit">한전 송전</div>
+                        <div class="detail">
+                        잉여전력 계통 송전
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">05</div>
+                        <div class="tit">전기요금 차감</div>
+                        <div class="detail">
+                        송전량만큼 요금 상계
+                        </div>
+                    </li>
+                </ul>
+                <div class="result">같은 건물에서 쓰고, 남은 전기는 바로 차감</div>
+            </div>
+            <div class="metering-process-in2 sec_in">
+                <h3 class="title">
+                VNM(Virtual Net Metering)
+                </h3>
+                <div class="subtxt">가상상계제도</div>
+                <ul class="list">
+                    <li class="item">
+                        <div class="num">01</div>
+                        <div class="tit">원격 태양광 발전</div>
+                        <div class="detail">
+                        다른 지역 태양광 <br>발전소에서 전기 생산
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">02</div>
+                        <div class="tit">계통 연계</div>
+                        <div class="detail">
+                        발전 전력 한전 <br>계통으로 송전
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">03</div>
+                        <div class="tit">전력 계량 (kWh)</div>
+                        <div class="detail">
+                        발전량 계량 측정
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">04</div>
+                        <div class="tit">크레딧 전환</div>
+                        <div class="detail">
+                        kWh → 요금 크레딧으로 환산
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">05</div>
+                        <div class="tit">크레딧 적립</div>
+                        <div class="detail">
+                        계약자 계정에 크레딧 저장
+                        </div>
+                    </li>
+                    <p class="next"><i class="xi-arrow-right"></i></p>
+                    <li class="item">
+                        <div class="num">06</div>
+                        <div class="tit">전기요금 차감</div>
+                        <div class="detail">
+                        다른 건물 요금에서 차감 적용
+                        </div>
+                    </li>
+                </ul>
+                <div class="result on">태양광은 원격에서, 요금은 여기서 차감</div>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap blubg">
+            <div class="sec_in">
+                <section class="comb_feat">
+                    <div class="comb_feat_in grid-2">
+                        <div class="buis_tit">
+                            <div class="tit2"> Key Features</div>
+                        </div>
+                        <div class="comb_detail_wrap grid-2">
+                            <div class="comb_detail">
+                                <div class="tit">유연한 거래 모델</div>
+                                <div class="info">
+                                전력 차감, 누진 분배, 수익 정산, DR 연계 등 다양한 시나리오 지원
+                                </div>
+                            </div>
+                            <div class="comb_detail">
+                                <div class="tit">복수 사업장 연계</div>
+                                <div class="info">
+                                지자체·교육기관·공공·민간 등 분산된 발전지와 소비지 통합 관리
+                                </div>
+                            </div>
+                            <div class="comb_detail">
+                                <div class="tit">자동화·실시간 관리</div>
+                                <div class="info">
+                                발전·소비·수익 데이터를 시각화하고 정산을 자동화
+                                </div>
+                            </div>
+                            <div class="comb_detail">
+                                <div class="tit">차별화 포인트</div>
+                                <div class="info">
+                                공유형 태양광·분산자원 최적화, 다양한 참여자 적용 가능
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="vnm_structure_wrap">
+            <div class="sec_in">
+                <div class="title">가상상계제도(VNM) 운영 구조</div>
+                <div class="img_wrap">
+                <img src="/theme/basic/images/sub/vnm_process.png" alt="">
+                </div>
+                <div class="list grid-3">
+                   <ul class="clist">
+                        <li>
+                        자신이 원하는 태양광 발전기의 용량 만큼 
+                        지분 투자 후 발전량 만큼 전력 소비량에서 차감
+                        </li>
+                        <li>다양한 투자방식이 존재 </li>
+                   </ul>
+                   <ul class="clist">
+                        <li>
+                        VNM 정산, 고객유치, 데이터관리등의 
+                        VNM 관련다양한 업무진행    
+                        </li>
+                        <li>유틸리티 회사에서도 운영이 가능함</li>
+                        <li>특수목적 법안에서도 운영 가능</li>
+                   </ul>
+                   <ul class="clist">
+                        <li>
+                        특수목적 법안에서도 운영 가능
+                    </li>
+                   </ul>
+                </div>
+            </div>
+        </div>

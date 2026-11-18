@@ -1,0 +1,129 @@
+---
+title: "HANBIT Innotech"
+path: "/page/carbon.html"
+editor_mode: "html"
+---
+
+    <div class="carbon-top-wrap">
+        <div class="sec_in sec_pd50">
+            <div class="carbon-top-img">
+                <img src="/theme/basic/images/sub/bipv_carbon.png">
+            </div>
+            </div>
+            <div class="bipv_cb_feat_section">
+               <div class="tit">
+               태양광 발전은 전기요금 절감과 함께, <br>
+               탄소배출권 수익까지 연결됩니다.
+               </div>
+               <div class="txt">BIPV 설비 운영 데이터를 기반으로 탄소 감축 실적을 산정하고, 배출권 발급 및 거래까지 연계합니다.</div>
+            </div>
+        </div>
+        <div class="cb-process-wrap blubg">
+            <div class="cb-process-in sec_in">
+                <h3 class="title">
+                탄소배출권 프로세스
+                </h3>
+                <div class="list owl-carousel owl-theme">
+                    <div class="item">
+                        <div class="num">01</div>
+                        <div class="tit">BIPV 설치</div>
+                        <div class="detail">
+                        건물 외장·옥상에 태양광 일체형(BIPV) 설비 구축
+                        </div>
+                        <ul class="clist">
+                            <li>설계 · 구조 · 전기 시스템 통합</li>
+                            <li>시공 · 품질관리 · 준공 검수</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">02</div>
+                        <div class="tit">태양광 발전</div>
+                        <div class="detail">
+                        설치된 BIPV 설비에서 친환경 전력 생산
+                        </div>
+                        <ul class="clist">
+                            <li>자가 소비 + 잉여 전력 발생</li>
+                            <li>전기요금 절감 효과</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">03</div>
+                        <div class="tit">발전량 데이터 수집</div>
+                        <div class="detail">
+                        발전량 실시간 계측 및 자동 저장
+                        </div>
+                        <ul class="clist">
+                            <li>발전량 · 운전 상태 모니터링</li>
+                            <li>감축량 산정을 위한 기초 데이터 확보</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">04</div>
+                        <div class="tit">탄소 감축 실적 산정</div>
+                        <div class="detail">
+                        발전 데이터를 기준으로 온실가스 감축량 자동 계산
+                        </div>
+                        <ul class="clist">
+                            <li>전력 생산량 → 탄소 감축량 환산</li>
+                            <li>외부감축사업 기준 적용</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">05</div>
+                        <div class="tit">감축 실적 인증</div>
+                        <div class="detail">
+                        제3자 검증 및 공식 인증 절차 진행
+                        </div>
+                        <ul class="clist">
+                            <li>검증기관 대응</li>
+                            <li>서류 제출 및 승인 지원</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">06</div>
+                        <div class="tit">배출권 발급</div>
+                        <div class="detail">
+                        인증된 감축 실적을 배출권으로 전환
+                        </div>
+                        <ul class="clist">
+                            <li>기업별 배출권 발급</li>
+                            <li>계좌 등록 및 보유 관리</li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <div class="num">07</div>
+                        <div class="tit">배출권 거래 · 수익화</div>
+                        <div class="detail">
+                        시장 거래를 통한 탄소 수익 창출
+                        </div>
+                        <ul class="clist">
+                            <li>배출권 매도</li>
+                            <li>현금 수익 확보 또는 보유 전략 운영</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buis_sec_all_wrap">
+            <div class="sec_in">
+                <section class="consult_wrap">
+                    <div class="consult_in">
+                        <div class="tit">외부감축사업 원스톱 컨설팅</div>
+                        <ul class="consult_list grid-3">
+                            <li>
+                                <div class="ico"><img src="/theme/basic/images/sub/consult_ico_01.png" alt=""></div>
+                                <div class="detail">PV,BIPV 기반하여 맞춤형 솔루션 제안</div>
+                            </li>
+                            <li>
+                                <div class="ico"><img src="/theme/basic/images/sub/consult_ico_02.png" alt=""></div>
+                                <div class="detail">인증 -> 승인 -> 거래까지 전 과정 지원</div>
+                            </li>
+                            <li>
+                                <div class="ico"><img src="/theme/basic/images/sub/consult_ico_03.png" alt=""></div>
+                                <div class="detail">규제 대응 + 수익창출 + ESG강화</div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>

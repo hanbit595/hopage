@@ -1,0 +1,65 @@
+---
+title: "HANBIT Innotech"
+path: "/page/combiner.html"
+editor_mode: "visual"
+---
+
+    <div class="sec_wrap">
+        <div class="sec_in">
+            <div class="sec_pd100">
+                <h3 class="sub_title sec_tit7 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                    <b>
+                    태양광접속함
+                    </b>
+                </h3>
+                <div class="ssgap"></div>
+                <p class="sec_txt2"> 
+                녹색기술 인증을 받은 고신뢰성 태양광 핵심 안전 장치로, 전력 집합·보호·제어를 통합해 안정적인 발전 운영을 지원합니다.
+                </p> 
+                <div class="gap"></div>
+                <div class="product_preview">
+                    <div class="view_slider_wrap2 grid-2">
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/combiner01.png">
+                            <p class="sec_tit2 bold600">20CH 접속함 전면 외함</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/combiner02.png">
+                            <p class="sec_tit2 bold600">20CH 접속함 내부</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap blubg">
+            <div class="sec_in">
+                <section class="comb_feat">
+                    <div class="comb_feat_in grid-2">
+                        <div class="buis_tit">
+                            <div class="tit2"> Key Features</div>
+                        </div>
+                        <div class="comb_detail_wrap">
+                            <div class="comb_detail">
+                                <div class="tit">일반타입 8CH, 16CH</div>
+                                <div class="info">
+                                여러개의 태양 전지 모듈에서 발생된 직류전력을 한군데로 모아 인버터로 전달, 각 모듈의 발전량 <br>
+                                차이에 따른 모듈 간의 충돌이나 역전류를 방지하고 보호합니다.
+                                </div>
+                            </div>
+                            <div class="comb_detail">
+                                <div class="tit">녹색인증 기술 제품 </div>
+                                <div class="img_wrap">
+                                    <img src="/theme/basic/images/pdt/comb_cert_01.png" alt="">
+                                    <img src="/theme/basic/images/pdt/comb_cert_02.png" alt="">
+                                </div>
+                                <ul class="clist">
+                                    <li>누설 전류 감시 차단 및 저감 기술이 적용된 태양광 발전장치시스템</li>
+                                    <li>태양광 모듈 진동 감지 기능을 가지는 태양광 발전장치시스템</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,214 @@
+---
+title: "HANBIT Innotech"
+path: "/page/bipv.html"
+editor_mode: "html"
+---
+
+ 
+    <div class="sec_wrap">
+        <div class="sec_in">
+         <!--    <h3 class="sub_title sec_tit7 sec_pd100 txt_center animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                <b>
+                  주요 사업
+                </b>
+            </h3>  -->
+            <div class="subnav sec_pd50 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                <ul>
+                    <li>
+                        <a href="#BIM" class="go_ani">BIM설계</a>
+                    </li>
+                    <li>
+                        <a href="#Module" class="go_ani">고내구성 모듈</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="buis_sec_all_wrap">
+            <div class="go_target" id="BIM"></div>
+                <section class="buis_section buis_section_01">
+                    <div class="buis_tit">
+                        <div class="num">01</div>
+                        <div class="tit">BIM설계</div>
+                        <div class="txt">설치 단계에서부터 발전량 시뮬레이션과 구조 안정성을 정밀 검토하여, 수십 년간 안정적인 운영이 가능한 설계 기반을 구축합니다.</div>
+                    </div>
+                    <ul class="buis_detail_list">
+                        <li class="buis_detail_card">
+                        <div class="ico"><img src="/theme/basic/images/sub/ico_01_06_01.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">BIM 연계 시뮬레이션</div>
+                                <div class="txt">
+                                    일사량, 그림자 영향, 건물 외피 조건 등을 자동 <br>
+                                    분석하여 최적의 에너지 성능을 확보합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                        <div class="ico"><img src="/theme/basic/images/sub/ico_01_06_02.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit"> BIPB-BIM 통합 분석</div>
+                                <div class="txt">
+                                    BIPV 설계에 특화된 BIM 기반 평가로 발전 <br>
+                                    효율·경제성·설치 적합성을 정량 검토합니다.
+                                </div>
+                            </div>
+                        </li>
+                        <li class="buis_detail_card">
+                        <div class="ico"><img src="/theme/basic/images/sub/ico_01_06_03.png" alt=""></div>
+                            <div class="detail_info_wrap">
+                                <div class="tit">설계-시공 데이터 연계</div>
+                                <div class="txt">
+                                    분석 결과를 시공 단계까지 활용 가능한 <br>
+                                    데이터로 제공하여 현장 적용성을 극대화합니다.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bipv_dif_wrap">
+                        <div class="title"> 기술적 차별성 </div>
+                        <div class="bipv_dif_in">
+                            <ul class="bipv_dif_list clist">
+                                <li>건축·에너지 시뮬레이션 통합 설계 환경 구축 </li>
+                                <li>자동화된 검토 프로세스를 통한 업무 효율화</li>
+                                <li>RE100·ZEB 등 최신 에너지 정책 대응에 최적화</li>
+                                <li>설계와 시공이 유기적으로 연결되는 실무 중심 기술</li>
+                            </ul>
+                            <div class="bipv_dif_preview">
+                                <div class="pdt_slider_wrap owl-carousel ">
+                                    <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                                        <img src="/theme/basic/images/sub/bipv_dif_preview_01.jpg">
+                                        <p class="sec_tit3 bold600">BIM 설계</p>
+                                    </div>
+                                    <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                                        <img src="/theme/basic/images/sub/bipv_dif_preview_02.jpg">
+                                        <p class="sec_tit3 bold600">BIM 설계</p>
+                                    </div>
+                                    <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                                        <img src="/theme/basic/images/sub/bipv_dif_preview_03.jpg">
+                                        <p class="sec_tit3 bold600">BIM 설계</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bipv_custom_wrap sec_pd100 ">
+                        <div class="title"> 고객 맞춤형 BIPV 설계 </div>
+                        <div class="info">설계 단계에서부터 발전량 시뮬레이션과 구조 안정성을 정밀 검토하여, 수십 년간 안정적인 운영이 가능한 설계 기반을 구축합니다.</div>
+                        <div class="bipv_custom_in">
+                            <ul class="bipv_custom_list grid-3">
+                                <li class="item">
+                                    <div class="img"><img src="/theme/basic/images/sub/bipv_custom_01.jpg" alt=""></div>
+                                    <div class="tit">산업단지 지붕형 BIPV</div>
+                                    <div class="txt">노후 지붕 보강을 병행한 안정적 지붕형 태양광 설계</div>
+                                </li>
+                                <li class="item">
+                                    <div class="img"><img src="/theme/basic/images/sub/bipv_custom_02.jpg" alt=""></div>
+                                    <div class="tit">도시형 BIPV</div>
+                                    <div class="txt">유리·컬러·반투명 모듈을 적용한 미관 중심 설계</div>
+                                </li>
+                                <li class="item">
+                                    <div class="img"><img src="/theme/basic/images/sub/bipv_custom_03.jpg" alt=""></div>
+                                    <div class="tit">대규모 발전소</div>
+                                    <div class="txt">토지 활용도를 극대화한 레이아웃 및 송·배전 시스템 최적화</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="buis_sec_all_wrap">
+            <div class="go_target" id="Module"></div>
+                <section class="buis_section buis_section_01">
+                    <div class="buis_tit">
+                        <div class="num">02</div>
+                        <div class="tit">고내구성 모듈</div>
+                        <div class="txt">30년 이상 지속되는 세계 최장수명 제품으로 고효율과 세련된 디자인을 모두 갖춘 차세대 태양광 솔루션입니다. <br>
+                        탁월한 내구성과 경제성으로 비용 절감 효과를 제공하여, 건축물의 가치와 에너지 효율을 동시에 높입니다.</div>
+                    </div>
+                    <ul class="bipv_module_list grid-2">
+                        <li class="bipv_module_card bipv_module_01">
+                            <div class="tit">G2G 모듈</div>
+                            <div class="detail_info_wrap">
+                               <div class="img_wrap">
+                                    <img src="/theme/basic/images/sub/bipv_module_01.png" alt="">
+                               </div>
+                               <table>
+                                <tr>
+                                    <th>제품 효율 (블랙)</th>
+                                    <td>210 Wp/㎡ (Black)</td>
+                                </tr>
+                                <tr>
+                                    <th>제품 효율 (컬러)</th>
+                                    <td>180 Wp/㎡ (Color)</td>
+                                </tr>
+                                <tr>
+                                    <th>제품 무게</th>
+                                    <td>19.0Kg/㎡</td>
+                                </tr>
+                                <tr>
+                                    <th>제품 보증 (출력 보증)</th>
+                                    <td>15년 (30년)</td>
+                                </tr>
+                               </table>
+                            </div>
+                        </li>
+                        <li class="bipv_module_card bipv_module_02">
+                            <div class="tit">G2S 모듈</div>
+                            <div class="detail_info_wrap">
+                               <div class="img_wrap">
+                                    <img src="/theme/basic/images/sub/bipv_module_02.png" alt="">
+                               </div>
+                               <table>
+                                <tr>
+                                    <th>제품 효율 (블랙)</th>
+                                    <td>210 Wp/㎡ (Black)</td>
+                                </tr>
+                                <tr>
+                                    <th>제품 효율 (컬러)</th>
+                                    <td>180 Wp/㎡ (Color)</td>
+                                </tr>
+                                <tr>
+                                    <th>제품 무게</th>
+                                    <td>17.8Kg/㎡</td>
+                                </tr>
+                                <tr>
+                                    <th>휨</th>
+                                    <td>모듈 휨 없음 (+1mm/㎡)</td>
+                                </tr>
+                                <tr>
+                                    <th>별도 Al Z-Bar</th>
+                                    <td>불필요 / Al-Free 친환경 저탄소 모듈</td>
+                                </tr>
+                                <tr>
+                                    <th>특허</th>
+                                    <td>특허 등록 (PCT 출원)</td>
+                                </tr>
+                                <tr>
+                                    <th>탄소발자국</th>
+                                    <td>50%⬆ 절감 (vs G2G 모듈)</td>
+                                </tr>
+                                <tr>
+                                    <th>수명보증 (출력보증)</th>
+                                    <td>15년 (30년)</td>
+                                </tr>
+                               </table>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bipv_features_wrap">
+                        <div class="item">세계 최장수명 BIPV</div>
+                        <div class="item">국내외 최초 Z-bar 일체형 BIPV</div>
+                        <div class="item">고효율 모듈로 인한 경제성</div>
+                        <div class="item">
+                            Edge-Sealing + <br>
+                            폴리올레핀(POE)봉지재 <br>
+                            적용으로 50년 이상 내구성 확보
+                        </div>
+                        <div class="item">
+                            TOPCon, Back Contact Cell <br>
+                            사용하여 와이어 노출 최소화
+                        </div>
+                        <div class="item">무반사 PV Glass</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>

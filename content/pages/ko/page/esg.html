@@ -53,51 +53,7 @@
         <div class="visual_nav_menu">
             %%MENU_KO:subtab%%
         </div>
-    </div>
-    <div class="sec_wrap">
-        <div class="sec_in">
-{#- ESG 경영: cms/pages/esg.yml 의 소개·흐르는 글자·원 3개·상세 상자(P4) #}
-            <div class="aboutTitle txt_center sec_pd100">
-                <h3 class="sub_title sec_tit6 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
-                    <b>
-                    {{ intro.title|esc }}
-                    </b>
-                </h3> 
-                <div class="ssgap"></div>
-                <p class="info sec_txt2"> 
-                {{ intro.text|ml("                ") }}
-                </p>
-            </div>
-        </div>
-        <div class="esg_circle_wrap">
-            <div class="flow_txt flow-wrap"><span>{{ flow_text|esc }}</span></div>
-            <ul class="esg_circle_list">
-{%- for c in pillars %}
-                <li>
-                    <div class="tit">{{ c.title|esc }}</div>
-                    <div class="ico"><img src="{{ c.icon|img }}" alt=""></div>
-                    <div class="txt">
-                    {{ c.text|ml("                    ") }}
-                    </div>
-                </li>
-{%- endfor %}
-            </ul>
-        </div>
-        <div class="esg_detail_wrap">
-            <div class="esg_detail_list">
-{%- for d in details %}
-                <div class="esg_wrap">
-                    <div class="tit">{{ d.title|esc }}</div>
-                    <ul class="clist">
-{%- for t in d['items'] %}
-                        <li>{{ t }}</li>
-{%- endfor %}
-                    </ul>
-                </div>
-{%- endfor %}
-            </div>
-        </div>
-    </div>
+    </div>%%FREE_BODY%%
 </div>
 <!-- <script>
 document.addEventListener("DOMContentLoaded", () => {

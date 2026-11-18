@@ -1,0 +1,230 @@
+---
+title: "HANBIT Innotech"
+path: "/en/page/finance.html"
+editor_mode: "html"
+---
+
+    <div class="sec_wrap">
+        <div class="sec_in sec_pd100">
+            <div class="Government-tit-wrap grid-2 animate" data-animate="fadeIn" data-duration="1.0s"
+                data-delay="0.3s">
+                <div class="right-in">
+                    <div class="img">
+                        <img src="/theme/basic/images/sub/government_04_tit_img.jpg">
+                    </div>
+                </div>
+                <div class="left-in">
+                    <h3 class="sub_title sec_tit7">
+                        <b> Financial Support Program </b>
+                    </h3>
+                    <div class="ssgap"></div>
+                    <p class="sec_txt2"> A long-term, low-interest loan support program for the installation of
+                        renewable energy facilities and equipment for the production of dedicated products. </p>
+                </div>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap blubg">
+            <div class="sec_in">
+                <div class="Government-detail-wrap animate" data-animate="fadeIn" data-duration="1.0s"
+                    data-delay="0.3s">
+                    <div class="Government-detail-spec">
+                        <h3 class="sub_title sec_tit5">
+                            <b> Funding Support Conditions </b>
+                        </h3>
+                        <div class="ssgap"></div>
+                        <div class="spec_term_wrap">
+                            <table class="spec_term term-5">
+                                <tr class="term_row">
+                                    <th class="txt_left">Use of Funds</th>
+                                    <th class="txt_left">Maximum Support per Business Entity</th>
+                                    <th class="txt_left">Loan Period</th>
+                                    <th class="txt_center">Interest Rate</th>
+                                    <th class="txt_center">Support Ratio to Total Project Cost</th>
+                                </tr>
+                                <tr class="term_row">
+                                    <td>Wind Power Sector</td>
+                                    <td>Up to KRW 75 billion</td>
+                                    <td>5-year grace period, 10-year installment repayment</td>
+                                    <td rowspan="6" class="highlight"><b class="detail">Quarterly Variable Interest
+                                            Rate</b></td>
+                                    <td rowspan="6" class="highlight">
+                                        <ul class="detail">
+                                            <li>
+                                                <div class="tit">SMEs (Individuals · Cooperatives)</div>
+                                                <div class="txt">Up to 75%</div>
+                                            </li>
+                                            <li>
+                                                <div class="tit">Mid-sized Enterprises</div>
+                                                <div class="txt">Up to 35%</div>
+                                            </li>
+                                            <li>
+                                                <div class="tit">Large Enterprises Participating in RE100 <br>
+                                                    (Self-consumption)</div>
+                                                <div class="txt">Up to 55%</div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="term_row highlight_row">
+                                    <td><b>Solar Power Sector</b></td>
+                                    <td><b>Up to KRW 30 billion</b></td>
+                                    <td><b>5-year grace period, 10-year installment repayment</b></td>
+                                </tr>
+                                <tr class="term_row">
+                                    <td>Bio Sector</td>
+                                    <td>Up to KRW 10 billion</td>
+                                    <td>3-year grace period, 5-year installment repayment</td>
+                                </tr>
+                                <tr class="term_row">
+                                    <td>Other Energy</td>
+                                    <td>Up to KRW 15 billion</td>
+                                    <td>5-year grace period, 10-year installment repayment</td>
+                                </tr>
+                                <tr class="term_row">
+                                    <td>Production Funds</td>
+                                    <td>Up to KRW 30 billion</td>
+                                    <td>5-year grace period, 10-year installment repayment</td>
+                                </tr>
+                                <tr class="term_row">
+                                    <td>Bio Sector</td>
+                                    <td>Up to KRW 10 billion</td>
+                                    <td>3-year grace period, 5-year installment repayment</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="Government-detail-spec sec_pd100">
+                        <h3 class="sub_title sec_tit5">
+                            <b> Funding Support Conditions </b>
+                        </h3>
+                        <div class="ssgap"></div>
+                        <table class="spec_term">
+                            <tr class="term_row">
+                                <th class="txt_left">Category</th>
+                                <th class="txt_left">Details</th>
+                            </tr>
+                            <tr class="term_row">
+                                <td>Facility Funds</td>
+                                <td> Purchase cost of applicable facilities (excluding used equipment) and auxiliary
+                                    equipment, installation and renovation costs (including grid connection costs),
+                                    repair, design and supervision costs (including technology introduction costs), test
+                                    operation expenses, etc. (However, hydro facilities exceeding 5MW are excluded) <div
+                                        class="ssgap"></div>
+                                    <p>- VAT, land purchase costs, construction expenses not directly related to
+                                        building installation, and licensing costs are excluded</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="Government-detail-spec">
+                        <h3 class="sub_title sec_tit5">
+                            <b> Eligible Facilities </b>
+                        </h3>
+                        <div class="ssgap"></div>
+                        <table class="spec_term">
+                            <tr class="term_row">
+                                <th class="txt_left">Category</th>
+                                <th class="txt_left">Details</th>
+                            </tr>
+                            <tr class="term_row">
+                                <td>Solar Thermal Facilities</td>
+                                <td> Facilities for producing and installing solar thermal collectors certified under
+                                    renewable energy equipment certification, KS-certified products, or equivalent
+                                    equipment (excluding natural circulation integrated solar thermal systems) </td>
+                            </tr>
+                            <tr class="term_row">
+                                <td><b>Solar Power <br/>Facilities</b></td>
+                                <td>
+                                    <b> Facilities for power generation and transmission, or facilities for producing
+                                        such equipment <br> Including resident participation portions such as bonds,
+                                        stocks, and funds of village enterprises participating in power generation
+                                        projects </b>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Government-steps-wrap sec_pd100 animate" data-animate="fadeIn" data-duration="1.0s"
+            data-delay="0.3s">
+            <div class="sec_in">
+                <div class="title txt_center">Process</div>
+                <ul class="list">
+                    <li class="card">
+                        <div class="num">01</div>
+                        <div class="info">
+                            <div class="tit">Project Announcement</div>
+                            <div class="txt">The New & Renewable Energy Center announces the project and confirms<br/>
+                                eligible applicants after document review.</div>
+                        </div>
+                        <div class="tag tag03">New & Renewable Energy Center</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">02</div>
+                        <div class="info">
+                            <div class="tit">Online Application for Funding</div>
+                            <div class="txt">Applicants submit their funding application online.</div>
+                        </div>
+                        <div class="tag tag02">Applicant</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">03</div>
+                        <div class="info">
+                            <div class="tit">Document Review and Evaluation</div>
+                            <div class="txt">The Center/Comprehensive Support Center reviews the submitted
+                                documents,<br> requests supplementation if necessary, and conducts the final evaluation.
+                            </div>
+                        </div>
+                        <div class="tag tag01">Center/Comprehensive Support Center</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">04</div>
+                        <div class="info">
+                            <div class="tit">Issuance of Recommendation Letter</div>
+                            <div class="txt">After evaluation is completed, the Center issues a recommendation letter.
+                            </div>
+                        </div>
+                        <div class="tag tag01">Center/Comprehensive Support Center</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">05</div>
+                        <div class="info">
+                            <div class="tit">Loan Application</div>
+                            <div class="txt">After receiving the recommendation letter, the applicant visits a financial
+                                institution (bank)<br/> for loan screening and approval.</div>
+                        </div>
+                        <div class="tag tag02">Applicant</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">06</div>
+                        <div class="info">
+                            <div class="tit">Fund Disbursement (Initial and Interim Withdrawals)</div>
+                            <div class="txt">After loan approval, the initial withdrawal is made,<br/>and additional
+                                withdrawals may be made until the end of the year if necessary.</div>
+                        </div>
+                        <div class="tag tag02">Applicant</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">07</div>
+                        <div class="info">
+                            <div class="tit">Facility Installation and Completion Inspection</div>
+                            <div class="txt">Once installation is completed, inspection and completion verification are
+                                conducted.<br> After certification procedures are completed, the remaining funds are
+                                disbursed.</div>
+                        </div>
+                        <div class="tag tag02">Applicant</div>
+                    </li>
+                    <li class="card">
+                        <div class="num">08</div>
+                        <div class="info">
+                            <div class="tit">Post-Management</div>
+                            <div class="txt">After final completion, on-site inspections and operational management<br/>
+                                procedures are carried out.</div>
+                        </div>
+                        <div class="tag tag01">Center/Comprehensive Support Center</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>

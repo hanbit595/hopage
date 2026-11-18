@@ -1,0 +1,208 @@
+---
+title: "HANBIT Innotech"
+path: "/page/inverter.html"
+editor_mode: "html"
+---
+
+    <div class="sec_wrap">
+        <div class="sec_in">
+            <div class="sec_pd100">
+                <h3 class="sub_title sec_tit7 animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+                    <b>
+                    인버터
+                    </b>
+                </h3>
+                <div class="ssgap"></div>
+                <p class="sec_txt2"> 
+                고효율 발전 · 계통 안정화 · 원격 O&M 통합 제어 솔루션 
+                </p> 
+                <div class="gap"></div>
+                <div class="product_preview">
+                    <div class="view_slider_wrap owl-carousel">
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter01.png">
+                            <p class="sec_tit2 bold600">50kW 스트링 인버터</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter02.png">
+                            <p class="sec_tit2 bold600">700W Optimizer</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter03.png">
+                            <p class="sec_tit2 bold600">RSD</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter04.png">
+                            <p class="sec_tit2 bold600">스트링 인버터용 RTU</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter05.png">
+                            <p class="sec_tit2 bold600">SRPV-MT-KR</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter06.png">
+                            <p class="sec_tit2 bold600">SRPV-GW-KR</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter07.png">
+                            <p class="sec_tit2 bold600">SRPV-MR1in1-KR</p>
+                        </div>
+                        <div class="item animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.9s">
+                            <img src="/theme/basic/images/pdt/inverter08.png">
+                            <p class="sec_tit2 bold600">SRPV-MR2in1-KR</p>
+                        </div>
+                    </div>
+                </div>
+                <ul class="inv-feature-icons grid-5">
+                    <li class="feature active">
+                    <span class="icon">
+                        <img src="/theme/basic/images/pdt/inv-ico-01-on.png" class="on">
+                        <img src="/theme/basic/images/pdt/inv-ico-01-off.png" class="off">
+                    </span>
+                    <p>GMPPT 자동 제어</p>
+                    </li>
+                    <li class="feature">
+                    <span class="icon">
+                        <img src="/theme/basic/images/pdt/inv-ico-02-on.png" class="on">
+                        <img src="/theme/basic/images/pdt/inv-ico-02-off.png" class="off">
+                    </span>
+                    <p>발전량 평균 30%<br>이상 증가</p>
+                    </li>
+                    <li class="feature">
+                    <span class="icon">
+                        <img src="/theme/basic/images/pdt/inv-ico-03-on.png" class="on">
+                        <img src="/theme/basic/images/pdt/inv-ico-03-off.png" class="off">
+                    </span>
+                    <p>P/Q 고속 계통 제어</p>
+                    </li>
+                    <li class="feature">
+                    <span class="icon">
+                        <img src="/theme/basic/images/pdt/inv-ico-04-on.png" class="on">
+                        <img src="/theme/basic/images/pdt/inv-ico-04-off.png" class="off">
+                    </span>
+                    <p>OTA 원격 업데이트</p>
+                    </li>
+                    <li class="feature">
+                    <span class="icon">
+                        <img src="/theme/basic/images/pdt/inv-ico-05-on.png" class="on">
+                        <img src="/theme/basic/images/pdt/inv-ico-05-off.png" class="off">
+                    </span>
+                    <p>KC · KS 계통 인증 완료</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap blubg">
+            <div class="sec_in">
+                <section class="inv_install_section">
+                    <div class="buis_tit">
+                        <div class="tit2">
+                        옵티마이저(700W), RSD(1in1,2in1), 스트링 인버터(50kW)
+                        </div>
+                    </div>
+                    <div class="product-grid grid-2">
+                        <div class="product-item">
+                        <img src="/theme/basic/images/pdt/inverter-view-01.jpg" alt="">
+                        </div>
+                        <div class="product-item">
+                        <img src="/theme/basic/images/pdt/inverter-view-02.jpg" alt="">
+                        </div>
+                    </div>
+                </section>
+                <section class="inv_spec">
+                    <div class="inv_spec_in grid-2">
+                        <div class="buis_tit">
+                            <div class="tit2"> 주요 특징<br> 및 기능 차별화</div>
+                        </div>
+                        <div class="spec_table">
+                            <dl class="spec_row">
+                                <dt>데이터 수집</dt>
+                                <dd>인버터 및 연계 계통 데이터 모니터링</dd>
+                            </dl>
+                            <dl class="spec_row">
+                                <dt>발전량 증가</dt>
+                                <dd>
+                                    <ul class="clist">
+                                        <li>음영(출력 변동) 검출 후 GMPPT 자동 시행</li>
+                                        <li>발전량 평균 30% 이상 증가</li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl class="spec_row">
+                                <dt>O&M 서비스 제공</dt>
+                                <dd>
+                                    <ul class="clist">
+                                        <li>패널 : IV 스캔 데이터 무료 제공 (10초 / MPPT)</li>
+                                        <li>인버터 : OTA 기반 펌웨어 업데이트 및 파라미터 설정</li>
+                                    </ul>
+                                </dd>
+                                </dl>
+
+                                <dl class="spec_row">
+                                <dt>계통 안정화 제어</dt>
+                                <dd>
+                                    <ul class="clist">
+                                        <li> P 제어 : 1초 이내</li>
+                                        <li>Q(V), pf 제어 : P/Q 제어 범위 (100% ~ 48%)</li>
+                                        <li>자가용 발전기 역전송 방지 (2초 이내 부하 추종)</li>
+                                    </ul>
+                                </dd>
+                                </dl>
+
+                                <dl class="spec_row">
+                                <dt>KDN DER ANN<br>및 REMS 연동</dt>
+                                <dd>
+                                    VCG, ACB 상태 감시 및 원격 On / Off
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="buis2_sec_all_wrap">
+            <div class="sec_in">
+            <section class="buis2_section">
+                <div class="buis_tit">
+                    <div class="tit2">설치 방법</div>
+                </div>
+                <div class="sgap"></div>
+                <div class="install-type-wrap grid-2">
+                    <article class="install-type">
+                    <div class="install-type-head">
+                        <span class="step-num">01</span>
+                        <h3 class="step-title">스트링 인버터 단독 설치</h3>
+                    </div>
+
+                    <div class="install-diagram">
+                        <img src="/theme/basic/images/pdt/inv-install-type-01.jpg" alt="스트링 인버터 단독 설치 구성도">
+                    </div>
+                    </article>
+                    <article class="install-type">
+                    <div class="install-type-head">
+                        <span class="step-num">02</span>
+                        <h3 class="step-title">
+                        스트링 인버터 및 MLPE (OPT, RSD) 연계 설치
+                        </h3>
+                    </div>
+
+                    <div class="install-diagram">
+                        <img src="/theme/basic/images/pdt/inv-install-type-02.jpg" alt="스트링 인버터 MLPE 연계 설치 구성도">
+                    </div>
+                    </article>
+                </div>
+                <div class="install-legend">
+                    <ul class="legend-list">
+                    <li><span class="legend-mark">a</span> 스트링 인버터</li>
+                    <li><span class="legend-mark">b</span> 무선라우터 및 RTU</li>
+                    <li><span class="legend-mark">1</span> 옵티마이저</li>
+                    <li><span class="legend-mark">2</span> RSD 1in1</li>
+                    <li><span class="legend-mark">3</span> RSD 2in1</li>
+                    <li><span class="legend-mark">4</span> 데이터 컬렉터</li>
+                    <li><span class="legend-mark">5</span> 게이트웨이</li>
+                    </ul>
+                </div>
+            </section>
+            </div>
+        </div>
+    </div>

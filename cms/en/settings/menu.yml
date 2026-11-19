@@ -170,6 +170,10 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_02
+      - label: "Simulation"
+        link: "/en/page/simulation.html"
+        new_window: false
+        visible: true
       - label: "Blog"
         link: "https://blog.naver.com/hkele"
         new_window: true

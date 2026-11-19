@@ -19,3 +19,7 @@ email: "hkele@hanmail.net"
 # - inquiry_public: 영문 견적문의 공개 스위치(true/false). false 면 영문 Request a Quote 메뉴·페이지를 만들지 않고,
 #   푸터 "Contact Us"는 en/page/location.html 로 연결하며 푸터 Privacy Policy 링크를 숨긴다
 inquiry_public: false
+# - simulation_public: Simulation public switch (true/false). false or no visible case → no menu, page or sitemap entry
+# - simulation_intro: intro text at the top of the Simulation list (case files cms/en/simulation/*.md)
+simulation_public: false
+simulation_intro: "Explore shading analysis simulations of our solar projects in video and 3D."

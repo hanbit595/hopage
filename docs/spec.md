@@ -222,3 +222,11 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
 - body class 는 sub_<대메뉴 번호> sub_<대메뉴>_<소메뉴 class 번호>. menu.yml 에 visible: true 소메뉴(대메뉴도 노출)로 연결된 것만 만들고 sitemap 에 넣는다. 옛 주소 대응표에는 넣지 않는다.
 - KOR/ENG: 짝 언어 새 페이지가 있으면 그 페이지, 없으면 상대 언어 메인(사용자 결정 2026-11-19).
 - 빌드 실패: 노출 메뉴 link(/page/…·/en/page/…)가 가리키는 페이지가 없으면 필요한 파일 이름을 붙여 실패. hero_image 가 사이트에 없으면 실패.
+
+## 11. 시뮬레이션 페이지(P8, 2026-11-19)
+- 사례 cms/simulation/<slug>.md(영문 cms/en/simulation/). 앞부분 title·categories(시공사례 분류, 여러 개)·kwp·modules·arrays·parking(선택, 비면 숨김)·youtube(필수)·thumbnail(/uploads/…, 비면 유튜브 썸네일)·viewer(/uploads/sim/<slug>.html)·related(/board/media/<번호>.html)·visible·order·date. 본문 = 설명 HTML. 정렬 order 오름차순 → date 최신순.
+- 설정: 언어별 site.yml simulation_public(기본 false)·simulation_intro. 꺼짐 또는 노출 사례 0개 → 메뉴(홍보센터 > 시뮬레이션, 시공사례 다음)·페이지·sitemap·hb_sim.css·js·사례 업로드 모두 없음.
+- 목록 /page/simulation.html: 소개 → 분류 탭(전체 + 사례 있는 분류, 영문 All·PV System·BIPV·Solar Carport·Others) → 카드(썸네일·분류·현장명·용량).
+- 상세 /simulation/<slug>.html: 수치 → 유튜브(youtube-nocookie) → 3D(PC 화면에 보이면 iframe, 768px 미만은 썸네일 + "3D 보기 (약 N MB)" 버튼, 전체 화면 버튼·안 되면 새 탭) → 설명 → 관련 시공사례·상담(inquiry_public 이면 견적문의, 아니면 오시는 길)·목록 → 안내문.
+- KOR/ENG: 상대 언어 시뮬레이션 목록(꺼져 있으면 상대 언어 메인).
+- 빌드 실패: uploads/sim/*.html 이 25MB 초과이거나 reference_photos·data:image/jpeg 포함(스위치와 무관, 항상), title·youtube 누락, 허용 밖 분류, viewer·thumbnail 파일 없음, related 글 없음. uploads/sim 은 이미지 최적화 안 함.

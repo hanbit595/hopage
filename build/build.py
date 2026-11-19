@@ -22,6 +22,7 @@ import cms_faq
 import cms_free
 import cms_pages
 import cms_posts
+import cms_sim
 import extras
 import uploads
 from datetime import date, datetime
@@ -268,12 +269,21 @@ def main():
         rel = Path(d).relative_to(STATIC).as_posix()
         return [n for n in names if (f"{rel}/{n}" if rel != "." else n).lower() in exclude]
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
+    # 1-0) 시뮬레이션(P8): 3D 파일 안전 검사(항상), 언어별 공개 스위치·노출 사례
+    cms_sim.check_sim_files(UPLOADS)
+    sim_intro, sim_cases = {}, {}
+    for lang, yml in (("ko", SITE_YML), ("en", SITE_YML_EN)):
+        on, sim_intro[lang] = cms_sim.setting(read_yml(yml, "offices"), yml.relative_to(SITE).as_posix())
+        sim_cases[lang] = cms_sim.load(SITE, lang, on)   # 꺼져 있으면 [](형식 검사는 함)
+    sim_src = cms_sim.published_sources(SITE, sim_cases)
+    sim_dirs = [SITE / d for d in cms_sim.FOLDER.values()]
     # 1-1) 관리자 화면 업로드 이미지: 긴 변 1920px 이하로 줄여 public/uploads/ 에(P3-4b). 축소본은 필요할 때 만든다
     up = uploads.Uploads(UPLOADS, PUBLIC / "uploads")
     # P3-5c-2: 글(cms/*.md, 영문 cms/en/*.md)·페이지(cms/pages, content/pages)·설정·팝업(cms/settings, cms/en/settings)·템플릿에 쓰인 업로드만 넣는다
     up.find_used([p for d in (SITE / "cms", CONTENT, TEMPLATES) for p in d.rglob("*")
                   if p.is_file() and p.suffix.lower() in (".md", ".yml", ".yaml", ".json", ".html")
-                  and p.name != "redirects.json"])
+                  and p.name != "redirects.json"
+                  and (p in sim_src or not any(d in p.parents for d in sim_dirs))])   # 시뮬레이션은 노출 사례만
     up.process()
     boards.Site.uploads = up
 
@@ -286,10 +296,12 @@ def main():
     env.filters["esc_text"] = cms_pages.esc_text   # 영문 고정 페이지(P4-EN1): 화면 글자 이스케이프(R&D 같은 & 는 그대로)
     footer_vars, per_page_ko, seo_desc_ko, site_links = load_site()
     footer_vars_en, site_links_en = load_site_en()     # 영문 푸터(P4-EN3)
+    footers_inquiry = {"ko": footer_vars["inquiry_public"], "en": footer_vars_en["inquiry_public"]}
     # P5-2 공개 스위치: 꺼진 FAQ·견적문의·개인정보처리방침은 페이지·메뉴·sitemap 에서 뺀다
     new_sw = cms_faq.switches(SITE, {"ko": footer_vars["inquiry_public"], "en": footer_vars_en["inquiry_public"]})
     new_off = cms_faq.off_pages(new_sw)
-    hidden = frozenset("/" + o for o in new_off)
+    hidden = frozenset(["/" + o for o in new_off]
+                       + ["/" + cms_sim.LIST_OUT[lang] for lang in sim_cases if not sim_cases[lang]])   # P8 시뮬레이션 꺼짐
     menus_ko, menu_links_ko = load_menu(MENU_YML, hidden)
     menus_en, menu_links_en = load_menu(MENU_YML_EN, hidden)   # 영문 메뉴(P4-EN3)
     menu_links = menu_links_ko + menu_links_en
@@ -385,7 +397,7 @@ def main():
     for a in cms_faq.unused_assets(new_sw):   # 꺼진 새 페이지만 쓰는 CSS·JS 는 공개하지 않음
         (PUBLIC / a).unlink(missing_ok=True)
     # 2-1b) 관리자 화면에서 만든 새 페이지(created: true): 공통 틀 templates/free_page.html, 메뉴에 노출 연결된 것만(옛 주소 대응 없음)
-    outs = {m["out"] for m in meta.values()}
+    outs = {m["out"] for m in meta.values()} | set(cms_sim.LIST_OUT.values())
     created = {lang: cms_free.created_pages(SITE, lang, f, outs) for lang, f in (("ko", MENU_YML), ("en", MENU_YML_EN))}
     built = {p["out"] for v in created.values() for p in v}
     for lang, pages in created.items():
@@ -417,6 +429,39 @@ def main():
         wr = out.rsplit("/", 1)[1][:-5]
         sitemap_urls.append((out, dates.get(f"{ctx['g5_bo_table']}:{wr}")))   # 글 페이지만 lastmod(목록 쪽은 없음)
     print(f"  게시판 목록 {n_list}쪽, 글 {n_view}건")
+
+    # 2-3) 시뮬레이션(P8): 목록 page/simulation.html, 상세 simulation/<slug>.html (영문 en/ 아래). 켜진 언어만
+    for lang, cases in sim_cases.items():
+        if not cases:
+            continue
+        out, other = cms_sim.LIST_OUT[lang], cms_sim.LIST_OUT["en" if lang == "ko" else "ko"]
+        other_list = other if sim_cases["en" if lang == "ko" else "ko"] else ("en/index.html" if lang == "ko" else "index.html")
+        n, k = "06", "03"
+        for m in menu_sets[lang][0]:
+            for it in m["items"]:
+                if it["href"] == "%%ROOT%%" + out:
+                    n, k = (re.sub(r"\D", "", m["cls"])[-2:].zfill(2), re.sub(r"\D", "", it["cls"])[-2:].zfill(2))
+        L = cms_sim.L[lang]
+        css = '<link rel="stylesheet" href="%%ROOT%%theme/basic/css/hb_sim.css">'
+
+        def body_class(file):
+            return f" pc sub sub_{n} sub_{n}_{k} sub file_{file} page lang_{'ko_KR' if lang == 'ko' else 'en_US'} b_tp"
+        ctx = common(lang, out, f"{L['name']} | HANBIT Innotech", body_class("simulation"))
+        ctx.update(page_css=css, content_html=cms_sim.render_list(env, lang, cases, sim_intro[lang]))
+        write(out, tpl.render(**ctx), lang, other_list, "%%ROOT%%" + out)
+        sitemap_urls.append((out, None))
+        for r in cases:
+            rp = r["related"].lstrip("/")
+            if rp and not (PUBLIC / rp).is_file():
+                raise BuildError(f"{r['src']}: related 시공사례 글이 사이트에 없습니다: {r['related']}")
+            ctx = common(lang, r["out"], esc(f"{r['title']} | {L['name']} | HANBIT Innotech"), body_class(r["slug"]))
+            ctx.update(page_css=css, content_html=cms_sim.render_view(env, lang, r, SITE, footers_inquiry[lang]))
+            write(r["out"], tpl.render(**ctx), lang, other_list, "%%ROOT%%" + out)
+            sitemap_urls.append((r["out"], r["date"] or None))
+        print(f"  시뮬레이션({lang}) 목록 1쪽, 사례 {len(cases)}건")
+    if not any(sim_cases.values()):
+        for a in cms_sim.ASSETS:   # 꺼져 있으면 시뮬레이션 CSS·JS 도 공개하지 않음
+            (PUBLIC / a).unlink(missing_ok=True)
 
     # 3) 옛 주소 이동(404.html + redirects.json), sitemap.xml, robots.txt
     boards_cfg = json.loads((CONTENT / "boards.json").read_text(encoding="utf-8"))

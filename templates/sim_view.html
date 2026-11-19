@@ -1,0 +1,45 @@
+{#- 시뮬레이션 상세(국·영 공통): build/cms_sim.py render_view.
+    핵심 수치 → 유튜브(youtube-nocookie) → 3D(viewer 있을 때, theme/basic/js/hb_sim.js) → 설명 → 버튼 → 안내문 -#}
+{%- set nav = true %}{% set headline = title %}
+{%- include "_page_head.html" %}
+<div class="hb_sim hb_sim_view">
+{%- if cat_text %}
+    <p class="hb_sim_cat">{{ cat_text }}</p>
+{%- endif %}
+{%- if facts %}
+    <dl class="hb_sim_facts">
+{%- for f in facts %}
+        <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+{%- endfor %}
+    </dl>
+{%- endif %}
+    <div class="hb_sim_frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/{{ vid }}" title="{{ L.video }}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+{%- if viewer %}
+    <div class="hb_sim_frame hb_sim_3d" data-hb-sim-3d="{{ viewer }}">
+        <img class="poster" src="{{ thumb }}" alt="">
+        <button type="button" class="hb_sim_load">{{ L.view3d }} ({{ "약 " if lang == "ko" else "approx. " }}{{ mb }} MB)</button>
+        <button type="button" class="hb_sim_full">{{ L.full }}</button>
+    </div>
+{%- endif %}
+{%- if body %}
+    <div class="hb_sim_body">
+{{ body }}
+    </div>
+{%- endif %}
+    <div class="hb_sim_btns">
+{%- if related %}
+        <a class="line" href="{{ related }}">{{ L.related }}</a>
+{%- endif %}
+        <a class="fill" href="{{ contact_href }}">{{ contact_label }}</a>
+        <a class="line" href="{{ list_href }}">{{ L.list }}</a>
+    </div>
+    <p class="hb_sim_note">※ {{ L.note }}</p>
+</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="%%ROOT%%theme/basic/js/hb_sim.js"></script>

@@ -1,0 +1,38 @@
+{#- 시뮬레이션 목록(국·영 공통): build/cms_sim.py render_list. 소개 문구 → 분류 탭 → 카드(theme/basic/js/hb_sim.js 가 탭 거르기) -#}
+{%- set nav = true %}{% set headline = L.name %}
+{%- include "_page_head.html" %}
+<div class="hb_sim" data-hb-sim-list>
+{%- if intro %}
+    <p class="hb_sim_intro">{{ intro }}</p>
+{%- endif %}
+{%- if categories %}
+    <ul class="hb_sim_tabs" role="tablist">
+        <li><button type="button" class="on" data-cat="all" role="tab" aria-selected="true">{{ L.all }}</button></li>
+{%- for c in categories %}
+        <li><button type="button" data-cat="{{ loop.index }}" role="tab" aria-selected="false">{{ c }}</button></li>
+{%- endfor %}
+    </ul>
+{%- endif %}
+    <ul class="hb_sim_cards">
+{%- for c in cards %}
+        <li data-cats="{{ c.cats }}"><a href="{{ c.href }}">
+            <span class="thumb"><img src="{{ c.thumb }}" alt="" loading="lazy"></span>
+            <span class="txt">
+{%- if c.cat_text %}
+                <span class="cat">{{ c.cat_text }}</span>
+{%- endif %}
+                <strong class="tit">{{ c.title }}</strong>
+{%- if c.kwp %}
+                <span class="cap">{{ c.kwp }}</span>
+{%- endif %}
+            </span>
+        </a></li>
+{%- endfor %}
+    </ul>
+</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="%%ROOT%%theme/basic/js/hb_sim.js"></script>

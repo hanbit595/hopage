@@ -64,7 +64,7 @@ class Uploads:
             dst.parent.mkdir(parents=True, exist_ok=True)
             self.src_bytes += f.stat().st_size
             ext = f.suffix.lower()
-            if ext in RESIZE_EXT:
+            if ext in RESIZE_EXT and not rel.lower().startswith("sim/"):   # P8 3D 파일 폴더(uploads/sim)는 최적화하지 않음
                 im = Image.open(f)
                 im.load()
                 im2 = ImageOps.exif_transpose(im)

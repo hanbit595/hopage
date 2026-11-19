@@ -169,6 +169,10 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_02
+      - label: "시뮬레이션"
+        link: "/page/simulation.html"
+        new_window: false
+        visible: true
       - label: "블로그"
         link: "https://blog.naver.com/hkele"
         new_window: true

@@ -44,11 +44,6 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_02
-      - label: "시험 페이지"
-        link: "/page/board.html"
-        new_window: false
-        visible: false
-        class: "sub_menu_04"
       - label: "PV"
         link: "/page/pv.html"
         new_window: false

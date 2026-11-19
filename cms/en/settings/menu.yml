@@ -45,11 +45,6 @@ menu:
         new_window: false
         visible: true
         class: sub_menu_02
-      - label: "Test Page"
-        link: "/en/page/zz_test_page.html"
-        new_window: false
-        visible: false
-        class: "sub_menu_04"
       - label: "PV"
         link: "/en/page/pv.html"
         new_window: false

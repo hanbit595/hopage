@@ -230,3 +230,8 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
 - 상세 /simulation/<slug>.html: 수치 → 유튜브(youtube-nocookie) → 3D(PC 화면에 보이면 iframe, 768px 미만은 썸네일 + "3D 보기 (약 N MB)" 버튼, 전체 화면 버튼·안 되면 새 탭) → 설명 → 관련 시공사례·상담(inquiry_public 이면 견적문의, 아니면 오시는 길)·목록 → 안내문.
 - KOR/ENG: 상대 언어 시뮬레이션 목록(꺼져 있으면 상대 언어 메인).
 - 빌드 실패: uploads/sim/*.html 이 25MB 초과이거나 reference_photos·data:image/jpeg 포함(스위치와 무관, 항상), title·youtube 누락, 허용 밖 분류, viewer·thumbnail 파일 없음, related 글 없음. uploads/sim 은 이미지 최적화 안 함.
+
+## 12. 메뉴 숨김 페이지(P9, 2026-11-19)
+- 기존 자유 페이지(cms/free·cms/en/free, created 아님)도 menu.yml 에서 그 path 를 가리키는 소메뉴가 모두 숨김(소메뉴 visible: false 또는 대메뉴 visible: false)이면 페이지·sitemap·옛 .php 주소 이동에서 뺀다(build/cms_free.py hidden_pages). 대메뉴 link 는 같은 주소의 소메뉴가 없을 때만 셈.
+- 대메뉴 link 가 숨긴 페이지면 첫 노출 소메뉴로 바꾸고 경고. 짝 언어 페이지가 숨겨졌으면 KOR/ENG 는 상대 언어 메인.
+- 숨긴 페이지를 가리키는 본문 링크(메인 버튼 등)는 빌드 경고(실패 아님). 메뉴에 아예 연결 안 된 자유 페이지는 규칙 적용 없이 경고로 보고.

@@ -64,10 +64,11 @@ def esc(s) -> str:
     return s.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-def load_menu(path: Path = MENU_YML, hidden=frozenset()):
+def load_menu(path: Path = MENU_YML, hidden=frozenset(), free_hidden=frozenset(), warns=None):
     """메뉴 파일(한글 cms/settings/menu.yml, 영문 cms/en/settings/menu.yml) → (노출 메뉴 목록, 검사할 내부 주소 목록).
     형식이 틀리면 BuildError. 내부 주소 검사 목록의 위치 설명에는 파일 경로를 붙인다.
-    hidden: 공개 스위치로 꺼진 새 페이지 주소(/page/faq.html 등). 그 주소의 소메뉴는 visible: false 처럼 뺀다."""
+    hidden: 공개 스위치로 꺼진 새 페이지 주소(/page/faq.html 등). 그 주소의 소메뉴는 visible: false 처럼 뺀다.
+    free_hidden: 메뉴에서 숨겨 만들지 않는 자유 페이지 주소. 대메뉴 link 가 이것이면 첫 노출 소메뉴로 바꾸고 warns 에 적는다."""
     fname = path.relative_to(SITE).as_posix()
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -105,7 +106,11 @@ def load_menu(path: Path = MENU_YML, hidden=frozenset()):
                 internal.append((inner, f"{fname} {where}"))
             items.append({"label": str(s["label"]).strip(), "href": h, "new_window": bool(s.get("new_window")),
                           "cls": str(s.get("class") or f"sub_menu_{j:02d}")})
-        if str(m.get("link") or "").strip():
+        if str(m.get("link") or "").strip() in free_hidden and items:
+            h = items[0]["href"]
+            if warns is not None:
+                warns.append(f"{fname} {name}: link {str(m['link']).strip()} 가 숨긴 페이지라 첫 노출 소메뉴로 바꿈")
+        elif str(m.get("link") or "").strip():
             h, inner = href(m["link"], name)
             if inner:
                 internal.append((inner, f"{fname} {name}"))
@@ -302,8 +307,16 @@ def main():
     new_off = cms_faq.off_pages(new_sw)
     hidden = frozenset(["/" + o for o in new_off]
                        + ["/" + cms_sim.LIST_OUT[lang] for lang in sim_cases if not sim_cases[lang]])   # P8 시뮬레이션 꺼짐
-    menus_ko, menu_links_ko = load_menu(MENU_YML, hidden)
-    menus_en, menu_links_en = load_menu(MENU_YML_EN, hidden)   # 영문 메뉴(P4-EN3)
+    # 메뉴 숨김 페이지: 기존 자유 페이지(cms/free·cms/en/free)도 가리키는 소메뉴가 모두 숨김이면 페이지·sitemap·옛 주소 이동에서 뺀다
+    free_hidden, warns = set(), []
+    for lang, f in (("ko", MENU_YML), ("en", MENU_YML_EN)):
+        hid, unlinked = cms_free.hidden_pages(SITE, lang, f)
+        free_hidden |= hid
+        warns += [f"{u}: 메뉴에 연결되지 않은 자유 페이지(숨김 규칙 적용 안 함, 그대로 만듦)" for u in unlinked]
+    fh_links = frozenset("/" + o for o in free_hidden)
+    menus_ko, menu_links_ko = load_menu(MENU_YML, hidden, fh_links, warns)
+    menus_en, menu_links_en = load_menu(MENU_YML_EN, hidden, fh_links, warns)   # 영문 메뉴(P4-EN3)
+    hid_link = re.compile(r"%%ROOT%%(" + "|".join(re.escape(o) for o in sorted(free_hidden)) + r")(?=[\"'#?\s)])") if free_hidden else None
     menu_links = menu_links_ko + menu_links_en
     popups, popup_links = load_popups(POPUPS_YML)
     popups_en, popup_links_en = load_popups(POPUPS_YML_EN)   # 영문 메인 팝업(P4-EN3)
@@ -339,6 +352,9 @@ def main():
         # 메뉴를 언어별 menu.yml 로 그리면서 active 표시(한글 P3-2, 영문 P4-EN3), 푸터를 언어별 site.yml 로 그림(P3-3, P4-EN3)
         html = fill_menu(html, lang, active, out)
         html = html.replace(*footers[lang])
+        if hid_link:   # 숨긴 페이지를 가리키는 본문 링크(메인 버튼 등): 실패 아닌 경고
+            for t in sorted(set(hid_link.findall(html))):
+                warns.append(f"{out}: 숨긴 페이지 링크 /{t}")
         if out == "index.html":
             # 옛 영문 메인 주소(/?locale=en_US)는 없는 주소가 아니라서 404.html을 거치지 않는다 → 국문 메인에서 바로 영문 메인으로
             html = html.replace("<head>", "<head>\n<script>if(/[?&]locale=en_US(&|$)/.test(location.search))"
@@ -367,7 +383,7 @@ def main():
     n_pages = 0
     for key, m in meta.items():
         out = m["out"]
-        if out in new_off:   # P5-2 공개 스위치로 꺼진 새 페이지
+        if out in new_off or out in free_hidden:   # P5-2 공개 스위치로 꺼진 새 페이지, 메뉴에서 숨긴 자유 페이지
             continue
         n_pages += 1
         ctx = common(m["lang"], out, m["title"], m["body_class"])
@@ -392,7 +408,8 @@ def main():
             popup = extras.popup_html(popups if m["lang"] == "ko" else popups_en)
         ctx.update(description=description, page_css=m.get("page_css", ""), content_html=content_html,
                    popup_html=popup)
-        write(out, tpl.render(**ctx), m["lang"], m["pair"], m.get("active"))
+        pair = m["pair"] if m["pair"] not in free_hidden else ("en/index.html" if m["lang"] == "ko" else "index.html")
+        write(out, tpl.render(**ctx), m["lang"], pair, m.get("active"))
         sitemap_urls.append((out, None))
     for a in cms_faq.unused_assets(new_sw):   # 꺼진 새 페이지만 쓰는 CSS·JS 는 공개하지 않음
         (PUBLIC / a).unlink(missing_ok=True)
@@ -411,7 +428,8 @@ def main():
             sitemap_urls.append((p["out"], None))
     if built:
         print(f"  새 페이지 {len(built)}개(국문 {len(created['ko'])}, 영문 {len(created['en'])})")
-    print(f"  메인·고정 페이지 {n_pages}개" + (f"(공개 스위치로 뺀 새 페이지 {len(new_off)}개)" if new_off else ""))
+    print(f"  메인·고정 페이지 {n_pages}개" + (f"(공개 스위치로 뺀 새 페이지 {len(new_off)}개)" if new_off else "")
+          + (f"(메뉴에서 숨긴 페이지 {len(free_hidden)}개: {', '.join(sorted(free_hidden))})" if free_hidden else ""))
 
     # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 cms/en/*.md)
     n_list = n_view = 0
@@ -468,7 +486,7 @@ def main():
     for cfg in boards_cfg.values():
         if cfg["lang"] == "ko":
             cfg["page_rows"] = per_page_ko   # 옛 주소 page=N 대응도 site.yml per_page 기준
-    red = extras.redirects(meta, boards_cfg, posts)
+    red = extras.redirects({k: m for k, m in meta.items() if m["out"] not in free_hidden}, boards_cfg, posts)
     red_json = json.dumps(red, ensure_ascii=False, indent=0, sort_keys=True)
     (CONTENT / "redirects.json").write_text(red_json, encoding="utf-8", newline="\n")   # 옛 주소 대응표(기록용, 빌드마다 새로 만듦)
     (PUBLIC / "redirects.json").write_text(json.dumps(red, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
@@ -511,6 +529,8 @@ def main():
                          + "\n".join(f"  - {src}: {f}" for src, f in missing))
     print(f"  E-Catalog 파일 {len(ecat)}개 확인(한글 {len(posts['boards']['library'])}, 영문 {len(posts['boards']['library_en'])})")
 
+    for w in warns:
+        print(f"  경고: {w}")
     up.report(PUBLIC)   # 업로드 이미지 용량, public/ 300MB(D13) 넘으면 경고
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)

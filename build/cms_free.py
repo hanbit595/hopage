@@ -106,6 +106,51 @@ def fill(frame: str, body: str) -> str:
     return frame.replace(SLOT, body, 1)
 
 
+# ───────── 숨김(기존 페이지 포함): menu.yml 에서 그 주소를 가리키는 소메뉴가 모두 숨김이면 만들지 않음 ─────────
+def menu_visibility(menu_file: Path) -> tuple:
+    """menu.yml → (가리키는 주소 전체, 노출로 가리키는 주소). 소메뉴는 대메뉴도 노출일 때만 노출(P7 과 같음).
+    대메뉴 link 는 그 주소를 가리키는 소메뉴가 없을 때만 셈(있으면 소메뉴 기준)."""
+    menu = (yaml.safe_load(menu_file.read_text(encoding="utf-8")) or {}).get("menu") or []
+    linked, shown, parents = set(), set(), []
+    for m in menu:
+        if not isinstance(m, dict):
+            continue
+        on = m.get("visible", True) is not False
+        for s in m.get("items") or []:
+            if isinstance(s, dict):
+                link = str(s.get("link") or "").strip()
+                linked.add(link)
+                if on and s.get("visible", True) is not False:
+                    shown.add(link)
+        parents.append((str(m.get("link") or "").strip(), on))
+    for link, on in parents:
+        if link and link not in linked:
+            linked.add(link)
+            if on:
+                shown.add(link)
+    linked.discard("")
+    return linked, shown
+
+
+def hidden_pages(site: Path, lang: str, menu_file: Path) -> tuple:
+    """기존 자유 페이지(created 아님) 중 숨길 출력 경로 set, 메뉴에 아예 연결 안 된 파일 목록(규칙 적용 안 함, 보고용)."""
+    folder = site / ("cms/en/free" if lang == "en" else "cms/free")
+    prefix = "en/page/" if lang == "en" else "page/"
+    linked, shown = menu_visibility(menu_file)
+    hidden, unlinked = set(), []
+    for f in sorted(folder.glob("*.md")) if folder.is_dir() else []:
+        src = f.relative_to(site).as_posix()
+        fm, _ = split_md(f.read_text(encoding="utf-8"), src)
+        if fm.get("created") is True:
+            continue   # 새 페이지는 created_pages 가 같은 기준으로 처리
+        out = prefix + f.stem + ".html"
+        if "/" + out not in linked:
+            unlinked.append(src)
+        elif "/" + out not in shown:
+            hidden.add(out)
+    return hidden, unlinked
+
+
 # ───────── 새 페이지(created: true): 관리자 화면에서 만든 페이지 ─────────
 # 파일 cms/free/<slug>.md(영문 cms/en/free/<slug>.md), 앞부분 title·path·editor_mode·created: true·hero_title·hero_desc·hero_image(선택).
 # 틀 templates/free_page.html. menu.yml 에 visible: true 소메뉴로 연결된 것만 만든다(대메뉴도 visible). 옛 주소 대응표에는 넣지 않는다.

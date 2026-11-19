@@ -384,6 +384,21 @@ def main():
         sitemap_urls.append((out, None))
     for a in cms_faq.unused_assets(new_sw):   # 꺼진 새 페이지만 쓰는 CSS·JS 는 공개하지 않음
         (PUBLIC / a).unlink(missing_ok=True)
+    # 2-1b) 관리자 화면에서 만든 새 페이지(created: true): 공통 틀 templates/free_page.html, 메뉴에 노출 연결된 것만(옛 주소 대응 없음)
+    outs = {m["out"] for m in meta.values()}
+    created = {lang: cms_free.created_pages(SITE, lang, f, outs) for lang, f in (("ko", MENU_YML), ("en", MENU_YML_EN))}
+    built = {p["out"] for v in created.values() for p in v}
+    for lang, pages in created.items():
+        for p in pages:
+            body, body_class, title = cms_free.render_created(env, p, lang, SITE, PUBLIC, renames)
+            other = ("en/" + p["out"]) if lang == "ko" else p["out"][3:]
+            pair = other if other in built else ("en/index.html" if lang == "ko" else "index.html")
+            ctx = common(lang, p["out"], esc(title), body_class)
+            ctx.update(content_html=body)
+            write(p["out"], tpl.render(**ctx), lang, pair, "%%ROOT%%" + p["out"])
+            sitemap_urls.append((p["out"], None))
+    if built:
+        print(f"  새 페이지 {len(built)}개(국문 {len(created['ko'])}, 영문 {len(created['en'])})")
     print(f"  메인·고정 페이지 {n_pages}개" + (f"(공개 스위치로 뺀 새 페이지 {len(new_off)}개)" if new_off else ""))
 
     # 2-2) 게시판 목록·글 (한글 cms/*.md, 영문 cms/en/*.md)
@@ -420,6 +435,13 @@ def main():
 
     # 4) 메뉴 내부 주소 검사: 한글·영문 menu.yml 의 /로 시작하는 link 가 public/ 에 없으면 빌드 실패
     missing = [(link, where) for link, where in menu_links if not (PUBLIC / link.lstrip("/").split("#")[0].split("?")[0]).is_file()]
+    free_missing = [(link, where) for link, where in missing
+                    if re.fullmatch(r"/(en/)?page/[a-z0-9_]+\.html", link.split("#")[0].split("?")[0])]
+    if free_missing:
+        raise BuildError("메뉴가 가리키는 페이지가 없습니다(새 페이지 파일이 없거나 created·이름이 다름):\n"
+                         + "\n".join(f"  - {where}: {link} → 필요한 파일 "
+                                     + cms_free.md_path(link.split("#")[0].split("?")[0].lstrip("/"))
+                                     for link, where in free_missing))
     if missing:
         raise BuildError("menu.yml 에 사이트에 없는 주소가 있습니다:\n"
                          + "\n".join(f"  - {where}: {link}" for link, where in missing))

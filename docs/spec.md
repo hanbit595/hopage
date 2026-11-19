@@ -212,3 +212,13 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
   - 1벌(하위 탭만), 5개: combiner, fire_cert, inverter, monitoring, structure
 - 합계 한글 27개 파일 65벌. (ENG도 _top_en·_board_head_en·content/pages/en/page/*.html 에 같은 구조로 65벌 → P4-EN3 에서 공통화, 8-4절)
 - 푸터: templates/_tail_ko.html 1벌 + 메인 content/pages/ko/index.html 안에 별도 1벌.
+
+## 10. 관리자 화면 새 페이지(created: true) (P7, 2026-11-19)
+- 파일 cms/free/<slug>.md(영문 cms/en/free/<slug>.md). 앞부분 title·path(/page/<slug>.html, 영문 /en/page/<slug>.html)·editor_mode·created: true·hero_title·hero_desc·hero_image(선택).
+  slug 는 영문 소문자·숫자·_, 기존 페이지·static 폴더 이름과 겹치면 빌드 실패.
+- 틀 templates/free_page.html(국·영 공통, build/cms_free.py created_pages·render_created). h1·<title> = title, 사진 위 문구 .tit = hero_title, 설명 .txt = hero_desc(이스케이프, 줄바꿈 → <br>).
+- 모양은 소속 대메뉴의 기존 페이지와 같다: 사업분야·정부지원·회사소개 = 사진 배경(hero_image, 비면 sub_01·sub_04·sub_05.jpg),
+  제품·기술 = 제목+하위 탭, 탄소중립 = 경로 드롭다운+제목, 홍보센터 = 게시판 머리(_page_head). 이 셋도 hero_image 가 있으면 사진 배경.
+- body class 는 sub_<대메뉴 번호> sub_<대메뉴>_<소메뉴 class 번호>. menu.yml 에 visible: true 소메뉴(대메뉴도 노출)로 연결된 것만 만들고 sitemap 에 넣는다. 옛 주소 대응표에는 넣지 않는다.
+- KOR/ENG: 짝 언어 새 페이지가 있으면 그 페이지, 없으면 상대 언어 메인(사용자 결정 2026-11-19).
+- 빌드 실패: 노출 메뉴 link(/page/…·/en/page/…)가 가리키는 페이지가 없으면 필요한 파일 이름을 붙여 실패. hero_image 가 사이트에 없으면 실패.

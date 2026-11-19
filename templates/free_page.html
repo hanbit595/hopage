@@ -1,0 +1,82 @@
+{#- 관리자 화면에서 새로 만든 페이지(created: true, cms/free/<slug>.md·cms/en/free/<slug>.md) 공통 틀(국문·영문).
+    build/cms_free.py created_pages() → build.py 가 렌더링한다. 모양은 소속 대메뉴의 기존 페이지와 같다.
+    변수: lang(ko|en), shape(photo|title_tab|title_drop|board), title(h1), hero_title·hero_desc(사진 위 문구·설명, HTML),
+          hero_image(%%ROOT%% 주소, photo 일 때), body(본문 HTML) -#}
+{%- set M = "%%MENU_KO:" if lang == "ko" else "%%MENU_EN:" %}
+{%- macro drop() %}
+                <div class="visual_nav_label">
+                    <div class="sub_visual_nav_wrap animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+    <div class="sub_visual_nav">
+        <a href="%%ROOT%%{{ "index.html" if lang == "ko" else "en/index.html" }}">
+                    {{ "홈" if lang == "ko" else "Home" }}
+                </a>
+        <span class="deco"></span>
+        <div class="p_d_menu">
+            <div class="p_d_menu_label mainmenu">
+            {{ M }}drop_main%%
+            </div>
+        </div>
+        <span class="deco"></span>
+        <div class="p_d_menu">
+            <div class="p_d_menu_label submenu">
+            {{ M }}drop_sub%%
+            </div>
+        </div>
+    </div>
+</div>
+                </div>
+{%- endmacro %}
+{%- if shape == "board" %}
+{%- set nav = true %}{% set headline = title %}
+{%- include "_page_head.html" %}
+{{ body }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{%- else %}
+<div class="motion_visual_wrap">
+    <div class="motion_visual_wrap_in">
+        <div class="motion_visual_tit_wrap animate" data-animate="fadeIn" data-duration="1.0s" data-delay="0.3s">
+            <div class="board_top_label">
+{%- if shape != "title_tab" %}{{ drop() }}{% endif %}
+                <h1 class="title sec_tit8 bold600">
+                    {{ title }}
+                </h1>
+{%- if shape == "photo" %}
+                <div class="bgap"></div>
+                <div class="sub_motion_visual_bg_wrap">
+                    <div class="sub_motion_visual_bg" style="background-image: url('{{ hero_image }}');">
+                    </div>
+                    <div class="sub_motion_visual_txt">
+{%- if hero_title %}
+                        <div class="tit">
+                            {{ hero_title }}
+                        </div>
+{%- endif %}
+{%- if hero_desc %}
+                        <div class="txt">
+                            {{ hero_desc }}
+                        </div>
+{%- endif %}
+                    </div>
+                </div>
+                <a class="scroll" id="moveDown">
+                    <div class="txt">SCROLL DOWN</div>
+                    <div class="arr"></div>
+                </a>
+{%- endif %}
+            </div>
+        </div>
+    </div>
+{%- if shape != "title_drop" %}
+    <div class="visual_nav_box">
+        <div class="visual_nav_menu">
+            {{ M }}subtab%%
+        </div>
+    </div>
+{%- endif %}
+{{ body }}
+</div>
+{%- endif %}

@@ -8,7 +8,7 @@ modules: 322
 arrays: 3
 parking: 103
 youtube: 'https://youtu.be/dQw4w9WgXcQ'
-visible: true
+visible: false
 order: 0
 date: '2026-11-19'
 viewer: '/uploads/sim/zz_simtest.html'

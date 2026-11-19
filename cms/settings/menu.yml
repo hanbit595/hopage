@@ -47,7 +47,7 @@ menu:
       - label: "시험 페이지"
         link: "/page/zz_test_page.html"
         new_window: false
-        visible: false
+        visible: true
         class: "sub_menu_04"
       - label: "PV"
         link: "/page/pv.html"

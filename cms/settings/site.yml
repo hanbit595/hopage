@@ -22,5 +22,5 @@ inquiry_public: false
 seo_description: "한빛이노텍은 태양광·BIPV·RE100 기반의 친환경 에너지 솔루션 전문기업으로, 건물·산업단지·주차장 태양광 및 태양광 EPC 사업을 통해 탄소중립과 에너지 자립을 실현합니다. 분산에너지와 통합 에너지 플랫폼을 기반으로 지속가능한 미래를 구축합니다."
 # - simulation_public: 시뮬레이션 공개 스위치(true/false). false 이거나 노출(visible) 사례가 0개면 시뮬레이션 메뉴·페이지·sitemap 을 만들지 않는다
 # - simulation_intro: 시뮬레이션 목록 맨 위 소개 문구(사례 파일 cms/simulation/*.md)
-simulation_public: false
-simulation_intro: "태양광 발전소의 음영 분석 시뮬레이션 사례를 영상과 3D로 확인해 보세요."
+simulation_public: true
+simulation_intro: "태양광 발전설비의 음영 분석 시뮬레이션 사례를 영상과 3D로 확인해 보세요."

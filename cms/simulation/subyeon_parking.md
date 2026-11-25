@@ -7,5 +7,6 @@ thumbnail: '/uploads/20261125-103258-95mxkl.jpg'
 visible: true
 order: 0
 date: '2026-11-25'
+viewer: '/uploads/sim/subyeon_parking.html'
 ---
 

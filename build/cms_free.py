@@ -21,6 +21,7 @@ from pathlib import Path
 
 import yaml
 
+import html_safe
 from cms_pages import CmsPageError
 
 SLOT = "%%FREE_BODY%%"
@@ -93,7 +94,7 @@ def load(site: Path, out: str) -> str:
         raise CmsPageError(f"{name}: path 는 '/{out}' 이어야 합니다 (현재: '{fm.get('path')}')")
     if fm.get("editor_mode", "html") not in MODES:
         raise CmsPageError(f"{name}: editor_mode 는 html 또는 visual 이어야 합니다 (현재: '{fm.get('editor_mode')}')")
-    return to_root(sanitize(body))
+    return to_root(html_safe.safe(sanitize(body), name))   # 보안: 정규식 정화 뒤 파서 기반 재정화·검사
 
 
 def fill(frame: str, body: str) -> str:

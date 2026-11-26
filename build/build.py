@@ -23,6 +23,8 @@ import cms_free
 import cms_pages
 import cms_posts
 import cms_sim
+import html_safe   # 보안: 관리자 입력 HTML 정화
+import security_check   # 보안: 업로드 종류·배포본 민감 파일 검사
 import extras
 import uploads
 from datetime import date, datetime
@@ -54,7 +56,8 @@ class BuildError(Exception):
     """한국어 메시지로 빌드를 멈춘다(종료코드 1)."""
 
 
-BUILD_ERRORS = (BuildError, cms_posts.CmsError, cms_pages.CmsPageError)
+BUILD_ERRORS = (BuildError, cms_posts.CmsError, cms_pages.CmsPageError, html_safe.UnsafeHtml,
+                security_check.SecurityCheckError)
 
 
 def esc(s) -> str:
@@ -276,6 +279,7 @@ def main():
     shutil.copytree(STATIC, PUBLIC, dirs_exist_ok=True, ignore=ignore)
     # 1-0) 시뮬레이션(P8): 3D 파일 안전 검사(항상), 언어별 공개 스위치·노출 사례
     cms_sim.check_sim_files(UPLOADS)
+    security_check.check_uploads(UPLOADS)   # 보안: svg·html·js 등 업로드 차단
     sim_intro, sim_cases = {}, {}
     for lang, yml in (("ko", SITE_YML), ("en", SITE_YML_EN)):
         on, sim_intro[lang] = cms_sim.setting(read_yml(yml, "offices"), yml.relative_to(SITE).as_posix())
@@ -532,6 +536,8 @@ def main():
     for w in warns:
         print(f"  경고: {w}")
     up.report(PUBLIC)   # 업로드 이미지 용량, public/ 300MB(D13) 넘으면 경고
+    security_check.check_public(PUBLIC)   # 보안: 배포본에 소스·설정·숨김 파일이 섞이면 실패
+    print("  보안 검사 통과(업로드 파일 종류·배포본 파일 목록·본문 HTML)")
     files = [f for f in PUBLIC.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files)
     print(f"완료: public/ 파일 {len(files)}개, {size / 1024 / 1024:.1f}MB")

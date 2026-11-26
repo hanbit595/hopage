@@ -12,6 +12,8 @@
 import re
 from datetime import date, datetime
 from html.entities import html5
+
+import html_safe
 from pathlib import Path
 
 import yaml
@@ -105,6 +107,7 @@ class Checker:
         if isinstance(v, (date, datetime)):
             v = v.isoformat()
         s = str(v).rstrip("\n")   # 여러 줄 칸(|)의 끝 줄바꿈은 뗀다
+        s = html_safe.safe(s, f"{self.file} {where} {key}")   # 보안: <br>·<b> 외 위험 코드 차단(그 밖의 글자는 그대로)
         return s + "\n" if keep_end and str(v).endswith("\n") else s
 
     def flag(self, d, key, where, default=True):

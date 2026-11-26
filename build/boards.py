@@ -24,6 +24,8 @@ import posixpath
 import re
 from pathlib import Path
 
+import html_safe
+
 LABELS = {
     "ko": {"writer": "작성자", "date": "작성일", "views": "조회수", "search_placeholder": "검색어를 입력해주세요",
            "link_cnt": "{}회 연결", "list_label": "회사소식"},
@@ -211,8 +213,8 @@ def map_link(u: str, root: str) -> str:
     return root + p.lstrip("/")
 
 
-def render_content(content: str, site: Site, root: str) -> str:
-    content = purify(content)
+def render_content(content: str, site: Site, root: str, where: str = "게시판 본문") -> str:
+    content = html_safe.safe(purify(content), where)   # 보안: 위험 태그·속성 제거 후 재검사
 
     def img_sub(m):
         tag = m.group(0)
@@ -391,7 +393,7 @@ def build_pages(content_dir: Path, static_dir: Path, templates, posts: dict, ko_
                 "subject": html_lib.escape(cut(html_lib.unescape(p["subject"]), CUT_VIEW_SUBJECT), quote=False),
                 "view_date": f"{dt[2:4]}-{dt[5:7]}-{dt[8:10]} {dt[11:16]}",
                 "hit": s.get("hit", "0"),
-                "content_html": render_content(p["content"], site, "%%ROOT%%"),
+                "content_html": render_content(p["content"], site, "%%ROOT%%", f"{table} 게시판 {p['id']}번 글"),
                 "file_images": file_images, "downloads": downloads, "links": links, "embed": embed,
                 "prev": nav(items[i - 1] if i > 0 else None), "next": nav(items[i + 1] if i + 1 < len(items) else None),
             }

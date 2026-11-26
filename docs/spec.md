@@ -19,7 +19,7 @@ v2.6 변경(2026-11-16, P4-EN3): 영문 메뉴·푸터·메인 팝업을 cms/en/
 
 ## 2. hopage 원본 파일 규칙
 - 한글 게시판 글은 cms/<게시판>/<글번호>.md 로 관리한다. 이전한 기존 글은 머리말 body_format: html 로 본문 HTML을 그대로 출력한다.
-  body_format 이 없는 글(관리자 화면으로 쓴 새 글)은 본문을 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 그대로 통과).
+  body_format 이 없는 글(관리자 화면으로 쓴 새 글)은 본문을 markdown → HTML 로 바꾼다(표·줄바꿈 지원, 원문 HTML 은 통과하되 13절 보안 정화를 거친다).
   - cms/notice/*.md   → /board/notice/<파일명>.html   (회사소식)
   - cms/media/*.md    → /board/media/<파일명>.html    (시공사례)
   - cms/library/*.md  → /board/library/<파일명>.html  (E-Catalog)
@@ -82,9 +82,10 @@ v2.6 변경(2026-11-16, P4-EN3): 영문 메뉴·푸터·메인 팝업을 cms/en/
 - 시공사례 category가 허용 목록에 없음, E-Catalog file 누락
 - 비공개 검사: 1차에서는 자동 배포 빌드에 비공개 검사를 넣지 않는다. 판별 목록이 저장소 밖에 있어 Actions 에서
   읽을 수 없기 때문이다. 비공개 현장은 관리자 화면에 올리지 않는 원칙으로 막고, 관리자 화면 입력칸 안내문에 이 원칙을 표시한다.
+- 보안 검사(13절): 정화 후에도 본문에 위험 코드가 남음, uploads/ 에 허용 밖 파일 종류, public/ 에 숨김·소스·허용 밖 파일
 
 ## 6. 기술 조건
-- Python 3.12. 의존성은 기존 jinja2, pillow 에 markdown, pyyaml 만 추가 허용한다.
+- Python 3.12. 의존성은 기존 jinja2, pillow 에 markdown, pyyaml 만 추가 허용한다. 버전은 build/requirements.txt 에 고정한다(13절).
 - 제목·요약·경로는 HTML 이스케이프한다.
 - 빌드 산출물 public/ 은 git에 올리지 않는다(기존 .gitignore 유지).
 - 관리자 화면 업로드 이미지(uploads/)는 빌드 시 pillow 로 긴 변 1920px 이하(기존 확대본 D3 기준과 동일)로 줄여 public/ 에 넣는다.
@@ -235,3 +236,16 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
 - 기존 자유 페이지(cms/free·cms/en/free, created 아님)도 menu.yml 에서 그 path 를 가리키는 소메뉴가 모두 숨김(소메뉴 visible: false 또는 대메뉴 visible: false)이면 페이지·sitemap·옛 .php 주소 이동에서 뺀다(build/cms_free.py hidden_pages). 대메뉴 link 는 같은 주소의 소메뉴가 없을 때만 셈.
 - 대메뉴 link 가 숨긴 페이지면 첫 노출 소메뉴로 바꾸고 경고. 짝 언어 페이지가 숨겨졌으면 KOR/ENG 는 상대 언어 메인.
 - 숨긴 페이지를 가리키는 본문 링크(메인 버튼 등)는 빌드 경고(실패 아님). 메뉴에 아예 연결 안 된 자유 페이지는 규칙 적용 없이 경고로 보고.
+
+## 13. 보안(S1, 2026-11-26)
+- 본문 정화(build/html_safe.py): 게시판 본문(이전 글 포함)·자유 페이지·FAQ 답변·회사 페이지(cms/pages) 글 칸·시뮬레이션 설명에 적용.
+  - 내용째 삭제: script·object·embed·applet·svg·math·noembed·noframes·template / 태그만 삭제: base·meta·link·frame·frameset·form·input·textarea·select·button·option
+  - iframe 은 유튜브(youtube·youtube-nocookie)·구글 지도(www.google.com/maps)만 허용, 그 밖은 삭제
+  - on… 이벤트 속성 삭제. 주소 속성(href·src 등)은 http·https·mailto·tel·상대주소만(img 의 data:image/png·jpeg·gif·webp 허용). 문자 참조·공백을 풀어서 판단
+  - style 속성에 expression(·javascript:·behavior:·-moz-binding·@import 가 있으면 속성 삭제
+  - 위험 요소가 없는 태그는 원문 글자 그대로 둔다(기존 글 출력 변화 없음). 정화 후 표준 HTML 파서로 다시 검사해 남은 것이 있으면 빌드 실패.
+- 업로드 종류(build/security_check.py): uploads/ 는 jpg·jpeg·png·gif·webp·pdf·mp4·webm, uploads/sim/ 은 html 추가 허용. svg·html·js 등은 빌드 실패.
+- 배포본 검사: public/ 에 숨김 파일·폴더, 허용 목록 밖 확장자, theme/·js/ 밖의 svg, robots.txt 외 txt 가 있으면 빌드 실패.
+- 보안 정책(templates/_security_meta.html): 모든 페이지 <head> 맨 앞에 CSP·referrer meta. 스크립트·스타일은 이 사이트(+구글 폰트), iframe 은 유튜브·구글 지도,
+  전송은 admin.hanbitinnotech.com 만. 새 외부 서비스를 붙이면 이 파일에 주소를 추가한다. (GitHub Pages 는 응답 헤더를 못 바꿔 frame-ancestors·HSTS 는 미적용)
+- 배포(deploy.yml): checkout persist-credentials: false. 패키지는 build/requirements.txt 고정 버전으로 설치(올릴 때는 내 PC 빌드로 확인 후 변경).

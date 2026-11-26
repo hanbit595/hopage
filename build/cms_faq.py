@@ -15,6 +15,7 @@ from pathlib import Path
 
 import yaml
 
+import html_safe
 from cms_pages import CmsPageError
 
 # 출력 경로 → (종류, 언어)
@@ -96,7 +97,8 @@ def load_faq(site: Path, lang: str) -> dict:
     for _, _, cat, q, a in rows:
         if cat not in cats:
             cats.append(cat)
-        items.append({"cat": cats.index(cat) + 1, "category": html.escape(cat), "question": html.escape(q), "answer": a})
+        items.append({"cat": cats.index(cat) + 1, "category": html.escape(cat), "question": html.escape(q),
+                      "answer": html_safe.safe(a, f"{name} 답변 '{q}'")})
     return {"categories": [html.escape(c) for c in cats], "items": items}
 
 

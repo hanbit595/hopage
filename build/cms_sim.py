@@ -18,6 +18,7 @@ from urllib.parse import parse_qs, urlparse
 
 import yaml
 
+import html_safe
 from cms_free import split_md
 from cms_pages import CmsPageError
 from cms_posts import CATEGORIES
@@ -144,7 +145,7 @@ def load(site: Path, lang: str, public_on) -> list:
             raise CmsPageError(f"{src}: related 는 시공사례 글 주소(/board/media/<번호>.html)여야 합니다 (현재: '{related}')")
         row = {"src": src, "slug": slug, "title": title, "cats": [c for c in CATEGORIES if c in cats], "vid": vid,
                "thumbnail": _upload(fm.get("thumbnail"), src, "thumbnail", site), "viewer": viewer, "related": related,
-               "order": order, "date": _date(fm.get("date"), src), "visible": visible, "body": body.strip(),
+               "order": order, "date": _date(fm.get("date"), src), "visible": visible, "body": html_safe.safe(body.strip(), src),
                "out": ("en/" if lang == "en" else "") + f"simulation/{slug}.html"}
         for k in ("kwp", "modules", "arrays", "parking"):
             row[k] = _num(fm.get(k), src, k)

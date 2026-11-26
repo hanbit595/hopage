@@ -1,0 +1,7 @@
+{#- 보안 정책(모든 페이지 <head> 맨 앞). GitHub Pages 는 응답 헤더를 바꿀 수 없어 meta 로 넣는다.
+    - 스크립트는 이 사이트 파일만 허용(외부 주소에서 스크립트를 불러오는 공격 차단). 기존 인라인 스크립트 때문에 'unsafe-inline' 은 남긴다.
+    - 끼워 넣기(iframe)는 유튜브·구글 지도만, 플러그인(object/embed) 금지, <base> 주소 바꾸기 금지.
+    - 문의폼 전송처(admin.hanbitinnotech.com)는 connect-src·form-action 에 허용.
+    - 새 외부 서비스(지도·영상·분석 도구 등)를 붙이면 여기에 주소를 추가해야 동작한다. -#}
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://i.ytimg.com; media-src 'self' blob:; font-src 'self' data: https://fonts.gstatic.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com 'self'; connect-src 'self' https://admin.hanbitinnotech.com; form-action 'self' https://admin.hanbitinnotech.com; object-src 'none'; base-uri 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">

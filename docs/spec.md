@@ -244,7 +244,8 @@ c) 메뉴가 복사된 파일 (한글, 전체 메뉴 1벌 = menu_05~ 전체 대�
   - on… 이벤트 속성 삭제. 주소 속성(href·src 등)은 http·https·mailto·tel·상대주소만(img 의 data:image/png·jpeg·gif·webp 허용). 문자 참조·공백을 풀어서 판단
   - style 속성에 expression(·javascript:·behavior:·-moz-binding·@import 가 있으면 속성 삭제
   - 위험 요소가 없는 태그는 원문 글자 그대로 둔다(기존 글 출력 변화 없음). 정화 후 표준 HTML 파서로 다시 검사해 남은 것이 있으면 빌드 실패.
-- 업로드 종류(build/security_check.py): uploads/ 는 jpg·jpeg·png·gif·webp·pdf·mp4·webm, uploads/sim/ 은 html 추가 허용. svg·html·js 등은 빌드 실패.
+- 업로드 종류(build/security_check.py): uploads/ 는 jpg·jpeg·png·gif·webp·mp4·webm + 문서 첨부 pdf·hwp·hwpx·docx·xlsx·zip(관리자 서버 업로드 허용 목록과 동일),
+  uploads/sim/ 은 html 추가 허용. svg·html·js 등은 빌드 실패. 관리자 서버 허용 종류를 늘리면 이 목록도 함께 늘린다.
 - 배포본 검사: public/ 에 숨김 파일·폴더, 허용 목록 밖 확장자, theme/·js/ 밖의 svg, robots.txt 외 txt 가 있으면 빌드 실패.
 - 보안 정책(templates/_security_meta.html): 모든 페이지 <head> 맨 앞에 CSP·referrer meta. 스크립트·스타일은 이 사이트(+구글 폰트), iframe 은 유튜브·구글 지도,
   전송은 admin.hanbitinnotech.com 만. 새 외부 서비스를 붙이면 이 파일에 주소를 추가한다. (GitHub Pages 는 응답 헤더를 못 바꿔 frame-ancestors·HSTS 는 미적용)
